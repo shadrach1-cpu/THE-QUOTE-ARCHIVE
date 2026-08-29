@@ -1,0 +1,1504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The Quote Archive — Diovu Shadrach</title>
+<meta name="description" content="A personal card-catalog archive by Diovu Shadrach, powered by a generative engine capable of over 1.5 million unique quote combinations across 20 color-coded drawers." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500;1,9..144,600&family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink-bg-1:#0b0e18;
+    --ink-bg-2:#141a2c;
+    --paper:#f3ead6;
+    --paper-hi:#faf5e8;
+    --ink-text:#1d1811;
+    --ink-muted:#6b5f4c;
+    --site-text:#e8e4d8;
+    --site-muted:#9aa0b4;
+    --gold:#e0a83f;
+    --gold-deep:#b9822a;
+    --teal:#4a9089;
+    --teal-deep:#2e6b65;
+    --line:#c9b892;
+    --shadow-card:0 18px 40px rgba(10,8,4,.35);
+    --shadow-soft:0 20px 60px rgba(0,0,0,.4);
+    --radius-card:6px;
+    --radius-lg:18px;
+    --focus:0 0 0 3px rgba(224,168,63,.55);
+    --site-bg:radial-gradient(circle at 12% -10%, rgba(74,144,137,.20), transparent 40%),
+              radial-gradient(circle at 88% 0%, rgba(224,168,63,.14), transparent 38%),
+              linear-gradient(180deg, var(--ink-bg-1), var(--ink-bg-2) 60%, var(--ink-bg-1));
+  }
+
+  body.day{
+    --ink-bg-1:#ece2c9;
+    --ink-bg-2:#f4ecda;
+    --site-text:#241d13;
+    --site-muted:#6d6250;
+    --paper:#fbf6ea;
+    --paper-hi:#ffffff;
+    --shadow-soft:0 20px 50px rgba(90,70,30,.15);
+    --site-bg:radial-gradient(circle at 12% -10%, rgba(74,144,137,.12), transparent 42%),
+              radial-gradient(circle at 88% 0%, rgba(224,168,63,.16), transparent 40%),
+              linear-gradient(180deg, var(--ink-bg-1), var(--ink-bg-2) 60%, var(--ink-bg-1));
+  }
+
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto}
+    *{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important;}
+  }
+
+  body{
+    margin:0;
+    font-family:'Inter',system-ui,-apple-system,Segoe UI,Arial,sans-serif;
+    color:var(--site-text);
+    background:var(--site-bg);
+    min-height:100vh;
+    transition:background .35s ease,color .35s ease;
+  }
+
+  .skip-link{
+    position:absolute;left:-999px;top:8px;background:var(--gold);color:#1d1811;
+    padding:10px 16px;z-index:1000;border-radius:8px;font-weight:700;text-decoration:none;
+  }
+  .skip-link:focus{left:12px;outline:none}
+
+  ::selection{background:var(--gold);color:#1d1811}
+
+  .grain{
+    position:fixed;inset:0;pointer-events:none;opacity:.05;mix-blend-mode:overlay;z-index:0;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .wrap{max-width:1240px;margin:0 auto;padding:20px 22px 60px;position:relative;z-index:1}
+
+  /* NAV */
+  .nav{
+    position:sticky;top:14px;z-index:50;
+    display:flex;justify-content:space-between;align-items:center;gap:14px;
+    padding:12px 18px;border-radius:999px;
+    background:color-mix(in srgb, var(--ink-bg-2) 78%, transparent);
+    border:1px solid rgba(224,168,63,.25);
+    backdrop-filter:blur(16px) saturate(140%);
+    box-shadow:var(--shadow-soft);
+  }
+  .brand{display:flex;align-items:center;gap:10px;font-family:'IBM Plex Mono',monospace;font-weight:600;letter-spacing:.02em}
+  .brand .mark{
+    width:30px;height:30px;border-radius:6px;display:grid;place-items:center;
+    background:linear-gradient(155deg,var(--gold),var(--teal));color:#1d1811;font-weight:700;font-size:.85rem;
+    box-shadow:0 4px 10px rgba(0,0,0,.3);
+  }
+  .brand small{display:block;font-size:.68rem;color:var(--site-muted);font-weight:500;letter-spacing:.08em}
+
+  .nav-links{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+  .nav-links a{
+    color:var(--site-text);text-decoration:none;font-size:.88rem;padding:8px 12px;border-radius:999px;
+    opacity:.85;font-weight:500;
+  }
+  .nav-links a:hover{opacity:1;background:rgba(224,168,63,.12)}
+
+  .icon-btn{
+    border:1px solid rgba(224,168,63,.3);background:rgba(224,168,63,.08);color:var(--site-text);
+    padding:8px 12px;border-radius:999px;cursor:pointer;font-size:.85rem;font-weight:600;
+    display:inline-flex;align-items:center;gap:6px;font-family:inherit;
+  }
+  .icon-btn:hover{background:rgba(224,168,63,.18)}
+  button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:none;box-shadow:var(--focus)}
+
+  .streak-pill{
+    font-family:'IBM Plex Mono',monospace;font-size:.78rem;color:var(--gold);
+    border:1px dashed rgba(224,168,63,.5);padding:6px 10px;border-radius:999px;white-space:nowrap;
+  }
+
+  /* HERO */
+  .hero{display:grid;grid-template-columns:1.15fr .85fr;gap:22px;padding:44px 0 20px;align-items:center}
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:.78rem;
+    letter-spacing:.12em;text-transform:uppercase;color:var(--teal);
+  }
+  .eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--gold)}
+
+  h1{
+    font-family:'Fraunces',serif;font-weight:600;font-size:clamp(2.4rem,5.4vw,4.2rem);
+    line-height:1.04;letter-spacing:-.01em;margin:16px 0 16px;max-width:14ch;
+  }
+  h1 em{font-style:italic;font-weight:500;color:var(--gold)}
+
+  .lead{color:var(--site-muted);line-height:1.85;max-width:56ch;font-size:1.02rem}
+  .lead .fine{display:block;margin-top:10px;font-size:.86rem;opacity:.8}
+
+  .hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px}
+  .btn{
+    padding:13px 20px;border-radius:10px;border:1px solid rgba(224,168,63,.3);color:var(--site-text);
+    background:rgba(224,168,63,.08);font-weight:700;cursor:pointer;font-family:inherit;font-size:.94rem;
+    transition:transform .2s ease, box-shadow .2s ease, background .2s ease; text-decoration:none;display:inline-flex;align-items:center;gap:8px;
+  }
+  .btn:hover{transform:translateY(-2px);box-shadow:0 14px 30px rgba(0,0,0,.25)}
+  .btn.primary{background:linear-gradient(100deg,var(--gold),var(--teal));color:#171205;border:none}
+  .btn.ghost{background:transparent}
+
+  /* index-card stack illustration */
+  .stack{position:relative;height:300px;perspective:900px}
+  .stack .card-illus{
+    position:absolute;inset:0;margin:auto;width:88%;max-width:340px;height:210px;
+    background:var(--paper);color:var(--ink-text);border-radius:var(--radius-card);
+    box-shadow:var(--shadow-card);padding:20px 22px;border:1px solid var(--line);
+    font-family:'Fraunces',serif;
+  }
+  .card-illus.back1{transform:rotate(-9deg) translate(-18px,10px);opacity:.75;top:14px}
+  .card-illus.back2{transform:rotate(7deg) translate(14px,18px);opacity:.55;top:26px}
+  .card-illus.front{top:0;animation:hover-float 6s ease-in-out infinite}
+  @keyframes hover-float{0%,100%{transform:rotate(-2deg) translateY(0)}50%{transform:rotate(-1deg) translateY(-8px)}}
+  .card-illus .hole{width:14px;height:14px;border-radius:50%;background:var(--ink-bg-2);border:1px solid var(--line);position:absolute;top:14px;left:16px}
+  .card-illus .cat-no{position:absolute;top:16px;right:18px;font-family:'IBM Plex Mono',monospace;font-size:.7rem;color:var(--ink-muted)}
+  .card-illus .qtext{margin-top:26px;font-style:italic;font-size:1.06rem;line-height:1.5}
+  .card-illus .qauth{margin-top:14px;font-family:'Inter',sans-serif;font-weight:700;font-size:.78rem;color:var(--teal-deep);text-transform:uppercase;letter-spacing:.04em}
+
+  .stat-row{display:flex;gap:10px;margin-top:20px;flex-wrap:wrap}
+  .stat-chip{
+    font-family:'IBM Plex Mono',monospace;font-size:.76rem;color:var(--site-muted);
+    border:1px solid rgba(255,255,255,.12);padding:6px 10px;border-radius:8px;
+  }
+  .stat-chip b{color:var(--gold);font-size:.9rem}
+
+  /* FEATURED / QOTD */
+  .qotd-wrap{margin-top:26px}
+  .qotd{
+    background:var(--paper);color:var(--ink-text);border-radius:var(--radius-lg);
+    padding:26px 28px;box-shadow:var(--shadow-card);border:1px solid var(--line);position:relative;
+    border-top:4px solid var(--cat-color, var(--gold));
+  }
+  .qotd .hole{width:16px;height:16px;border-radius:50%;background:var(--ink-bg-2);border:1px solid var(--line);position:absolute;top:20px;left:20px}
+  .qotd .label{font-family:'IBM Plex Mono',monospace;font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;color:var(--teal-deep);margin-left:32px}
+  .qotd blockquote{font-family:'Fraunces',serif;font-style:italic;font-size:1.5rem;line-height:1.5;margin:14px 0 12px;font-weight:500}
+  .qotd .qauth{font-weight:700;color:var(--gold-deep);font-size:.9rem}
+  .qotd .qactions{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
+  .mini-btn{
+    border:1px solid var(--line);background:rgba(0,0,0,.04);color:var(--ink-text);
+    padding:8px 12px;border-radius:8px;cursor:pointer;font-size:.82rem;font-weight:600;
+    font-family:'Inter',sans-serif;display:inline-flex;align-items:center;gap:6px;
+  }
+  .mini-btn:hover{background:rgba(0,0,0,.08)}
+  .mini-btn.dl{color:var(--teal-deep)}
+  .mini-btn.fav.active{background:var(--gold);border-color:var(--gold-deep);color:#1d1811}
+
+  .status{margin-top:8px;color:var(--site-muted);min-height:1.4em;font-size:.85rem}
+
+  /* SECTIONS */
+  .section-head{display:flex;justify-content:space-between;align-items:flex-end;gap:14px;margin:48px 0 16px;flex-wrap:wrap}
+  .section-head h2{font-family:'Fraunces',serif;font-weight:600;font-size:1.7rem;margin:0}
+  .section-head p{margin:4px 0 0;color:var(--site-muted)}
+
+  /* DRAWER TABS */
+  /* CABINET — visual drawer directory */
+  .cabinet{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-bottom:26px}
+  .drawer-btn{
+    display:flex;flex-direction:column;gap:6px;align-items:flex-start;text-align:left;
+    padding:14px 14px 12px;border-radius:12px;border:1px solid rgba(255,255,255,.08);cursor:pointer;
+    background:linear-gradient(160deg, rgba(255,255,255,.04), rgba(255,255,255,.015));
+    color:var(--site-text);font-family:inherit;position:relative;overflow:hidden;
+    border-left:3px solid var(--dc, var(--gold));transition:transform .18s ease, background .18s ease;
+  }
+  .drawer-btn:hover{transform:translateY(-3px);background:linear-gradient(160deg, rgba(255,255,255,.08), rgba(255,255,255,.02))}
+  .drawer-btn.active{background:color-mix(in srgb, var(--dc, var(--gold)) 18%, transparent);border-color:var(--dc, var(--gold))}
+  .drawer-btn .di{font-size:1.15rem;color:var(--dc, var(--gold))}
+  .drawer-btn .dl{font-weight:700;font-size:.86rem}
+  .drawer-btn .dn{font-family:'IBM Plex Mono',monospace;font-size:.72rem;color:var(--site-muted)}
+
+  .drawers{display:flex;gap:8px;overflow-x:auto;padding:4px 2px 14px;scrollbar-width:thin}
+  .drawer-tab{
+    flex:0 0 auto;font-family:'IBM Plex Mono',monospace;font-size:.8rem;
+    padding:10px 14px;border-radius:8px 8px 0 0;border:1px solid rgba(224,168,63,.22);border-bottom:none;
+    background:rgba(255,255,255,.03);color:var(--site-muted);cursor:pointer;white-space:nowrap;
+    display:inline-flex;align-items:center;gap:6px;
+  }
+  .drawer-tab .dot{width:7px;height:7px;border-radius:50%;background:var(--dc, var(--gold));display:inline-block}
+  .drawer-tab.active{background:var(--paper);color:var(--ink-text);border-color:var(--line);font-weight:600}
+  .drawer-tab .n{opacity:.6;margin-left:2px}
+
+  .controls{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:22px}
+  .search-wrap{position:relative;flex:1;min-width:220px}
+  .search-wrap input{
+    width:100%;background:rgba(255,255,255,.05);color:var(--site-text);
+    border:1px solid rgba(224,168,63,.25);border-radius:10px;padding:12px 14px 12px 38px;font-family:inherit;font-size:.95rem;
+  }
+  .search-wrap svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);opacity:.6}
+  .controls .icon-btn.focus-mode{white-space:nowrap}
+
+  /* GRID / CARDS */
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(255px,1fr));gap:16px}
+  .qcard{
+    position:relative;background:var(--paper);color:var(--ink-text);border-radius:var(--radius-card);
+    padding:22px 18px 16px;border:1px solid var(--line);box-shadow:var(--shadow-card);
+    transition:transform .2s ease, box-shadow .2s ease;
+    border-top:4px solid var(--cat-color, var(--gold));
+    animation:card-in .45s ease backwards;
+  }
+  @keyframes card-in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+  .qcard:nth-child(n+13){animation-delay:0s !important}
+  .qcard:hover{transform:translateY(-6px) rotate(-.3deg);box-shadow:0 26px 50px rgba(0,0,0,.4)}
+  .qcard .hole{width:11px;height:11px;border-radius:50%;background:var(--ink-bg-2);border:1px solid var(--line);position:absolute;top:16px;left:14px}
+  .qcard .cat-icon{position:absolute;top:14px;left:32px;font-size:.85rem;color:var(--cat-color, var(--gold-deep))}
+  .qcard .cat-no{position:absolute;top:16px;right:14px;font-family:'IBM Plex Mono',monospace;font-size:.68rem;color:var(--ink-muted)}
+  .qcard .qtext{font-family:'Fraunces',serif;font-style:italic;font-size:1rem;line-height:1.6;margin:24px 0 12px;min-height:66px}
+  .qcard .qfoot{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+  .qcard .qauth{font-weight:700;font-size:.76rem;color:var(--teal-deep);text-transform:uppercase;letter-spacing:.03em}
+  .qcard .tag{font-family:'IBM Plex Mono',monospace;font-size:.68rem;color:var(--cat-color, var(--ink-muted));border:1px solid var(--cat-color, var(--line));background:color-mix(in srgb, var(--cat-color, var(--line)) 14%, transparent);padding:3px 7px;border-radius:6px}
+  .qcard .perf{border-top:1px dashed var(--line);margin:12px 0 10px}
+  .qcard .actions{display:flex;gap:6px;flex-wrap:wrap}
+  .qcard .actions button{
+    border:none;background:rgba(0,0,0,.05);color:var(--ink-text);width:30px;height:30px;border-radius:7px;
+    cursor:pointer;display:inline-flex;align-items:center;justify-content:center;font-size:.9rem;
+  }
+  .qcard .actions button:hover{background:rgba(0,0,0,.1)}
+  .qcard .actions button.fav.active{background:var(--cat-color, var(--gold));color:#1d1811}
+
+  .load-more-wrap{display:flex;justify-content:center;margin-top:26px}
+
+  /* FAVORITES */
+  .fav-list{display:grid;gap:10px}
+  .fav-item{
+    display:flex;justify-content:space-between;align-items:center;gap:12px;
+    padding:14px 16px;border:1px solid rgba(224,168,63,.2);border-radius:12px;background:rgba(255,255,255,.03);
+  }
+  .fav-item p{margin:0;font-family:'Fraunces',serif;font-style:italic;line-height:1.5}
+  .fav-item .meta{color:var(--site-muted);font-family:'IBM Plex Mono',monospace;font-size:.72rem;margin-top:4px}
+  .fav-empty{color:var(--site-muted);padding:20px;text-align:center;border:1px dashed rgba(224,168,63,.25);border-radius:12px}
+  .fav-actions{display:flex;gap:8px}
+
+  /* FOCUS MODE OVERLAY */
+  .focus-overlay{
+    position:fixed;inset:0;z-index:200;display:none;align-items:center;justify-content:center;
+    background:radial-gradient(circle at 50% 30%, rgba(20,26,44,.98), rgba(6,8,14,.99));
+    padding:24px;
+  }
+  .focus-overlay.open{display:flex}
+  .focus-card{max-width:720px;text-align:center;color:#f3ead6}
+  .focus-card .cat-no{font-family:'IBM Plex Mono',monospace;color:var(--gold);letter-spacing:.15em;font-size:.8rem;text-transform:uppercase}
+  .focus-card blockquote{font-family:'Fraunces',serif;font-style:italic;font-size:clamp(1.6rem,4vw,2.6rem);line-height:1.4;margin:22px 0}
+  .focus-card .qauth{color:var(--teal);font-weight:700;letter-spacing:.05em}
+  .focus-controls{display:flex;gap:12px;justify-content:center;margin-top:34px;flex-wrap:wrap}
+  .focus-hint{margin-top:18px;color:#7f8598;font-size:.8rem;font-family:'IBM Plex Mono',monospace}
+
+  footer{margin-top:50px;padding:26px;text-align:center;color:var(--site-muted);border-top:1px solid rgba(224,168,63,.15);font-size:.9rem}
+  footer .fmark{color:var(--gold)}
+  footer .fine{display:block;margin-top:6px;font-size:.78rem;opacity:.75}
+
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+  @media (max-width:900px){
+    .hero{grid-template-columns:1fr}
+    .stack{height:230px;order:-1}
+  }
+  @media (max-width:520px){
+    .nav{flex-wrap:wrap;border-radius:20px}
+    .nav-links{width:100%;justify-content:flex-start}
+    .section-head{flex-direction:column;align-items:flex-start}
+  }
+</style>
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to content</a>
+<div class="grain" aria-hidden="true"></div>
+
+<div class="wrap" id="main">
+
+  <header class="nav" aria-label="Main navigation">
+    <div class="brand">
+      <span class="mark">DS</span>
+      <span>The Quote Archive<br><small>by Diovu Shadrach</small></span>
+    </div>
+    <div class="nav-links">
+      <a href="#drawers">Browse</a>
+      <a href="#favorites">Favorites</a>
+      <span class="streak-pill" id="streakPill" title="Consecutive days visited">🔥 — day streak</span>
+      <button class="icon-btn" id="focusBtn" type="button">▣ Focus Mode</button>
+      <button class="icon-btn" id="themeBtn" type="button" aria-pressed="false">☾ Night / ☀ Day</button>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div>
+      <div class="eyebrow"><span class="dot"></span> Personal archive · <span id="eyebrowTotal">1,536,000+</span> generated cards · 20 drawers</div>
+      <h1>Words worth <em>keeping</em>, filed one card at a time.</h1>
+      <p class="lead">
+        A hand-written seed collection of original lines by Diovu Shadrach Chinecherem, recombined by a small
+        generative engine into a card catalog with over a million possible cards across twenty color-coded
+        drawers. Pull a random card, file one under favorites, or download any quote as its own keepsake image.
+        <span class="fine">Every card is assembled on the fly from ~360 hand-written fragments — that's how a small archive becomes a huge one.</span>
+      </p>
+      <div class="hero-actions">
+        <button class="btn primary" id="pullBtn" type="button">🎴 Pull a Random Card</button>
+        <button class="btn" id="focusBtn2" type="button">▣ Enter Focus Mode</button>
+        <a class="btn ghost" href="#drawers">Browse the Cabinet</a>
+      </div>
+      <div class="stat-row">
+        <span class="stat-chip"><b id="statTotal">0</b> possible cards</span>
+        <span class="stat-chip"><b>20</b> drawers</span>
+        <span class="stat-chip"><b id="statFav">0</b> favorited</span>
+        <span class="stat-chip"><b id="statShown">0</b> currently shown</span>
+      </div>
+    </div>
+
+    <div class="stack" aria-hidden="true">
+      <div class="card-illus back2"></div>
+      <div class="card-illus back1"></div>
+      <div class="card-illus front">
+        <span class="hole"></span>
+        <span class="cat-no" id="heroCatNo">MOT·00001</span>
+        <div class="qtext" id="heroQuoteText">It always seems impossible until it's done.</div>
+        <div class="qauth">— Diovu Shadrach</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="qotd-wrap">
+    <div class="qotd" aria-live="polite">
+      <span class="hole"></span>
+      <div class="label">Card of the Day</div>
+      <blockquote id="qotdText">Loading…</blockquote>
+      <div class="qauth" id="qotdMeta">— Diovu Shadrach</div>
+      <div class="qactions">
+        <button class="mini-btn" id="qotdCopy" type="button">⧉ Copy</button>
+        <button class="mini-btn fav" id="qotdFav" type="button">♡ Favorite</button>
+        <button class="mini-btn dl" id="qotdDownload" type="button">⬇ Download Card</button>
+        <button class="mini-btn" id="qotdShare" type="button">↗ Share</button>
+      </div>
+    </div>
+    <div class="status" id="status" role="status" aria-live="polite"></div>
+  </div>
+
+  <section id="drawers">
+    <div class="section-head">
+      <div>
+        <h2>The Cabinet</h2>
+        <p id="cabinetSub">Twenty drawers, over a million cards each way you search them. Open one to filter, or search across all of them below.</p>
+      </div>
+    </div>
+
+    <div class="cabinet" id="cabinet" aria-label="Category directory"></div>
+
+    <div class="controls">
+      <div class="search-wrap">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/></svg>
+        <label class="sr-only" for="search">Search quotes</label>
+        <input id="search" type="text" placeholder="Search quotes… (press / to focus)" aria-label="Search quotes" />
+      </div>
+      <button class="icon-btn focus-mode" id="shuffleBtn" type="button">🔀 Shuffle Grid</button>
+    </div>
+
+    <div class="drawers" id="drawerTabs" role="tablist" aria-label="Category filter"></div>
+
+    <div class="grid" id="grid" aria-live="polite"></div>
+    <div class="load-more-wrap">
+      <button class="btn" id="loadMoreBtn" type="button">Show More Cards</button>
+    </div>
+  </section>
+
+  <section id="favorites">
+    <div class="section-head">
+      <div>
+        <h2>Your Favorites</h2>
+        <p>Saved locally in this browser. Nothing leaves your device.</p>
+      </div>
+      <div class="fav-actions">
+        <button class="icon-btn" id="exportFavBtn" type="button">⬇ Export as .txt</button>
+      </div>
+    </div>
+    <div id="favList" class="fav-list" aria-live="polite"></div>
+  </section>
+
+  <footer>
+    Filed with care by <span class="fmark"><a href="https://shadrach1-cpu.github.io/SHADRACH.DEV/">Diovu Shadrach Chinecherem</a></span> · The Quote Archive · 20 drawers
+    <span class="fine" id="footerCount">1,536,000+ possible cards, generated from ~360 original fragments</span>
+  </footer>
+</div>
+
+<!-- FOCUS MODE OVERLAY -->
+<div class="focus-overlay" id="focusOverlay" role="dialog" aria-modal="true" aria-label="Focus reading mode">
+  <div class="focus-card">
+    <div class="cat-no" id="focusCatNo">MOT·00001</div>
+    <blockquote id="focusText">Quote</blockquote>
+    <div class="qauth" id="focusAuthor">— Diovu Shadrach</div>
+    <div class="focus-controls">
+      <button class="btn" id="focusPrev" type="button">← Prev</button>
+      <button class="btn primary" id="focusNext" type="button">Next Card →</button>
+      <button class="btn ghost" id="focusFav" type="button">♡ Favorite</button>
+      <button class="btn ghost" id="focusClose" type="button">✕ Exit</button>
+    </div>
+    <div class="focus-hint">Space / → next card · ← previous · Esc to exit</div>
+  </div>
+</div>
+
+<script>
+/* =====================================================================
+   DATA — a small hand-written seed (20 category "openers" x 16, plus
+   40 shared bridge fragments and 40 shared closing lines) recombined
+   by a generative engine into 1,536,000 addressable, stable-ID cards.
+   ===================================================================== */
+const CATS = [
+  {key:'motivation', label:'Motivation', prefix:'MOT', color:'#e0a83f', icon:'✦'},
+  {key:'discipline', label:'Discipline', prefix:'DIS', color:'#c9622e', icon:'▦'},
+  {key:'success', label:'Success', prefix:'SUC', color:'#b9822a', icon:'◆'},
+  {key:'mindset', label:'Mindset', prefix:'MND', color:'#7a6fd6', icon:'◈'},
+  {key:'growth', label:'Growth', prefix:'GRW', color:'#4a9089', icon:'✶'},
+  {key:'focus', label:'Focus', prefix:'FOC', color:'#3f8fb0', icon:'◎'},
+  {key:'resilience', label:'Resilience', prefix:'RES', color:'#b5563f', icon:'▲'},
+  {key:'action', label:'Action', prefix:'ACT', color:'#c0483f', icon:'➤'},
+  {key:'creativity', label:'Creativity', prefix:'CRE', color:'#c25a9e', icon:'✺'},
+  {key:'leadership', label:'Leadership', prefix:'LEA', color:'#a3762e', icon:'♛'},
+  {key:'courage', label:'Courage', prefix:'COU', color:'#b03d3d', icon:'⚑'},
+  {key:'gratitude', label:'Gratitude', prefix:'GRA', color:'#d69a4e', icon:'❁'},
+  {key:'patience', label:'Patience', prefix:'PAT', color:'#5c8f6b', icon:'☾'},
+  {key:'confidence', label:'Confidence', prefix:'CNF', color:'#4472b0', icon:'★'},
+  {key:'purpose', label:'Purpose', prefix:'PUR', color:'#7a5a3f', icon:'⊙'},
+  {key:'change', label:'Change', prefix:'CHA', color:'#3f9e8f', icon:'⟳'},
+  {key:'perseverance', label:'Perseverance', prefix:'PER', color:'#8f4a3f', icon:'⛰'},
+  {key:'selfbelief', label:'Self-Belief', prefix:'BEL', color:'#6b4fa0', icon:'♥'},
+  {key:'ambition', label:'Ambition', prefix:'AMB', color:'#c0392b', icon:'▴'},
+  {key:'positivity', label:'Positivity', prefix:'POS', color:'#e0b93f', icon:'☀'}
+];
+
+const A_BANK = {
+motivation:[
+"It always seems impossible until it's done",
+"Start where you are, use what you have, do what you can",
+"Motivation gets you moving; momentum keeps you going",
+"The spark you're waiting for is already inside you",
+"Every sunrise is a second chance disguised as a new day",
+"You don't need permission to begin",
+"The first step rarely feels ready",
+"Energy follows action, not the other way around",
+"Chase the version of you that hasn't given up yet",
+"A single decision can change the next ten years",
+"Get up one more time than you fall",
+"Your someday becomes real the moment you schedule it",
+"Show up before you feel like it",
+"Big journeys are just small starts, repeated",
+"The best time to start was earlier; the next best time is now",
+"Stop waiting for motivation and start building discipline"
+],
+discipline:[
+"Discipline is choosing what you want most over what you want now",
+"Motivation starts it; discipline finishes it",
+"Consistency turns ordinary effort into extraordinary results",
+"Small disciplines, repeated daily, become massive advantages",
+"Discipline is the bridge between goals and accomplishment",
+"Do it especially on the days you don't feel like it",
+"Habits are the compound interest of self-improvement",
+"Your routine is your reputation with yourself",
+"Show up when the excitement fades",
+"What you tolerate, you train yourself to repeat",
+"A disciplined mind is a free mind",
+"Structure your day before the day structures you",
+"Discipline is choosing your future over your feelings",
+"Excellence is a habit, not an accident",
+"Say no to comfort so you can say yes to growth",
+"Every rule you keep builds the person you're becoming"
+],
+success:[
+"Success is the sum of small efforts, repeated day in and day out",
+"Success isn't owned, it's leased, and rent is due every day",
+"Define success on your own terms before someone else defines it for you",
+"Behind every overnight success are years nobody saw",
+"Success favors the ones who keep showing up after it gets hard",
+"Winning is mostly about not quitting on the boring days",
+"Success is what happens after you stop looking for shortcuts",
+"Your results are the receipts of your habits",
+"Every level of success asks for a new level of you",
+"Success leaves clues; find them and follow them",
+"Nobody succeeds alone, but everybody starts alone",
+"The scoreboard changes only after the work changes",
+"Success is built in private and revealed in public",
+"Comparison steals joy; focus builds success",
+"Success is a lagging indicator of daily discipline",
+"Keep your eyes on your own lane and your own pace"
+],
+mindset:[
+"The only person you are destined to become is the person you decide to be",
+"Your mindset is the lens; change the lens, change the world you see",
+"A fixed mindset says I can't; a growth mindset says not yet",
+"What you believe about yourself sets the ceiling on what you attempt",
+"Reframe the obstacle and you often find the opportunity",
+"Your thoughts are the architects of your habits",
+"Change your inner conversation and you change your outer results",
+"The mind that expects little rarely finds much",
+"Feed your mind the same way you'd feed your body: on purpose",
+"Perspective is a choice you make before circumstances make it for you",
+"You are not your worst day, and you are not your best excuse",
+"A calm mind sees solutions a panicked mind never will",
+"Guard your thoughts; they eventually become your life",
+"See setbacks as data, not verdicts",
+"Confidence is built one kept promise to yourself at a time",
+"The story you tell yourself becomes the life you live"
+],
+growth:[
+"Small progress is still progress",
+"Great things never come from comfort zones",
+"Growth is uncomfortable by design; that's how you know it's working",
+"You don't have to see the whole staircase to take the first step",
+"Every version of you was built by the one before it",
+"Discomfort today is competence tomorrow",
+"Growth is a quiet decision made loudly, every single day",
+"Outgrow your excuses before you outgrow your circumstances",
+"Stretch a little past what feels safe; that's where growth lives",
+"You grow the most in the seasons you wanted to quit",
+"A tree doesn't grow overnight, and neither do you",
+"Growth isn't a straight line; it's a spiral that keeps circling upward",
+"The edge of your comfort zone is the start of your next self",
+"Every skill you have now was once something you couldn't do",
+"Growth asks you to be a beginner again, on purpose",
+"Compare today's you to yesterday's you, not to anyone else"
+],
+focus:[
+"Don't watch the clock; do what it does — keep going",
+"What you give your attention to, you give your life to",
+"Focus is saying no to a hundred good ideas for one great one",
+"A distracted mind builds a scattered life",
+"Where focus goes, energy flows and results grow",
+"Single-task your way to results multitasking never gave you",
+"Protect your focus like it's the asset it actually is",
+"Clarity of goal creates clarity of effort",
+"The noise won't stop; your focus has to start anyway",
+"One priority done well beats five priorities done halfway",
+"Deep work beats busy work every single time",
+"Focus is a muscle, and distraction is its biggest workout partner",
+"A calm, focused hour outproduces a scattered day",
+"Cut the noise until only the signal remains",
+"Attention is the currency of achievement; spend it wisely",
+"Narrow your focus and your progress will widen"
+],
+resilience:[
+"Get up one more time than life knocks you down",
+"Resilience isn't never falling; it's rising with the lesson in hand",
+"Storms don't last, but the strength they build in you does",
+"What doesn't break you is quietly building you",
+"Bend, don't break; bamboo survives storms that snap the rigid oak",
+"The comeback is always harder to ignore than the setback",
+"Scars are proof you survived what tried to stop you",
+"Resilient people don't avoid pain, they refuse to be defined by it",
+"Every hard season teaches a skill an easy one never could",
+"You've survived every one of your worst days so far",
+"Setbacks are only permanent if you decide to stop there",
+"The oak fought the wind and lost; the willow bent and lived",
+"Resilience is built in the gap between falling and rising",
+"Pain is temporary, but the strength you build from it isn't",
+"Keep your roots strong so the storm can only shake your leaves",
+"A hard season is just training for an easier one"
+],
+action:[
+"Nothing will work unless you do",
+"A good plan executed today beats a perfect plan executed never",
+"Ideas are cheap; execution is everything",
+"Action is the antidote to anxiety",
+"Stop overthinking and start doing; clarity comes from motion",
+"You don't need to feel ready, you need to start",
+"Done is a decision, not an accident",
+"Talk is inventory; action is sales",
+"The gap between dreaming and achieving is called doing",
+"One action today beats a hundred plans for tomorrow",
+"Waiting for the perfect moment is how good ideas die quietly",
+"Every result you want is on the other side of an action you're avoiding",
+"Momentum rewards the person who moves first",
+"Stop rehearsing and start performing",
+"Take the imperfect step; adjust while you're already moving",
+"You can't steer a parked car — get moving"
+],
+creativity:[
+"Creativity is intelligence having fun with a problem",
+"Every masterpiece started as a mess somebody was brave enough to begin",
+"Ideas multiply the moment you stop judging the first draft",
+"Creativity thrives on constraints; give it a box to think outside of",
+"Curiosity is the engine every original idea runs on",
+"The blank page is an invitation, not a verdict",
+"Borrow inspiration, but build in your own voice",
+"Creative work rewards the people who keep showing up, not just the talented",
+"Bad first drafts are how good final drafts get made",
+"Play is the secret discipline behind every creative breakthrough",
+"Original ideas are old ideas that finally met the right combination",
+"Boredom is where your best ideas quietly wait for you",
+"Make something today, even if it's small, unfinished, and imperfect",
+"Creativity is just connecting dots nobody else thought to connect",
+"Your weird ideas are usually your best ones in disguise",
+"Every creator was once a beginner who refused to stop tinkering"
+],
+leadership:[
+"A leader's job is to make more leaders, not more followers",
+"Lead from where you stand, not from where you wish you stood",
+"People follow clarity long before they follow charisma",
+"The best leaders serve first and command second",
+"Leadership is borrowed authority; use it to lift others",
+"A leader eats last and thinks first",
+"Real leaders create rooms where truth is safe to say",
+"Leadership is a series of small trust deposits, made daily",
+"You lead loudest through what you tolerate",
+"Great leaders ask better questions, not louder ones",
+"Authority is given; respect is earned",
+"Lead with your actions and let your title catch up",
+"A team rises to the standard its leader models",
+"The strongest leaders admit I don't know without flinching",
+"Leadership is influence, and influence is built in private moments",
+"Protect your people's growth even when it costs you comfort"
+],
+courage:[
+"Courage isn't the absence of fear, it's action taken beside it",
+"Do the brave thing before you feel brave enough to do it",
+"Fear is loud, but courage only needs to be a little louder",
+"The bravest move is often the quiet, unnoticed one",
+"Courage grows in the exact spot you thought you had none",
+"You don't need to feel fearless, just willing",
+"Every brave person you admire was scared and moved anyway",
+"Courage is a muscle; the small risks you take today train it",
+"Speak the truth your fear told you to swallow",
+"The door you're afraid to knock on is often the right one",
+"Bravery is a decision made one breath before the fear wins",
+"Take the leap; the net rarely shows up before you jump",
+"Courage doesn't roar every time; sometimes it's a quiet I'll try",
+"Ask the question you're scared will make you look foolish",
+"The comfortable choice and the courageous choice are rarely the same one",
+"Fear shrinks the moment you walk straight at it"
+],
+gratitude:[
+"Gratitude turns what you have into enough",
+"A grateful heart finds reasons to smile in ordinary days",
+"Count what's working before you count what's missing",
+"Gratitude is the shortest path from anxious to present",
+"Say thank you like you mean it; it changes both people in the room",
+"What you appreciate, appreciates",
+"Gratitude doesn't deny the hard parts; it just refuses to be ruled by them",
+"Notice one good thing before you notice ten bad ones",
+"A thankful mind has less room left for worry",
+"Small blessings, noticed daily, add up to a rich life",
+"Gratitude is a lens that makes ordinary moments look like gifts",
+"The more you thank, the more you notice worth thanking for",
+"Appreciation is a quiet form of joy",
+"You can be ambitious and grateful in the same breath",
+"Gratitude turns a meal into a memory and a moment into a milestone",
+"Thank the people who showed up before you needed them to"
+],
+patience:[
+"Patience isn't waiting; it's working calmly while you wait",
+"Good things take the time they need, not the time you want",
+"Slow progress beats fast burnout every time",
+"Patience is trusting the process on the days it's invisible",
+"The seed doesn't argue with the season; it just grows",
+"Rushing rarely builds anything that lasts",
+"Patience is a quiet kind of confidence in the outcome",
+"Give it the time it takes, not the time you'd prefer",
+"Some things can't be hurried without being ruined",
+"Patience turns pressure into steady, sustainable progress",
+"The tea steeps in its own time; so does mastery",
+"Trust the timeline even when it doesn't match your plan",
+"Great work is rarely fast work",
+"Patience is choosing calm over the panic of not yet",
+"Every slow season is quietly preparing you for a fast one",
+"You can be ambitious and patient without contradiction"
+],
+confidence:[
+"Confidence is built in the reps nobody applauded",
+"Walk in like you already belong there",
+"Self-doubt is loud, but it's rarely accurate",
+"Confidence is a skill, not a personality trait",
+"Trust the version of you that's been preparing quietly",
+"You don't need to feel confident to act confident; the feeling often follows",
+"Believe the evidence of your effort more than the noise of your fear",
+"Confidence grows every time you keep a promise to yourself",
+"Stand tall even in the room that intimidates you",
+"Your posture can lead your mindset; try standing like you mean it",
+"Confidence isn't knowing you'll win; it's knowing you'll be fine either way",
+"Speak like your opinion has already earned its seat at the table",
+"Self-belief is quiet, steady, and rarely needs an audience",
+"The most confident people you know still get nervous; they just proceed anyway",
+"Every skill you built started with an awkward, unconfident first try",
+"Confidence is remembering what you've already survived"
+],
+purpose:[
+"Know your why and the how tends to sort itself out",
+"Purpose turns a job into a mission",
+"Live in a way that would make your reasons proud",
+"A life without direction drifts even when it's busy",
+"Purpose is the compass that makes hard choices simple",
+"Find the work that would matter to you even unpaid",
+"Your purpose doesn't have to be loud to be real",
+"Chase meaning, and success tends to follow the trail",
+"Ask not just what you want, but who it's for",
+"Purpose is what makes the hard days feel worth it anyway",
+"Live for a reason bigger than your mood on any given day",
+"Your gifts were given to be used, not just admired",
+"A clear purpose makes distraction easier to say no to",
+"Find what you'd do even if nobody was watching, and do more of it",
+"Purpose is the thread that turns scattered efforts into a life's work",
+"What breaks your heart might be pointing at your calling"
+],
+change:[
+"Growth demands a version of you that no longer fits your old habits",
+"Change is uncomfortable right up until it's your new normal",
+"You can't become who you're meant to be by staying who you were",
+"Every new chapter requires closing the one before it",
+"Change starts as a decision long before it becomes a difference",
+"The old you got you here; the new you has to take it from here",
+"Nothing changes if nothing changes",
+"Let go of the version of your life that's no longer working",
+"Change is just growth wearing an unfamiliar outfit",
+"You don't have to have it all figured out to start changing",
+"The season is shifting whether you're ready or not",
+"Reinvent yourself as often as your goals require",
+"What got you to this level won't necessarily get you to the next",
+"Change your habits and your identity eventually catches up",
+"You are allowed to outgrow people, places, and versions of yourself",
+"The discomfort of change is smaller than the regret of staying the same"
+],
+perseverance:[
+"Keep going, especially when nobody would blame you for stopping",
+"The finish line rewards the ones who refused to stop walking toward it",
+"Persistence turns no into not yet",
+"Endurance is choosing to continue after the excitement has worn off",
+"The last mile is always the hardest, and the most telling",
+"Quitting is a permanent decision to a usually temporary problem",
+"Every mile you didn't want to run built the strength for the next one",
+"Perseverance is doing the work long after the applause has stopped",
+"The tired middle is where most people quit; that's exactly why you shouldn't",
+"Keep pushing; the wall you're hitting is often thinner than it feels",
+"You don't have to feel strong to keep going, just willing",
+"Every rep you almost skipped is where the real strength was built",
+"Long roads reward the traveler who never stopped walking, even slowly",
+"The difference between a dream and a reality is often just persistence",
+"Show up tired, show up unsure, but show up",
+"Perseverance is a quieter kind of courage"
+],
+selfbelief:[
+"Believe in yourself before you have all the proof",
+"You are more capable than the voice that doubts you",
+"Trust the parts of you that have already carried you this far",
+"Self-belief is quiet fuel for loud goals",
+"You don't need permission to believe you can do this",
+"Bet on yourself the way you'd bet on someone you love",
+"The first person who has to believe in your dream is you",
+"You are allowed to outgrow the doubts other people planted in you",
+"Believing in yourself is a decision, renewed daily",
+"You've figured out hard things before; trust that pattern",
+"Self-belief doesn't wait for permission from the room",
+"What you believe about your own capability quietly shapes what you attempt",
+"The version of you that doubts is not the version that gets to decide",
+"Trust your gut; it's collected more data than you give it credit for",
+"Believe your effort deserves the outcome you're chasing",
+"You are not behind; you are exactly where your story needed you to be"
+],
+ambition:[
+"Aim high enough that the attempt itself changes you",
+"Ambition without direction is just restlessness with better branding",
+"Want it badly enough to outwork the doubt",
+"Big goals demand small, boring, daily actions",
+"Ambition is refusing to let good enough be your ceiling",
+"Chase the goal that makes other people ask why you're not tired yet",
+"Set the target beyond what feels comfortable to admit out loud",
+"Ambition is impatience with the gap between where you are and where you could be",
+"Want more for your life without apologizing for it",
+"The hungry stay sharp; the satisfied stay still",
+"Ambition is a fire that needs daily fuel, not a spark that lasts alone",
+"Dream in decades, but work in days",
+"Set goals that scare your comfort zone a little",
+"Ambition is refusing to negotiate with your own potential",
+"Reach for the version of success only you would define as enough",
+"The size of your goal should make your current habits nervous"
+],
+positivity:[
+"A positive mind finds a way; a negative mind finds an excuse",
+"Optimism is a decision you make before the day gives you a reason to",
+"Choose the thought that moves you forward, not the one that keeps you stuck",
+"Positivity isn't ignoring the hard parts, it's refusing to live only in them",
+"A hopeful outlook makes hard work feel lighter",
+"Look for the opening, not just the obstacle",
+"Your attitude is the one variable you control in every situation",
+"Optimism is contagious; be the reason someone else catches it today",
+"Choose the version of the story where you still win",
+"A good attitude doesn't fix everything, but it makes everything easier to face",
+"See the lesson before you settle for the complaint",
+"Positivity is a discipline you practice on the days it's hardest",
+"Expect good things and you'll notice more of them arriving",
+"Your mindset colors every situation before the situation even gets a say",
+"Choose hope; it's a better long-term strategy than cynicism",
+"A hopeful person plans for tomorrow like it's worth showing up for"
+]
+};
+
+const B_BANK = [
+"even when nobody's watching",
+"one small step at a time",
+"long after the applause fades",
+"especially on the days it's hardest",
+"before you feel ready",
+"without waiting for permission",
+"one honest effort at a time",
+"even when the results are invisible",
+"far past the point of comfort",
+"quietly, without needing credit",
+"again and again, until it sticks",
+"even on the mornings that feel pointless",
+"long before the proof arrives",
+"in the hours nobody else sees",
+"with more patience than you think you have",
+"even when the plan changes",
+"one imperfect attempt after another",
+"further than the doubt expected",
+"with the same energy on the bad days",
+"even when the outcome isn't guaranteed",
+"before the fear has a chance to argue",
+"with whatever you have right now",
+"steadily, whether or not anyone notices",
+"past the point where it stopped being fun",
+"even if it takes longer than planned",
+"with your whole effort, not just your mood",
+"again tomorrow, no matter how today went",
+"without shrinking to fit someone else's comfort",
+"even when the old habits pull you back",
+"with the discipline that motivation can't replace",
+"in a way your future self will thank you for",
+"even when the finish line keeps moving",
+"without needing the whole plan figured out",
+"past the excuses that used to work",
+"even when it's the hardest thing on your list",
+"with more trust than certainty",
+"one honest yes at a time",
+"even when it costs you comfort",
+"further than you promised yourself you would",
+"with the same care you'd give someone you love"
+];
+
+const C_BANK = [
+"That's how the work gets done.",
+"Keep going.",
+"The rest tends to follow.",
+"That's the whole secret.",
+"Nothing more complicated than that.",
+"Everything else builds from there.",
+"That's what separates trying from finishing.",
+"The results will catch up eventually.",
+"That's the quiet work nobody applauds.",
+"It adds up faster than you think.",
+"That's the only trick there is.",
+"This is how ordinary becomes remarkable.",
+"That's the discipline behind every breakthrough.",
+"Trust that and keep moving.",
+"That's the whole game.",
+"Everything worth having is built this way.",
+"That's how momentum is actually built.",
+"The rest is just repetition.",
+"That's the difference that compounds.",
+"It's simpler than it feels.",
+"That's the only shortcut that works.",
+"The proof comes later, not first.",
+"That's what consistency actually looks like.",
+"It won't always feel like progress, but it is.",
+"That's how quiet confidence gets built.",
+"The rest is just showing up again.",
+"That's the part nobody sees on the highlight reel.",
+"Small and steady beats loud and short-lived.",
+"That's the whole point of starting.",
+"It's not magic, it's repetition.",
+"That's the version of you worth becoming.",
+"The work speaks eventually.",
+"That's how the story changes.",
+"Nobody gets there any other way.",
+"That's the price of the outcome you want.",
+"It stacks up more than it feels like it does.",
+"That's what separates a wish from a plan.",
+"The compound effect handles the rest.",
+"That's the only way through.",
+"Keep showing up. That's enough."
+];
+
+const TEMPLATES = [
+  (a,b,c) => `${a}, ${b}. ${c}`,
+  (a,b,c) => `${a} — ${b}. ${c}`,
+  (a,b,c) => `${c} ${a}, ${b}.`
+];
+
+const A_LEN = 16, B_LEN = B_BANK.length, C_LEN = C_BANK.length, T_LEN = TEMPLATES.length;
+const TOTAL_PER_CAT = T_LEN * A_LEN * B_LEN * C_LEN; // 76,800
+const GRAND_TOTAL = TOTAL_PER_CAT * CATS.length;      // 1,536,000
+const SHUFFLE_M = 52709; // coprime to TOTAL_PER_CAT, used to scramble browse order
+
+/* ===================== HELPERS ===================== */
+function catInfo(key){ return CATS.find(c=>c.key===key); }
+function catByPrefix(prefix){ return CATS.find(c=>c.prefix===prefix); }
+
+function decodeLocal(idx){
+  let r = idx;
+  const cIdx = r % C_LEN; r = Math.floor(r / C_LEN);
+  const bIdx = r % B_LEN; r = Math.floor(r / B_LEN);
+  const aIdx = r % A_LEN; r = Math.floor(r / A_LEN);
+  const tIdx = r % T_LEN;
+  return {tIdx, aIdx, bIdx, cIdx};
+}
+
+function composeQuote(catKey, idx){
+  idx = ((idx % TOTAL_PER_CAT) + TOTAL_PER_CAT) % TOTAL_PER_CAT;
+  const {tIdx, aIdx, bIdx, cIdx} = decodeLocal(idx);
+  const info = catInfo(catKey);
+  const a = A_BANK[catKey][aIdx];
+  const b = B_BANK[bIdx];
+  const c = C_BANK[cIdx];
+  const text = TEMPLATES[tIdx](a,b,c);
+  const idxStr = String(idx).padStart(5,'0');
+  return {
+    id: `${info.prefix}-${idxStr}`,
+    catNo: `${info.prefix}\u00B7${idxStr}`,
+    quote: text,
+    author: "Diovu Shadrach",
+    category: catKey,
+    catLabel: info.label,
+    idx
+  };
+}
+
+function quoteFromId(id){
+  const dash = id.indexOf('-');
+  const prefix = id.slice(0, dash);
+  const idxStr = id.slice(dash+1);
+  const info = catByPrefix(prefix);
+  if(!info) return null;
+  return composeQuote(info.key, parseInt(idxStr,10));
+}
+
+function randomQuoteInCat(catKey){
+  return composeQuote(catKey, Math.floor(Math.random()*TOTAL_PER_CAT));
+}
+function randomQuoteAny(){
+  const catKey = CATS[Math.floor(Math.random()*CATS.length)].key;
+  return randomQuoteInCat(catKey);
+}
+
+/* ===================== STATE ===================== */
+const FAV_KEY = 'dqa_favorites_v2';
+const VISIT_KEY = 'dqa_visits_v1';
+const THEME_KEY = 'dqa_theme_v1';
+
+let favorites = new Set(JSON.parse(localStorage.getItem(FAV_KEY) || '[]'));
+let currentCategory = 'all';
+let currentSearch = '';
+let visibleCount = 24;
+const BATCH = 24;
+let shuffleSeed = 0;
+let currentRenderedList = [];
+let focusList = [];
+let focusIndex = 0;
+
+/* ===================== DOM REFS ===================== */
+const grid = document.getElementById('grid');
+const drawerTabs = document.getElementById('drawerTabs');
+const searchInput = document.getElementById('search');
+const loadMoreBtn = document.getElementById('loadMoreBtn');
+const statusEl = document.getElementById('status');
+const favList = document.getElementById('favList');
+const statTotal = document.getElementById('statTotal');
+const statFav = document.getElementById('statFav');
+const statShown = document.getElementById('statShown');
+const streakPill = document.getElementById('streakPill');
+const cabinetEl = document.getElementById('cabinet');
+
+/* ===================== BASICS ===================== */
+function setStatus(msg){ statusEl.textContent = msg; }
+
+function saveFavs(){
+  localStorage.setItem(FAV_KEY, JSON.stringify([...favorites]));
+  statFav.textContent = favorites.size;
+  renderFavorites();
+}
+
+function toggleFav(id){
+  if(favorites.has(id)) favorites.delete(id); else favorites.add(id);
+  saveFavs();
+  renderGrid();
+  refreshQotdFavButton();
+}
+
+/* ===================== DRAWER TABS + CABINET ===================== */
+function buildTabs(){
+  const allTab = `<button class="drawer-tab active" data-cat="all" role="tab" aria-selected="true"><span class="dot" style="--dc:var(--gold)"></span>All <span class="n">${GRAND_TOTAL.toLocaleString()}</span></button>`;
+  const catTabs = CATS.map(c=>`<button class="drawer-tab" data-cat="${c.key}" role="tab" aria-selected="false" style="--dc:${c.color}"><span class="dot"></span>${c.label} <span class="n">${TOTAL_PER_CAT.toLocaleString()}</span></button>`).join('');
+  drawerTabs.innerHTML = allTab + catTabs;
+}
+
+function setCategory(key){
+  currentCategory = key;
+  [...drawerTabs.children].forEach(b=>{
+    const match = b.dataset.cat === key;
+    b.classList.toggle('active', match);
+    b.setAttribute('aria-selected', match ? 'true':'false');
+  });
+  [...cabinetEl.children].forEach(b=>{
+    b.classList.toggle('active', b.dataset.cat === key);
+  });
+  visibleCount = BATCH;
+  renderGrid();
+}
+
+function buildCabinet(){
+  const allBtn = `<button class="drawer-btn active" data-cat="all" style="--dc:var(--gold)"><span class="di">✦</span><span class="dl">All Cards</span><span class="dn">${GRAND_TOTAL.toLocaleString()} possible</span></button>`;
+  const catBtns = CATS.map(c=>`<button class="drawer-btn" data-cat="${c.key}" style="--dc:${c.color}"><span class="di">${c.icon}</span><span class="dl">${c.label}</span><span class="dn">${TOTAL_PER_CAT.toLocaleString()} possible</span></button>`).join('');
+  cabinetEl.innerHTML = allBtn + catBtns;
+}
+
+drawerTabs.addEventListener('click', (e)=>{
+  const btn = e.target.closest('.drawer-tab');
+  if(!btn) return;
+  setCategory(btn.dataset.cat);
+});
+
+cabinetEl.addEventListener('click', (e)=>{
+  const btn = e.target.closest('.drawer-btn');
+  if(!btn) return;
+  setCategory(btn.dataset.cat);
+  document.getElementById('grid').scrollIntoView({behavior:'smooth', block:'nearest'});
+});
+
+/* ===================== BROWSE (no search term) ===================== */
+function browseAt(position){
+  if(currentCategory==='all'){
+    const n = CATS.length;
+    const catIndex = position % n;
+    const catP = Math.floor(position/n);
+    const localIdx = ((catP + shuffleSeed) * SHUFFLE_M) % TOTAL_PER_CAT;
+    return composeQuote(CATS[catIndex].key, localIdx);
+  }
+  const localIdx = ((position + shuffleSeed) * SHUFFLE_M) % TOTAL_PER_CAT;
+  return composeQuote(currentCategory, localIdx);
+}
+
+/* ===================== SEARCH ===================== */
+function getSearchResults(term){
+  const lower = term.toLowerCase().trim();
+  if(!lower) return [];
+  const cats = currentCategory==='all' ? CATS.map(c=>c.key) : [currentCategory];
+  const seen = new Set();
+  const results = [];
+
+  cats.forEach(catKey=>{
+    const info = catInfo(catKey);
+    const aArr = A_BANK[catKey];
+    const catLabelMatch = info.label.toLowerCase().includes(lower) || catKey.includes(lower) || info.prefix.toLowerCase().includes(lower);
+
+    const aIdxs = []; aArr.forEach((p,i)=>{ if(p.toLowerCase().includes(lower)) aIdxs.push(i); });
+    const bIdxs = []; B_BANK.forEach((p,i)=>{ if(p.toLowerCase().includes(lower)) bIdxs.push(i); });
+    const cIdxs = []; C_BANK.forEach((p,i)=>{ if(p.toLowerCase().includes(lower)) cIdxs.push(i); });
+
+    const addCombo = (ai,bi,ci,ti)=>{
+      const idx = ((ti*A_LEN + ai)*B_LEN + bi)*C_LEN + ci;
+      const key = catKey+':'+idx;
+      if(seen.has(key)) return;
+      seen.add(key);
+      results.push(composeQuote(catKey, idx));
+    };
+
+    const sampleT = [0,1,2];
+    const fbA = [0,1,2,3,4,5];
+    const fbB = [0,1,2,3,4,5];
+    const fbC = [0,1,2,3,4,5];
+
+    if(aIdxs.length){
+      aIdxs.slice(0,6).forEach(ai=>{
+        fbB.forEach(bi=>{
+          fbC.slice(0,4).forEach(ci=>{
+            sampleT.forEach(ti=> addCombo(ai,bi,ci,ti));
+          });
+        });
+      });
+    }
+    if(bIdxs.length){
+      bIdxs.slice(0,6).forEach(bi=>{
+        fbA.forEach(ai=>{
+          fbC.slice(0,4).forEach(ci=>{
+            sampleT.forEach(ti=> addCombo(ai,bi,ci,ti));
+          });
+        });
+      });
+    }
+    if(cIdxs.length){
+      cIdxs.slice(0,6).forEach(ci=>{
+        fbA.forEach(ai=>{
+          fbB.slice(0,4).forEach(bi=>{
+            sampleT.forEach(ti=> addCombo(ai,bi,ci,ti));
+          });
+        });
+      });
+    }
+    if(catLabelMatch && !aIdxs.length && !bIdxs.length && !cIdxs.length){
+      fbA.slice(0,4).forEach(ai=>{
+        fbB.slice(0,4).forEach(bi=>{
+          fbC.slice(0,4).forEach(ci=>{
+            sampleT.forEach(ti=> addCombo(ai,bi,ci,ti));
+          });
+        });
+      });
+    }
+  });
+
+  return results;
+}
+
+/* ===================== RENDER GRID ===================== */
+function cardHTML(q){
+  const fav = favorites.has(q.id);
+  const info = catInfo(q.category);
+  const color = info ? info.color : 'var(--gold)';
+  const icon = info ? info.icon : '✦';
+  return `
+  <article class="qcard" data-id="${q.id}" aria-label="${q.catLabel} quote ${q.catNo}" style="--cat-color:${color}">
+    <span class="hole" aria-hidden="true"></span>
+    <span class="cat-icon" aria-hidden="true">${icon}</span>
+    <span class="cat-no">${q.catNo}</span>
+    <p class="qtext">&ldquo;${q.quote}&rdquo;</p>
+    <div class="qfoot">
+      <span class="qauth">— ${q.author}</span>
+      <span class="tag">${q.catLabel}</span>
+    </div>
+    <div class="perf"></div>
+    <div class="actions">
+      <button class="copy-btn" title="Copy quote" aria-label="Copy quote">⧉</button>
+      <button class="fav-btn ${fav?'active':''}" title="${fav?'Remove favorite':'Add favorite'}" aria-label="Toggle favorite">${fav?'♥':'♡'}</button>
+      <button class="dl-btn" title="Download card image" aria-label="Download card image">⬇</button>
+      <button class="share-btn" title="Share quote" aria-label="Share quote">↗</button>
+      <button class="focus-open-btn" title="Open in focus mode" aria-label="Open in focus mode">▣</button>
+    </div>
+  </article>`;
+}
+
+function renderGrid(){
+  let list, totalAvailable;
+  if(currentSearch.trim()){
+    const all = getSearchResults(currentSearch);
+    totalAvailable = all.length;
+    list = all.slice(0, visibleCount);
+  } else {
+    totalAvailable = currentCategory==='all' ? GRAND_TOTAL : TOTAL_PER_CAT;
+    const count = Math.min(visibleCount, totalAvailable);
+    list = [];
+    for(let i=0;i<count;i++) list.push(browseAt(i));
+  }
+  currentRenderedList = list;
+  grid.innerHTML = list.length
+    ? list.map(cardHTML).join('')
+    : `<p style="color:var(--site-muted);grid-column:1/-1;text-align:center;padding:30px;">No cards match that search. Try another word or drawer.</p>`;
+  statShown.textContent = list.length;
+  loadMoreBtn.style.display = (visibleCount < totalAvailable) ? 'inline-flex' : 'none';
+}
+
+grid.addEventListener('click',(e)=>{
+  const card = e.target.closest('.qcard');
+  if(!card) return;
+  const id = card.dataset.id;
+  const q = currentRenderedList.find(x=>x.id===id) || quoteFromId(id);
+  if(e.target.closest('.copy-btn')){
+    navigator.clipboard.writeText(`"${q.quote}" — ${q.author}`);
+    setStatus(`Copied ${q.catNo} to clipboard.`);
+  } else if(e.target.closest('.fav-btn')){
+    toggleFav(id);
+    setStatus(favorites.has(id) ? `${q.catNo} added to favorites.` : `${q.catNo} removed from favorites.`);
+  } else if(e.target.closest('.dl-btn')){
+    downloadCard(q);
+  } else if(e.target.closest('.share-btn')){
+    shareQuote(q);
+  } else if(e.target.closest('.focus-open-btn')){
+    openFocus(q);
+  }
+});
+
+loadMoreBtn.addEventListener('click',()=>{
+  visibleCount += BATCH;
+  renderGrid();
+});
+
+let searchDebounce;
+searchInput.addEventListener('input',(e)=>{
+  clearTimeout(searchDebounce);
+  searchDebounce = setTimeout(()=>{
+    currentSearch = e.target.value;
+    visibleCount = BATCH;
+    renderGrid();
+  }, 150);
+});
+
+document.getElementById('shuffleBtn').addEventListener('click', ()=>{
+  shuffleSeed = Math.floor(Math.random()*TOTAL_PER_CAT);
+  visibleCount = BATCH;
+  renderGrid();
+  setStatus('Grid shuffled.');
+});
+
+/* ===================== FAVORITES SECTION ===================== */
+function renderFavorites(){
+  const favItems = [...favorites].map(id=>quoteFromId(id)).filter(Boolean);
+  favList.innerHTML = favItems.length ? favItems.map(q=>`
+    <div class="fav-item" data-id="${q.id}">
+      <div>
+        <p>&ldquo;${q.quote}&rdquo;</p>
+        <div class="meta">${q.catNo} · ${q.catLabel}</div>
+      </div>
+      <div class="fav-actions">
+        <button class="icon-btn dl-fav-btn" aria-label="Download card">⬇</button>
+        <button class="icon-btn remove-fav-btn" aria-label="Remove favorite">Remove</button>
+      </div>
+    </div>
+  `).join('') : `<div class="fav-empty">No favorites yet. Tap the ♡ on any card to file it here.</div>`;
+}
+
+favList.addEventListener('click',(e)=>{
+  const item = e.target.closest('.fav-item');
+  if(!item) return;
+  const id = item.dataset.id;
+  const q = quoteFromId(id);
+  if(e.target.closest('.remove-fav-btn')){
+    toggleFav(id);
+  } else if(e.target.closest('.dl-fav-btn')){
+    downloadCard(q);
+  }
+});
+
+document.getElementById('exportFavBtn').addEventListener('click',()=>{
+  const favItems = [...favorites].map(id=>quoteFromId(id)).filter(Boolean);
+  if(!favItems.length){ setStatus('No favorites to export yet.'); return; }
+  const text = favItems.map(q=>`"${q.quote}"\n— ${q.author} (${q.catNo}, ${q.catLabel})\n`).join('\n');
+  const blob = new Blob([`THE QUOTE ARCHIVE — Favorites\n\n${text}`], {type:'text/plain'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'my-favorite-quotes.txt'; a.click();
+  URL.revokeObjectURL(url);
+  setStatus('Favorites exported as a text file.');
+});
+
+/* ===================== QUOTE OF THE DAY ===================== */
+function getQOTD(){
+  const d = new Date();
+  const dayNum = Math.floor(d.getTime() / 86400000);
+  const globalIdx = dayNum % GRAND_TOTAL;
+  const catIndex = Math.floor(globalIdx / TOTAL_PER_CAT);
+  const localIdx = globalIdx % TOTAL_PER_CAT;
+  return composeQuote(CATS[catIndex].key, localIdx);
+}
+let qotdItem = getQOTD();
+
+function renderQOTD(){
+  document.getElementById('qotdText').textContent = `"${qotdItem.quote}"`;
+  document.getElementById('qotdMeta').textContent = `— ${qotdItem.author} · ${qotdItem.catNo}`;
+  const info = catInfo(qotdItem.category);
+  document.querySelector('.qotd').style.setProperty('--cat-color', info ? info.color : '#e0a83f');
+  refreshQotdFavButton();
+}
+function refreshQotdFavButton(){
+  const btn = document.getElementById('qotdFav');
+  const fav = favorites.has(qotdItem.id);
+  btn.textContent = fav ? '♥ Favorited' : '♡ Favorite';
+  btn.classList.toggle('active', fav);
+}
+document.getElementById('qotdCopy').addEventListener('click',()=>{
+  navigator.clipboard.writeText(`"${qotdItem.quote}" — ${qotdItem.author}`);
+  setStatus('Card of the Day copied to clipboard.');
+});
+document.getElementById('qotdFav').addEventListener('click',()=>{
+  toggleFav(qotdItem.id);
+  refreshQotdFavButton();
+});
+document.getElementById('qotdDownload').addEventListener('click',()=> downloadCard(qotdItem));
+document.getElementById('qotdShare').addEventListener('click',()=> shareQuote(qotdItem));
+
+/* ===================== RANDOM PULL / HERO CARD ===================== */
+function pullRandom(){
+  const q = randomQuoteAny();
+  document.getElementById('heroCatNo').textContent = q.catNo;
+  document.getElementById('heroQuoteText').textContent = `"${q.quote}"`;
+  setStatus(`Pulled card ${q.catNo}.`);
+  return q;
+}
+document.getElementById('pullBtn').addEventListener('click', pullRandom);
+
+/* ===================== SHARE / DOWNLOAD ===================== */
+function shareQuote(q){
+  const text = `"${q.quote}" — ${q.author}`;
+  if(navigator.share){
+    navigator.share({text, title:'The Quote Archive'}).catch(()=>{});
+  } else {
+    navigator.clipboard.writeText(text);
+    setStatus('Sharing not supported here — quote copied instead.');
+  }
+}
+
+function wrapCanvasText(ctx, text, x, y, maxWidth, lineHeight){
+  const words = text.split(' ');
+  let line = '';
+  let curY = y;
+  for(let n=0;n<words.length;n++){
+    const test = line + words[n] + ' ';
+    if(ctx.measureText(test).width > maxWidth && n>0){
+      ctx.fillText(line, x, curY);
+      line = words[n] + ' ';
+      curY += lineHeight;
+    } else {
+      line = test;
+    }
+  }
+  ctx.fillText(line, x, curY);
+  return curY;
+}
+
+function downloadCard(q){
+  const W = 1200, H = 675;
+  const canvas = document.createElement('canvas');
+  canvas.width = W; canvas.height = H;
+  const ctx = canvas.getContext('2d');
+
+  ctx.fillStyle = '#141a2c';
+  ctx.fillRect(0,0,W,H);
+
+  ctx.fillStyle = '#f3ead6';
+  const pad = 40;
+  ctx.fillRect(pad, pad, W-pad*2, H-pad*2);
+
+  ctx.strokeStyle = '#e0a83f';
+  ctx.lineWidth = 4;
+  ctx.strokeRect(pad, pad, W-pad*2, H-pad*2);
+
+  ctx.beginPath();
+  ctx.arc(pad+30, pad+30, 9, 0, Math.PI*2);
+  ctx.fillStyle = '#141a2c';
+  ctx.fill();
+  ctx.strokeStyle = '#c9b892';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  ctx.fillStyle = '#6b5f4c';
+  ctx.font = '600 20px "IBM Plex Mono", monospace';
+  ctx.textAlign = 'right';
+  ctx.fillText(q.catNo, W-pad-24, pad+42);
+  ctx.textAlign = 'left';
+
+  ctx.fillStyle = '#1d1811';
+  ctx.font = 'italic 40px Georgia, serif';
+  const endY = wrapCanvasText(ctx, `"${q.quote}"`, pad+50, pad+140, W-(pad+50)*2, 52);
+
+  ctx.fillStyle = '#b9822a';
+  ctx.font = 'bold 26px Arial';
+  ctx.fillText(`— ${q.author}`, pad+50, Math.max(endY+70, H-140));
+
+  ctx.fillStyle = '#4a9089';
+  ctx.font = '600 18px "IBM Plex Mono", monospace';
+  ctx.fillText(`${q.catLabel.toUpperCase()} · THE QUOTE ARCHIVE`, pad+50, H-pad-24);
+
+  const link = document.createElement('a');
+  link.download = `${q.catNo.replace('\u00B7','-')}.png`;
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+  setStatus(`Downloaded card ${q.catNo} as an image.`);
+}
+
+/* ===================== FOCUS MODE ===================== */
+const focusOverlay = document.getElementById('focusOverlay');
+function openFocus(q){
+  const idxInList = currentRenderedList.findIndex(x=>x.id===q.id);
+  if(idxInList >= 0){
+    focusList = currentRenderedList;
+    focusIndex = idxInList;
+  } else {
+    focusList = [q];
+    for(let i=0;i<7;i++) focusList.push(randomQuoteInCat(q.category));
+    focusIndex = 0;
+  }
+  renderFocus();
+  focusOverlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  document.getElementById('focusClose').focus();
+}
+function renderFocus(){
+  const q = focusList[focusIndex];
+  document.getElementById('focusCatNo').textContent = q.catNo;
+  document.getElementById('focusText').textContent = `"${q.quote}"`;
+  document.getElementById('focusAuthor').textContent = `— ${q.author}`;
+  const favBtn = document.getElementById('focusFav');
+  const fav = favorites.has(q.id);
+  favBtn.textContent = fav ? '♥ Favorited' : '♡ Favorite';
+}
+function closeFocus(){
+  focusOverlay.classList.remove('open');
+  document.body.style.overflow = '';
+}
+function focusStep(dir){
+  focusIndex = (focusIndex + dir + focusList.length) % focusList.length;
+  renderFocus();
+}
+document.getElementById('focusBtn').addEventListener('click', ()=> openFocus(randomQuoteAny()));
+document.getElementById('focusBtn2').addEventListener('click', ()=> openFocus(randomQuoteAny()));
+document.getElementById('focusClose').addEventListener('click', closeFocus);
+document.getElementById('focusNext').addEventListener('click', ()=>focusStep(1));
+document.getElementById('focusPrev').addEventListener('click', ()=>focusStep(-1));
+document.getElementById('focusFav').addEventListener('click', ()=>{
+  toggleFav(focusList[focusIndex].id);
+  renderFocus();
+});
+focusOverlay.addEventListener('click',(e)=>{ if(e.target===focusOverlay) closeFocus(); });
+
+/* ===================== KEYBOARD SHORTCUTS ===================== */
+document.addEventListener('keydown',(e)=>{
+  if(focusOverlay.classList.contains('open')){
+    if(e.key==='Escape') closeFocus();
+    if(e.key==='ArrowRight' || e.key===' ') { e.preventDefault(); focusStep(1); }
+    if(e.key==='ArrowLeft') focusStep(-1);
+    return;
+  }
+  const tag = document.activeElement.tagName;
+  if(tag==='INPUT' || tag==='SELECT' || tag==='TEXTAREA') return;
+  if(e.key==='/'){ e.preventDefault(); searchInput.focus(); }
+  if(e.key.toLowerCase()==='r'){ pullRandom(); }
+});
+
+/* ===================== THEME ===================== */
+function applyTheme(mode){
+  document.body.classList.toggle('day', mode==='day');
+  document.getElementById('themeBtn').setAttribute('aria-pressed', mode==='day');
+  localStorage.setItem(THEME_KEY, mode);
+}
+document.getElementById('themeBtn').addEventListener('click', ()=>{
+  const next = document.body.classList.contains('day') ? 'night' : 'day';
+  applyTheme(next);
+});
+applyTheme(localStorage.getItem(THEME_KEY) || 'night');
+
+/* ===================== STREAK ===================== */
+function updateStreak(){
+  const today = new Date().toISOString().slice(0,10);
+  let visits = JSON.parse(localStorage.getItem(VISIT_KEY) || '[]');
+  if(!visits.includes(today)){
+    visits.push(today);
+    localStorage.setItem(VISIT_KEY, JSON.stringify(visits));
+  }
+  visits = [...new Set(visits)];
+  let streak = 0;
+  let day = new Date(today);
+  const visitSet = new Set(visits);
+  while(visitSet.has(day.toISOString().slice(0,10))){
+    streak++;
+    day.setDate(day.getDate()-1);
+  }
+  streakPill.textContent = `🔥 ${streak} day${streak===1?'':'s'} streak`;
+}
+
+/* ===================== BOOT ===================== */
+buildTabs();
+buildCabinet();
+renderGrid();
+renderFavorites();
+renderQOTD();
+updateStreak();
+statTotal.textContent = GRAND_TOTAL.toLocaleString();
+document.getElementById('eyebrowTotal').textContent = GRAND_TOTAL.toLocaleString()+'+';
+document.getElementById('footerCount').textContent = GRAND_TOTAL.toLocaleString()+' possible cards, generated from ~360 original fragments';
+document.getElementById('cabinetSub').textContent = `Twenty drawers, ${TOTAL_PER_CAT.toLocaleString()} possible cards in each. Open one to filter, or search across all of them below.`;
+statFav.textContent = favorites.size;
+pullRandom();
+</script>
+</body>
+</html>
