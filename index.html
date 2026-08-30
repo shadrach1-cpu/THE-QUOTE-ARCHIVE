@@ -31,6 +31,14 @@
 
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23141a2c'/%3E%3Ctext x='50' y='68' font-size='54' text-anchor='middle' fill='%23e0a83f' font-family='Georgia,serif'%3E%E2%80%9C%3C/text%3E%3C/svg%3E">
 
+<!-- PWA: installable app support (needs manifest.json, sw.js, icon-192.png, icon-512.png alongside this file) -->
+<link rel="manifest" href="./manifest.json">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Quote Archive">
+<link rel="apple-touch-icon" href="./icon-192.png">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500;1,9..144,600&family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -372,6 +380,45 @@
   .focus-controls{display:flex;gap:12px;justify-content:center;margin-top:34px;flex-wrap:wrap}
   .focus-hint{margin-top:18px;color:#7f8598;font-size:.8rem;font-family:'IBM Plex Mono',monospace}
 
+  /* ACHIEVEMENTS OVERLAY */
+  .achieve-overlay{
+    position:fixed;inset:0;z-index:210;display:none;align-items:center;justify-content:center;
+    background:rgba(6,8,14,.82);backdrop-filter:blur(6px);padding:20px;
+  }
+  .achieve-overlay.open{display:flex}
+  .achieve-panel{
+    max-width:760px;width:100%;max-height:85vh;overflow-y:auto;
+    background:var(--paper);color:var(--ink-text);border-radius:var(--radius-lg);
+    border:1px solid var(--line);box-shadow:var(--shadow-soft);padding:24px 26px;
+  }
+  .achieve-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:6px}
+  .achieve-head h2{font-family:'Fraunces',serif;font-size:1.4rem;margin:0;display:flex;gap:8px;align-items:baseline}
+  .achieve-head span{font-family:'IBM Plex Mono',monospace;font-size:.8rem;color:var(--teal-deep)}
+  .achieve-head .icon-btn{border-color:var(--line);background:rgba(0,0,0,.05);color:var(--ink-text)}
+  .achieve-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px;margin-top:10px}
+  .badge{
+    border:1px solid var(--line);border-radius:12px;padding:14px;display:flex;gap:12px;align-items:flex-start;
+    background:rgba(0,0,0,.03);
+  }
+  .badge.locked{opacity:.42;filter:grayscale(60%)}
+  .badge .bicon{font-size:1.6rem;line-height:1}
+  .badge .bname{font-weight:700;font-size:.92rem;margin:0 0 3px}
+  .badge .bdesc{font-size:.78rem;color:var(--ink-muted);margin:0;line-height:1.4}
+
+  /* TOASTS */
+  .toast-stack{position:fixed;top:16px;right:16px;z-index:300;display:flex;flex-direction:column;gap:10px;max-width:320px}
+  .toast{
+    background:var(--paper);color:var(--ink-text);border:1px solid var(--gold);border-radius:12px;
+    padding:12px 14px;box-shadow:var(--shadow-card);font-size:.86rem;display:flex;gap:10px;align-items:center;
+    animation:toast-in .3s ease;
+  }
+  .toast .ticon{font-size:1.3rem}
+  .toast b{display:block;font-size:.88rem}
+  @keyframes toast-in{from{transform:translateX(30px);opacity:0}to{transform:translateX(0);opacity:1}}
+  @media (max-width:520px){
+    .toast-stack{left:12px;right:12px;top:12px;max-width:none}
+  }
+
   footer{margin-top:50px;padding:26px;text-align:center;color:var(--site-muted);border-top:1px solid rgba(224,168,63,.15);font-size:.9rem}
   footer .fmark{color:var(--gold)}
 
@@ -465,6 +512,9 @@
       <a href="#generator">Generator</a>
       <a href="#favorites">Favorites</a>
       <span class="streak-pill" id="streakPill" title="Consecutive days visited">🔥 — day streak</span>
+      <button class="icon-btn" id="achieveBtn" type="button">🏅 <span id="achieveCount">0/15</span></button>
+      <button class="icon-btn" id="soundBtn" type="button" aria-pressed="false" title="Toggle sound effects">🔇 Sound</button>
+      <button class="icon-btn" id="installBtn" type="button" hidden>⬇ Install App</button>
       <button class="icon-btn" id="focusBtn" type="button">▣ Focus Mode</button>
       <button class="icon-btn" id="themeBtn" type="button" aria-pressed="false">☾ Night / ☀ Day</button>
     </div>
@@ -608,6 +658,20 @@
     <div class="focus-hint">Space / → next card · ← previous · Esc to exit</div>
   </div>
 </div>
+
+<!-- ACHIEVEMENTS OVERLAY -->
+<div class="achieve-overlay" id="achieveOverlay" role="dialog" aria-modal="true" aria-label="Achievements">
+  <div class="achieve-panel">
+    <div class="achieve-head">
+      <h2>Achievements <span id="achieveHeadCount">0/15</span></h2>
+      <button class="icon-btn" id="achieveCloseBtn" type="button">✕ Close</button>
+    </div>
+    <p style="color:var(--site-muted);margin:0 0 16px;font-size:.9rem">Badges earned just by using the archive — favoriting, downloading, weaving, and returning day after day. Everything is tracked locally in your browser.</p>
+    <div class="achieve-grid" id="achieveGrid"></div>
+  </div>
+</div>
+
+<div class="toast-stack" id="toastStack" aria-live="polite"></div>
 
 <script>
 /* ===================== DATA ===================== */
@@ -1584,6 +1648,9 @@ function parseGeneratedId(id){
 const FAV_KEY = 'dqa_favorites_v1';
 const VISIT_KEY = 'dqa_visits_v1';
 const THEME_KEY = 'dqa_theme_v1';
+const STATS_KEY = 'dqa_stats_v1';
+const UNLOCKED_KEY = 'dqa_unlocked_v1';
+const SOUND_KEY = 'dqa_sound_v1';
 
 let favorites = new Set(JSON.parse(localStorage.getItem(FAV_KEY) || '[]'));
 let currentCategory = 'all';
@@ -1592,6 +1659,163 @@ let visibleCount = 24;
 const BATCH = 24;
 let focusIndex = 0;
 let focusList = quotes;
+let currentStreak = 0;
+
+let stats = Object.assign({downloads:0, weaves:0, focusViews:0, searched:false}, JSON.parse(localStorage.getItem(STATS_KEY) || '{}'));
+let unlocked = new Set(JSON.parse(localStorage.getItem(UNLOCKED_KEY) || '[]'));
+function saveStats(){ localStorage.setItem(STATS_KEY, JSON.stringify(stats)); }
+
+/* ===================== SOUND ENGINE ===================== */
+// Every sound here is synthesized with the Web Audio API — no audio files, so
+// it works offline and adds nothing to the download size.
+let soundOn = localStorage.getItem(SOUND_KEY) === '1';
+let audioCtx = null;
+function ensureAudio(){
+  if(!audioCtx){
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if(AC) audioCtx = new AC();
+  }
+  return audioCtx;
+}
+function tone(freq, start, dur, type='sine', gain=0.06){
+  if(!soundOn) return;
+  const ctx = ensureAudio();
+  if(!ctx) return;
+  const osc = ctx.createOscillator();
+  const g = ctx.createGain();
+  osc.type = type;
+  osc.frequency.setValueAtTime(freq, ctx.currentTime + start);
+  g.gain.setValueAtTime(0, ctx.currentTime + start);
+  g.gain.linearRampToValueAtTime(gain, ctx.currentTime + start + 0.01);
+  g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + start + dur);
+  osc.connect(g); g.connect(ctx.destination);
+  osc.start(ctx.currentTime + start);
+  osc.stop(ctx.currentTime + start + dur + 0.02);
+}
+const sfx = {
+  favOn: ()=>{ tone(660,0,.12,'sine'); tone(880,.06,.14,'sine'); },
+  favOff: ()=>{ tone(520,0,.12,'sine'); },
+  download: ()=>{ tone(740,0,.09,'triangle'); tone(990,.08,.14,'triangle'); },
+  weave: ()=>{ tone(300,0,.18,'sawtooth',0.03); tone(500,.05,.16,'sine',0.04); tone(760,.1,.16,'sine',0.04); },
+  pull: ()=>{ tone(440,0,.08,'square',0.03); },
+  focusOpen: ()=>{ tone(300,0,.12,'sine'); },
+  focusClose: ()=>{ tone(220,0,.12,'sine'); },
+  click: ()=>{ tone(400,0,.05,'square',0.025); },
+  achievement: ()=>{ tone(523,0,.14,'sine'); tone(659,.12,.14,'sine'); tone(784,.24,.24,'sine'); }
+};
+const soundBtn = document.getElementById('soundBtn');
+function applySoundBtn(){
+  soundBtn.textContent = soundOn ? '🔊 Sound' : '🔇 Sound';
+  soundBtn.setAttribute('aria-pressed', String(soundOn));
+}
+soundBtn.addEventListener('click', ()=>{
+  soundOn = !soundOn;
+  localStorage.setItem(SOUND_KEY, soundOn ? '1' : '0');
+  applySoundBtn();
+  if(soundOn){ ensureAudio(); tone(660,0,.1,'sine'); }
+});
+applySoundBtn();
+
+/* ===================== ACHIEVEMENTS ===================== */
+function allDrawersFavorited(){
+  const favCats = new Set();
+  favorites.forEach(id=>{ const q = findQuote(id); if(q) favCats.add(q.category); });
+  return CATS.every(c=>favCats.has(c.key));
+}
+const nowHour = new Date().getHours();
+const isNightOwlVisit = nowHour >= 0 && nowHour < 4;
+const isEarlyRiserVisit = nowHour >= 4 && nowHour < 6;
+
+const ACHIEVEMENTS = [
+  {id:'first_fav', icon:'🌟', name:'First Card', desc:'Favorite your first quote.', check:()=>favorites.size>=1},
+  {id:'collector', icon:'📚', name:'Collector', desc:'Favorite 10 quotes.', check:()=>favorites.size>=10},
+  {id:'curator', icon:'🗂️', name:'Curator', desc:'Favorite 25 quotes.', check:()=>favorites.size>=25},
+  {id:'archivist', icon:'🏛️', name:'Archivist', desc:'Favorite a quote from every one of the 20 drawers.', check:()=>allDrawersFavorited()},
+  {id:'printer', icon:'🖨️', name:"Printer's Apprentice", desc:'Download your first card image.', check:()=>stats.downloads>=1},
+  {id:'print_run', icon:'🖼️', name:'Print Run', desc:'Download 10 card images.', check:()=>stats.downloads>=10},
+  {id:'weaver', icon:'🧵', name:'Weaver', desc:'Generate your first batch on the loom.', check:()=>stats.weaves>=1},
+  {id:'master_weaver', icon:'🕸️', name:'Master Weaver', desc:'Weave 100 generated cards in total.', check:()=>stats.weaves>=100},
+  {id:'streak3', icon:'🔥', name:'3-Day Streak', desc:'Visit three days in a row.', check:()=>currentStreak>=3},
+  {id:'streak7', icon:'🔥', name:'Week of Words', desc:'Visit seven days in a row.', check:()=>currentStreak>=7},
+  {id:'streak30', icon:'🏆', name:'Monthly Devotion', desc:'Visit thirty days in a row.', check:()=>currentStreak>=30},
+  {id:'night_owl', icon:'🌙', name:'Night Owl', desc:'Visit the archive between midnight and 4am.', check:()=>isNightOwlVisit},
+  {id:'early_riser', icon:'🌅', name:'Early Riser', desc:'Visit the archive before 6am.', check:()=>isEarlyRiserVisit},
+  {id:'deep_focus', icon:'🎯', name:'Deep Focus', desc:'View 10 cards in Focus Mode.', check:()=>stats.focusViews>=10},
+  {id:'seeker', icon:'🔍', name:'Seeker', desc:'Search the archive at least once.', check:()=>stats.searched}
+];
+
+const achieveBtn = document.getElementById('achieveBtn');
+const achieveCount = document.getElementById('achieveCount');
+const achieveHeadCount = document.getElementById('achieveHeadCount');
+const achieveGrid = document.getElementById('achieveGrid');
+const achieveOverlay = document.getElementById('achieveOverlay');
+const toastStack = document.getElementById('toastStack');
+
+function showToast(icon, title, desc){
+  const el = document.createElement('div');
+  el.className = 'toast';
+  el.innerHTML = `<span class="ticon">${icon}</span><span><b>${title}</b>${desc}</span>`;
+  toastStack.appendChild(el);
+  setTimeout(()=>{ el.style.transition='opacity .4s ease, transform .4s ease'; el.style.opacity='0'; el.style.transform='translateX(30px)'; setTimeout(()=>el.remove(), 400); }, 4200);
+}
+
+function renderAchievements(){
+  const n = unlocked.size;
+  achieveCount.textContent = `${n}/${ACHIEVEMENTS.length}`;
+  achieveHeadCount.textContent = `${n}/${ACHIEVEMENTS.length}`;
+  achieveGrid.innerHTML = ACHIEVEMENTS.map(a=>{
+    const got = unlocked.has(a.id);
+    return `<div class="badge ${got?'':'locked'}">
+      <span class="bicon">${got ? a.icon : '🔒'}</span>
+      <div><p class="bname">${a.name}</p><p class="bdesc">${a.desc}</p></div>
+    </div>`;
+  }).join('');
+}
+
+function checkAchievements(){
+  let newlyUnlocked = false;
+  ACHIEVEMENTS.forEach(a=>{
+    if(!unlocked.has(a.id) && a.check()){
+      unlocked.add(a.id);
+      newlyUnlocked = true;
+      showToast(a.icon, `Achievement unlocked: ${a.name}`, a.desc);
+      sfx.achievement();
+    }
+  });
+  if(newlyUnlocked){
+    localStorage.setItem(UNLOCKED_KEY, JSON.stringify([...unlocked]));
+  }
+  renderAchievements();
+}
+
+achieveBtn.addEventListener('click', ()=>{ renderAchievements(); achieveOverlay.classList.add('open'); document.body.style.overflow='hidden'; sfx.click(); });
+document.getElementById('achieveCloseBtn').addEventListener('click', ()=>{ achieveOverlay.classList.remove('open'); document.body.style.overflow=''; });
+achieveOverlay.addEventListener('click', (e)=>{ if(e.target===achieveOverlay){ achieveOverlay.classList.remove('open'); document.body.style.overflow=''; } });
+
+/* ===================== PWA: INSTALL + SERVICE WORKER ===================== */
+let deferredInstallPrompt = null;
+const installBtn = document.getElementById('installBtn');
+window.addEventListener('beforeinstallprompt', (e)=>{
+  e.preventDefault();
+  deferredInstallPrompt = e;
+  installBtn.hidden = false;
+});
+installBtn.addEventListener('click', async ()=>{
+  if(!deferredInstallPrompt) return;
+  deferredInstallPrompt.prompt();
+  await deferredInstallPrompt.userChoice;
+  deferredInstallPrompt = null;
+  installBtn.hidden = true;
+});
+window.addEventListener('appinstalled', ()=>{
+  installBtn.hidden = true;
+  setStatus('Installed — find The Quote Archive on your home screen or app list.');
+});
+if('serviceWorker' in navigator){
+  window.addEventListener('load', ()=>{
+    navigator.serviceWorker.register('./sw.js').catch(()=>{ /* offline install still works without it */ });
+  });
+}
 
 /* ===================== DOM REFS ===================== */
 const grid = document.getElementById('grid');
@@ -1610,16 +1834,18 @@ function setStatus(msg){ statusEl.textContent = msg; }
 
 function saveFavs(){
   localStorage.setItem(FAV_KEY, JSON.stringify([...favorites]));
-  statFav.textContent = favorites.length !== undefined ? favorites.size : favorites.size;
   statFav.textContent = favorites.size;
   renderFavorites();
 }
 
 function toggleFav(id){
+  const adding = !favorites.has(id);
   if(favorites.has(id)) favorites.delete(id); else favorites.add(id);
   saveFavs();
   renderGrid();
   refreshQotdFavButton();
+  adding ? sfx.favOn() : sfx.favOff();
+  checkAchievements();
 }
 
 function findQuote(id){
@@ -1756,6 +1982,11 @@ searchInput.addEventListener('input',(e)=>{
     currentSearch = e.target.value;
     visibleCount = BATCH;
     renderGrid();
+    if(currentSearch.trim() && !stats.searched){
+      stats.searched = true;
+      saveStats();
+      checkAchievements();
+    }
   }, 150);
 });
 
@@ -1813,6 +2044,10 @@ function generateBatch(n){
   generatedItems = generatedItems.concat(batch);
   if(generatedItems.length > 240) generatedItems = generatedItems.slice(-240);
   renderGenGrid();
+  stats.weaves += batch.length;
+  saveStats();
+  sfx.weave();
+  checkAchievements();
 }
 
 document.getElementById('genBatchBtn').addEventListener('click', ()=>{
@@ -1911,6 +2146,7 @@ function pullRandom(){
   document.getElementById('heroCatNo').textContent = q.catNo;
   document.getElementById('heroQuoteText').textContent = `"${q.quote}"`;
   setStatus(`Pulled card ${q.catNo}: "${q.quote}"`);
+  sfx.pull();
   return q;
 }
 document.getElementById('pullBtn').addEventListener('click', pullRandom);
@@ -1992,6 +2228,10 @@ function downloadCard(q){
   link.href = canvas.toDataURL('image/png');
   link.click();
   setStatus(`Downloaded card ${q.catNo} as an image.`);
+  stats.downloads += 1;
+  saveStats();
+  sfx.download();
+  checkAchievements();
 }
 
 /* ===================== FOCUS MODE ===================== */
@@ -2004,6 +2244,7 @@ function openFocus(q){
   focusOverlay.classList.add('open');
   document.body.style.overflow = 'hidden';
   document.getElementById('focusClose').focus();
+  sfx.focusOpen();
 }
 function renderFocus(){
   const q = focusList[focusIndex];
@@ -2017,10 +2258,14 @@ function renderFocus(){
 function closeFocus(){
   focusOverlay.classList.remove('open');
   document.body.style.overflow = '';
+  sfx.focusClose();
 }
 function focusStep(dir){
   focusIndex = (focusIndex + dir + focusList.length) % focusList.length;
   renderFocus();
+  stats.focusViews += 1;
+  saveStats();
+  checkAchievements();
 }
 document.getElementById('focusBtn').addEventListener('click', ()=> openFocus(quotes[Math.floor(Math.random()*quotes.length)]));
 document.getElementById('focusBtn2').addEventListener('click', ()=> openFocus(quotes[Math.floor(Math.random()*quotes.length)]));
@@ -2088,6 +2333,7 @@ function updateStreak(){
     day.setDate(day.getDate()-1);
   }
   streakPill.textContent = `🔥 ${streak} day${streak===1?'':'s'} streak`;
+  currentStreak = streak;
 }
 
 /* ===================== BOOT ===================== */
@@ -2105,6 +2351,9 @@ buildGenCatSelect();
 document.getElementById('statGen').textContent = '50,000,000+';
 genCountText.textContent = `50,000,000+ possible combinations (${TOTAL_GENERATABLE.toLocaleString()} exactly) — ${CATS.length} drawers × ${GEN_TEMPLATES.length} patterns × ${GEN_NOUNS.length}×${GEN_ACTIONS.length}×${GEN_OUTCOMES.length}×5 word choices. Far too many to store, so each batch below is woven fresh.`;
 generateBatch(24);
+
+renderAchievements();
+checkAchievements();
 </script>
 </body>
 </html>
