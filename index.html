@@ -1,14 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!--
-GITHUB MUSIC SETUP:
-1. Put your MP3 files in the /music folder.
-2. Change MUSIC_TRACKS above to match the filenames.
-3. Example: file: "music/morning.mp3"
-4. GitHub Pages will serve these files relative to index.html.
--->
-
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <meta name="google-site-verification" content="W4KW9SkGeDnRAMtnggcePGGJCl001O2k9ayZcK1m_as" />
@@ -102,24 +94,6 @@ GITHUB MUSIC SETUP:
     }
   ]
 }
-
-const MUSIC_TRACKS = [
-  {
-    title: "Track 1",
-    artist: "Your Artist",
-    file: "music/track1.mp3"
-  },
-  {
-    title: "Track 2",
-    artist: "Your Artist",
-    file: "music/track2.mp3"
-  },
-  {
-    title: "Track 3",
-    artist: "Your Artist",
-    file: "music/track3.mp3"
-  }
-];
 </script>
 
 <style>
@@ -520,6 +494,75 @@ const MUSIC_TRACKS = [
     .cabinet{grid-template-columns:repeat(auto-fill,minmax(104px,1fr))}
     h1{font-size:1.8rem}
   }
+
+  /* ===================== MUSIC PLAYER ===================== */
+  .music-fab{
+    position:fixed;right:22px;bottom:22px;z-index:250;
+    width:58px;height:58px;border-radius:50%;border:1px solid rgba(224,168,63,.4);
+    background:linear-gradient(155deg,var(--gold),var(--teal));color:#171205;
+    display:flex;align-items:center;justify-content:center;font-size:1.4rem;cursor:pointer;
+    box-shadow:0 14px 30px rgba(0,0,0,.4);
+  }
+  .music-fab .disc{display:inline-block;transition:transform .6s linear}
+  .music-fab.playing .disc{animation:disc-spin 3.2s linear infinite}
+  @keyframes disc-spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+  .music-fab .eq{position:absolute;bottom:6px;right:6px;display:flex;gap:2px;align-items:flex-end;height:10px}
+  .music-fab .eq span{width:2px;background:#171205;opacity:.85;border-radius:1px}
+  .music-fab.playing .eq span{animation:eq-bounce 0.9s ease-in-out infinite}
+  .music-fab .eq span:nth-child(1){height:4px;animation-delay:0s}
+  .music-fab .eq span:nth-child(2){height:8px;animation-delay:.15s}
+  .music-fab .eq span:nth-child(3){height:5px;animation-delay:.3s}
+  @keyframes eq-bounce{0%,100%{transform:scaleY(.4)}50%{transform:scaleY(1.3)}}
+
+  .music-panel{
+    position:fixed;right:22px;bottom:90px;z-index:250;width:320px;max-width:calc(100vw - 32px);
+    max-height:min(70vh,560px);overflow-y:auto;
+    background:var(--paper);color:var(--ink-text);border-radius:var(--radius-lg);
+    border:1px solid var(--line);box-shadow:var(--shadow-soft);
+    padding:18px 18px 14px;display:none;
+  }
+  .music-panel.open{display:block}
+  .music-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:10px}
+  .music-head h3{font-family:'Fraunces',serif;font-size:1.05rem;margin:0;display:flex;align-items:center;gap:6px}
+  .music-head .icon-btn{border-color:var(--line);background:rgba(0,0,0,.05);color:var(--ink-text);padding:6px 9px;font-size:.78rem}
+
+  .music-now{
+    border:1px dashed var(--line);border-radius:10px;padding:10px 12px;margin-bottom:12px;
+    background:rgba(0,0,0,.03);
+  }
+  .music-now .mn-label{font-family:'IBM Plex Mono',monospace;font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--teal-deep)}
+  .music-now .mn-title{font-family:'Fraunces',serif;font-style:italic;font-size:1rem;margin:2px 0 8px;line-height:1.3}
+
+  .music-progress{width:100%;height:5px;border-radius:99px;background:rgba(0,0,0,.12);cursor:pointer;position:relative;overflow:hidden}
+  .music-progress .fill{height:100%;background:linear-gradient(90deg,var(--gold-deep),var(--teal));width:0%}
+  .music-times{display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:.68rem;color:var(--ink-muted);margin-top:5px}
+
+  .music-controls{display:flex;align-items:center;justify-content:center;gap:10px;margin:12px 0}
+  .music-controls button{
+    border:none;background:rgba(0,0,0,.06);color:var(--ink-text);border-radius:50%;
+    width:38px;height:38px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1rem;
+  }
+  .music-controls button.play-pause{width:48px;height:48px;background:var(--gold);color:#1d1811;font-size:1.15rem}
+  .music-controls button:hover{filter:brightness(1.08)}
+  .music-controls button.shuffle-btn.active{background:var(--teal);color:#fff}
+
+  .music-vol{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+  .music-vol input[type=range]{flex:1;accent-color:var(--gold-deep)}
+  .music-vol span{font-size:.9rem;width:16px;text-align:center}
+
+  .music-list{border-top:1px dashed var(--line);margin-top:6px;padding-top:8px;display:grid;gap:4px}
+  .music-track{
+    display:flex;align-items:center;gap:8px;padding:8px 8px;border-radius:8px;cursor:pointer;
+    font-size:.84rem;background:transparent;border:none;text-align:left;color:var(--ink-text);width:100%;font-family:inherit;
+  }
+  .music-track:hover{background:rgba(0,0,0,.05)}
+  .music-track.active{background:color-mix(in srgb, var(--gold) 22%, transparent);font-weight:700}
+  .music-track .tnum{font-family:'IBM Plex Mono',monospace;font-size:.7rem;color:var(--ink-muted);width:18px;flex:0 0 auto}
+
+  @media (max-width:520px){
+    .music-fab{right:14px;bottom:14px;width:52px;height:52px}
+    .music-panel{right:8px;left:8px;width:auto;bottom:76px}
+  }
 </style>
 </head>
 <body>
@@ -665,7 +708,7 @@ const MUSIC_TRACKS = [
   </section>
 
   <footer>
-    Filed with care by <span class="fmark"><a href="https://shadrach1-cpu.github.io/SHADRACH.DEV/" target="_blank" style="color: var(--site-accent);>Diovu Shadrach Chinecherem</a></span> · The Quote Archive · 820 cards across 20 drawers
+    Filed with care by <span class="fmark"><a href="https://shadrach1-cpu.github.io/SHADRACH.DEV/" target="_blank" rel="noopener noreferrer">Diovu Shadrach Chinecherem</a></span> · The Quote Archive · 820 cards across 20 drawers
   </footer>
 </div>
 
@@ -695,6 +738,42 @@ const MUSIC_TRACKS = [
     <p style="color:var(--site-muted);margin:0 0 16px;font-size:.9rem">Badges earned just by using the archive — favoriting, downloading, weaving, and returning day after day. Everything is tracked locally in your browser.</p>
     <div class="achieve-grid" id="achieveGrid"></div>
   </div>
+</div>
+
+<!-- MUSIC PLAYER -->
+<button class="music-fab" id="musicFab" type="button" aria-haspopup="dialog" aria-expanded="false" aria-label="Open background music player">
+  <span class="disc">🎵</span>
+  <span class="eq" aria-hidden="true"><span></span><span></span><span></span></span>
+</button>
+
+<div class="music-panel" id="musicPanel" role="dialog" aria-label="Background music player">
+  <div class="music-head">
+    <h3>🎧 Reading Music</h3>
+    <button class="icon-btn" id="musicCloseBtn" type="button">✕</button>
+  </div>
+
+  <div class="music-now">
+    <div class="mn-label">Now Playing</div>
+    <div class="mn-title" id="musicNowTitle">Nothing playing yet</div>
+    <div class="music-progress" id="musicProgress"><div class="fill" id="musicProgressFill"></div></div>
+    <div class="music-times"><span id="musicCurTime">0:00</span><span id="musicDurTime">0:00</span></div>
+  </div>
+
+  <div class="music-controls">
+    <button id="musicShuffleBtn" class="shuffle-btn" type="button" title="Shuffle" aria-pressed="false">🔀</button>
+    <button id="musicPrevBtn" type="button" title="Previous track">⏮</button>
+    <button id="musicPlayBtn" class="play-pause" type="button" title="Play">▶</button>
+    <button id="musicNextBtn" type="button" title="Next track">⏭</button>
+    <button id="musicLoopBtn" type="button" title="Repeat one" aria-pressed="false">🔁</button>
+  </div>
+
+  <div class="music-vol">
+    <span>🔈</span>
+    <input type="range" id="musicVolume" min="0" max="100" value="55" aria-label="Volume">
+    <span>🔊</span>
+  </div>
+
+  <div class="music-list" id="musicList" aria-label="Track list"></div>
 </div>
 
 <div class="toast-stack" id="toastStack" aria-live="polite"></div>
@@ -1678,7 +1757,18 @@ const STATS_KEY = 'dqa_stats_v1';
 const UNLOCKED_KEY = 'dqa_unlocked_v1';
 const SOUND_KEY = 'dqa_sound_v1';
 
-let favorites = new Set(JSON.parse(localStorage.getItem(FAV_KEY) || '[]'));
+function safeReadJSON(key, fallback) {
+  try {
+    const raw = localStorage.getItem(key);
+    if (!raw) return fallback;
+    const parsed = JSON.parse(raw);
+    return parsed ?? fallback;
+  } catch {
+    return fallback;
+  }
+}
+
+let favorites = new Set(safeReadJSON(FAV_KEY, []));
 let currentCategory = 'all';
 let currentSearch = '';
 let visibleCount = 24;
@@ -1687,8 +1777,8 @@ let focusIndex = 0;
 let focusList = quotes;
 let currentStreak = 0;
 
-let stats = Object.assign({downloads:0, weaves:0, focusViews:0, searched:false}, JSON.parse(localStorage.getItem(STATS_KEY) || '{}'));
-let unlocked = new Set(JSON.parse(localStorage.getItem(UNLOCKED_KEY) || '[]'));
+let stats = Object.assign({downloads:0, weaves:0, focusViews:0, searched:false}, safeReadJSON(STATS_KEY, {}));
+let unlocked = new Set(safeReadJSON(UNLOCKED_KEY, []));
 function saveStats(){ localStorage.setItem(STATS_KEY, JSON.stringify(stats)); }
 
 /* ===================== SOUND ENGINE ===================== */
@@ -1980,7 +2070,7 @@ function handleCardActionEvent(e){
   const q = findQuote(id);
   if(!q) return;
   if(e.target.closest('.copy-btn')){
-    navigator.clipboard.writeText(`"${q.quote}" — ${q.author}`);
+    copyText(`"${q.quote}" — ${q.author}`).then(ok => setStatus(ok ? 'Copied to clipboard.' : 'Could not copy — please copy the text manually.'));
     setStatus(`Copied ${q.catNo} to clipboard.`);
   } else if(e.target.closest('.fav-btn')){
     toggleFav(id);
@@ -2040,7 +2130,7 @@ function buildGenCatSelect(){
 
 function randomGenerated(catFilter){
   let attempts = 0, q = null;
-  while(attempts < 25){
+  while(attempts < 100){
     const cat = catFilter === 'all' ? CATS[Math.floor(Math.random()*CATS.length)] : catInfo(catFilter);
     const templateIdx = Math.floor(Math.random()*GEN_TEMPLATES.length);
     const ai = Math.floor(Math.random()*GEN_NOUNS.length);
@@ -2051,7 +2141,7 @@ function randomGenerated(catFilter){
     if(q && !usedGenIds.has(q.id)){ usedGenIds.add(q.id); return q; }
     attempts++;
   }
-  return q;
+  return null;
 }
 
 function renderGenGrid(){
@@ -2074,17 +2164,18 @@ function generateBatch(n){
   saveStats();
   sfx.weave();
   checkAchievements();
+  return batch.length;
 }
 
 document.getElementById('genBatchBtn').addEventListener('click', ()=>{
   generatedItems = [];
   usedGenIds.clear();
-  generateBatch(24);
-  setStatus('Wove 24 new cards from the loom.');
+  const generated = generateBatch(24);
+  setStatus(`Wove ${generated} new cards from the loom.`);
 });
 document.getElementById('genMoreBtn').addEventListener('click', ()=>{
-  generateBatch(24);
-  setStatus('Wove 24 more cards.');
+  const generated = generateBatch(24);
+  setStatus(`Wove ${generated} more cards.`);
 });
 document.getElementById('genClearBtn').addEventListener('click', ()=>{
   generatedItems = [];
@@ -2094,6 +2185,16 @@ document.getElementById('genClearBtn').addEventListener('click', ()=>{
 genGrid.addEventListener('click', handleCardActionEvent);
 
 /* ===================== FAVORITES SECTION ===================== */
+async function copyText(text){
+  try{
+    if(!navigator.clipboard || !window.isSecureContext) throw new Error('Clipboard unavailable');
+    await navigator.clipboard.writeText(text);
+    return true;
+  }catch{
+    return false;
+  }
+}
+
 function renderFavorites(){
   const favItems = [...favorites].map(id=>findQuote(id)).filter(Boolean);
   favList.innerHTML = favItems.length ? favItems.map(q=>`
@@ -2135,10 +2236,19 @@ document.getElementById('exportFavBtn').addEventListener('click',()=>{
 });
 
 /* ===================== QUOTE OF THE DAY ===================== */
+const allQuotes = [...quotes];
+
+function localDateKey(date = new Date()) {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, '0');
+  const d = String(date.getDate()).padStart(2, '0');
+  return `${y}-${m}-${d}`;
+}
+
 function getQOTD(){
   const d = new Date();
-  const dayNum = Math.floor(d.getTime() / 86400000);
-  return quotes[dayNum % quotes.length];
+  const dayNum = Math.floor(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) / 86400000);
+  return allQuotes[dayNum % allQuotes.length];
 }
 let qotdItem = getQOTD();
 
@@ -2155,9 +2265,9 @@ function refreshQotdFavButton(){
   btn.textContent = fav ? '♥ Favorited' : '♡ Favorite';
   btn.classList.toggle('active', fav);
 }
-document.getElementById('qotdCopy').addEventListener('click',()=>{
-  navigator.clipboard.writeText(`"${qotdItem.quote}" — ${qotdItem.author}`);
-  setStatus('Card of the Day copied to clipboard.');
+document.getElementById('qotdCopy').addEventListener('click', async ()=>{
+  const ok = await copyText(`"${qotdItem.quote}" — ${qotdItem.author}`);
+  setStatus(ok ? 'Card of the Day copied to clipboard.' : 'Could not copy — please copy the text manually.');
 });
 document.getElementById('qotdFav').addEventListener('click',()=>{
   toggleFav(qotdItem.id);
@@ -2183,8 +2293,7 @@ function shareQuote(q){
   if(navigator.share){
     navigator.share({text, title:'The Quote Archive'}).catch(()=>{});
   } else {
-    navigator.clipboard.writeText(text);
-    setStatus('Sharing not supported here — quote copied instead.');
+    copyText(text).then(ok => setStatus(ok ? 'Sharing not supported here — quote copied instead.' : 'Sharing and clipboard are unavailable here — please copy the quote manually.'));
   }
 }
 
@@ -2332,34 +2441,232 @@ applyTheme(localStorage.getItem(THEME_KEY) || 'night');
 
 /* ===================== STREAK ===================== */
 function updateStreak(){
-  const today = new Date().toISOString().slice(0,10);
-  let visits = JSON.parse(localStorage.getItem(VISIT_KEY) || '[]');
+  const today = localDateKey();
+  let visits = safeReadJSON(VISIT_KEY, []);
+  if(!Array.isArray(visits)) visits = [];
   if(!visits.includes(today)){
     visits.push(today);
     localStorage.setItem(VISIT_KEY, JSON.stringify(visits));
   }
   visits = [...new Set(visits)].sort();
-  let streak = 1;
-  let cursor = new Date(today);
-  for(let i=visits.length-1;i>=0;i--){
-    const d = visits[i];
-    const cursorStr = cursor.toISOString().slice(0,10);
-    if(d === cursorStr){
-      cursor.setDate(cursor.getDate()-1);
-    } else if (d < cursorStr) {
-      break;
-    }
-  }
-  // recompute streak properly by walking backward from today
-  streak = 0;
-  let day = new Date(today);
+
+  let streak = 0;
   const visitSet = new Set(visits);
-  while(visitSet.has(day.toISOString().slice(0,10))){
+  const day = new Date();
+  while(visitSet.has(localDateKey(day))){
     streak++;
     day.setDate(day.getDate()-1);
   }
+
   streakPill.textContent = `🔥 ${streak} day${streak===1?'':'s'} streak`;
   currentStreak = streak;
+}
+
+
+/* ===================== MUSIC PLAYER ===================== */
+const MUSIC_TRACKS = [
+  {file:'music/clavier-music-reading-soft-piano-221781.mp3', title:'Soft Piano for Reading'},
+  {file:'music/alexgrohl-gentle-499635.mp3', title:'Gentle'},
+  {file:'music/mixkit-nature-meditation-345.mp3', title:'Nature Meditation'},
+  {file:'music/mixkit-nature-yoga-442.mp3', title:'Nature Yoga'},
+  {file:'music/mixkit-meditation-441.mp3', title:'Meditation'},
+  {file:'music/mixkit-smooth-meditation-324.mp3', title:'Smooth Meditation'},
+  {file:'music/mixkit-relaxation-meditation-365.mp3', title:'Relaxation Meditation'},
+  {file:'music/mixkit-relaxation-05-749.mp3', title:'Relaxation I'},
+  {file:'music/mixkit-relaxation-07-760.mp3', title:'Relaxation II'},
+  {file:'music/mixkit-relax-beat-292.mp3', title:'Relax Beat'},
+  {file:'music/mixkit-rest-now-584.mp3', title:'Rest Now'},
+  {file:'music/mixkit-nap-time-340.mp3', title:'Nap Time'},
+  {file:'music/mixkit-serene-view-443.mp3', title:'Serene View'},
+  {file:'music/mixkit-valley-sunset-127.mp3', title:'Valley Sunset'},
+  {file:'music/mixkit-vastness-184.mp3', title:'Vastness'},
+  {file:'music/mixkit-opalescent-593.mp3', title:'Opalescent'},
+  {file:'music/mixkit-forest-mist-whispers-148.mp3', title:'Forest Mist Whispers'},
+  {file:'music/mixkit-forest-treasure-138.mp3', title:'Forest Treasure'},
+  {file:'music/mixkit-pilates-and-yoga-419.mp3', title:'Pilates & Yoga'},
+  {file:'music/mixkit-finding-myself-993.mp3', title:'Finding Myself'},
+  {file:'music/mixkit-feedback-dreams-588.mp3', title:'Feedback Dreams'},
+  {file:'music/mixkit-what-it-takes-616.mp3', title:'What It Takes'}
+];
+
+const MUSIC_STATE_KEY = 'dqa_music_state_v1';
+const musicAudio = new Audio();
+musicAudio.preload = 'metadata';
+musicAudio.addEventListener('error', () => {
+  const code = musicAudio.error?.code;
+  const reason = code === 1 ? 'loading was aborted'
+    : code === 2 ? 'a network/file read error occurred'
+    : code === 3 ? 'the audio could not be decoded'
+    : code === 4 ? 'the audio format or file path is unsupported'
+    : 'the audio file could not be loaded';
+  setStatus(`Music error: ${reason}. Check that the music folder is beside this HTML file.`);
+});
+
+
+const storedMusicState = safeReadJSON(MUSIC_STATE_KEY, {});
+let musicIndex = Number.isInteger(storedMusicState.index) && storedMusicState.index >= 0 && storedMusicState.index < MUSIC_TRACKS.length ? storedMusicState.index : 0;
+let musicVolume = typeof storedMusicState.volume === 'number' && Number.isFinite(storedMusicState.volume) ? Math.min(1, Math.max(0, storedMusicState.volume)) : 0.55;
+let musicShuffle = !!storedMusicState.shuffle;
+let musicLoopOne = !!storedMusicState.loopOne;
+let musicIsPlaying = false;
+
+musicAudio.volume = musicVolume;
+
+const musicFab = document.getElementById('musicFab');
+const musicPanel = document.getElementById('musicPanel');
+const musicCloseBtn = document.getElementById('musicCloseBtn');
+const musicNowTitle = document.getElementById('musicNowTitle');
+const musicProgress = document.getElementById('musicProgress');
+const musicProgressFill = document.getElementById('musicProgressFill');
+const musicCurTime = document.getElementById('musicCurTime');
+const musicDurTime = document.getElementById('musicDurTime');
+const musicPlayBtn = document.getElementById('musicPlayBtn');
+const musicPrevBtn = document.getElementById('musicPrevBtn');
+const musicNextBtn = document.getElementById('musicNextBtn');
+const musicShuffleBtn = document.getElementById('musicShuffleBtn');
+const musicLoopBtn = document.getElementById('musicLoopBtn');
+const musicVolumeInput = document.getElementById('musicVolume');
+const musicList = document.getElementById('musicList');
+
+function saveMusicState(){
+  localStorage.setItem(MUSIC_STATE_KEY, JSON.stringify({
+    index: musicIndex, volume: musicVolume, shuffle: musicShuffle, loopOne: musicLoopOne
+  }));
+}
+
+function formatTime(sec){
+  if(!isFinite(sec) || sec < 0) return '0:00';
+  const m = Math.floor(sec/60);
+  const s = Math.floor(sec%60).toString().padStart(2,'0');
+  return `${m}:${s}`;
+}
+
+function buildMusicList(){
+  musicList.innerHTML = MUSIC_TRACKS.map((t,i)=>`
+    <button class="music-track ${i===musicIndex?'active':''}" data-index="${i}">
+      <span class="tnum">${String(i+1).padStart(2,'0')}</span>
+      <span>${t.title}</span>
+    </button>`).join('');
+}
+
+function loadTrack(idx, autoplay){
+  musicIndex = idx;
+  const track = MUSIC_TRACKS[musicIndex];
+  musicAudio.src = track.file;
+  musicNowTitle.textContent = track.title;
+  [...musicList.children].forEach(btn=>btn.classList.toggle('active', Number(btn.dataset.index)===musicIndex));
+  musicProgressFill.style.width = '0%';
+  musicCurTime.textContent = '0:00';
+  musicDurTime.textContent = '0:00';
+  saveMusicState();
+  if(autoplay){
+    musicAudio.play().catch(()=>{ setStatus('Tap play again — your browser needs a direct click to start audio.'); });
+  }
+}
+
+function setPlayingUI(playing){
+  musicIsPlaying = playing;
+  musicPlayBtn.textContent = playing ? '⏸' : '▶';
+  musicPlayBtn.title = playing ? 'Pause' : 'Play';
+  musicFab.classList.toggle('playing', playing);
+}
+
+function playPause(){
+  if(!musicAudio.src){ loadTrack(musicIndex, true); return; }
+  if(musicAudio.paused){
+    musicAudio.play().then(()=>{}).catch(()=>{ setStatus('Playback blocked — click play once more to start music.'); });
+  } else {
+    musicAudio.pause();
+  }
+}
+
+function nextTrack(){
+  let idx;
+  if(musicShuffle){
+    do { idx = Math.floor(Math.random()*MUSIC_TRACKS.length); } while(idx===musicIndex && MUSIC_TRACKS.length>1);
+  } else {
+    idx = (musicIndex + 1) % MUSIC_TRACKS.length;
+  }
+  loadTrack(idx, true);
+}
+function prevTrack(){
+  const idx = (musicIndex - 1 + MUSIC_TRACKS.length) % MUSIC_TRACKS.length;
+  loadTrack(idx, true);
+}
+
+musicAudio.addEventListener('play', ()=>setPlayingUI(true));
+musicAudio.addEventListener('pause', ()=>setPlayingUI(false));
+musicAudio.addEventListener('timeupdate', ()=>{
+  if(musicAudio.duration){
+    musicProgressFill.style.width = `${(musicAudio.currentTime/musicAudio.duration)*100}%`;
+    musicCurTime.textContent = formatTime(musicAudio.currentTime);
+  }
+});
+musicAudio.addEventListener('loadedmetadata', ()=>{ musicDurTime.textContent = formatTime(musicAudio.duration); });
+musicAudio.addEventListener('ended', ()=>{
+  if(musicLoopOne){ musicAudio.currentTime = 0; musicAudio.play().catch(() => setPlayingUI(false)); }
+  else nextTrack();
+});
+
+musicFab.addEventListener('click', ()=>{
+  const open = musicPanel.classList.toggle('open');
+  musicFab.setAttribute('aria-expanded', String(open));
+});
+musicCloseBtn.addEventListener('click', ()=>{
+  musicPanel.classList.remove('open');
+  musicFab.setAttribute('aria-expanded','false');
+});
+document.addEventListener('click', (e)=>{
+  if(musicPanel.classList.contains('open') && !musicPanel.contains(e.target) && !musicFab.contains(e.target)){
+    musicPanel.classList.remove('open');
+    musicFab.setAttribute('aria-expanded','false');
+  }
+});
+
+musicPlayBtn.addEventListener('click', playPause);
+musicNextBtn.addEventListener('click', nextTrack);
+musicPrevBtn.addEventListener('click', prevTrack);
+
+musicShuffleBtn.addEventListener('click', ()=>{
+  musicShuffle = !musicShuffle;
+  musicShuffleBtn.classList.toggle('active', musicShuffle);
+  musicShuffleBtn.setAttribute('aria-pressed', String(musicShuffle));
+  saveMusicState();
+});
+musicLoopBtn.addEventListener('click', ()=>{
+  musicLoopOne = !musicLoopOne;
+  musicLoopBtn.classList.toggle('active', musicLoopOne);
+  musicLoopBtn.setAttribute('aria-pressed', String(musicLoopOne));
+  saveMusicState();
+});
+
+musicVolumeInput.addEventListener('input', (e)=>{
+  musicVolume = Number(e.target.value)/100;
+  musicAudio.volume = musicVolume;
+  saveMusicState();
+});
+
+musicProgress.addEventListener('click', (e)=>{
+  if(!musicAudio.duration) return;
+  const rect = musicProgress.getBoundingClientRect();
+  const ratio = (e.clientX - rect.left) / rect.width;
+  musicAudio.currentTime = ratio * musicAudio.duration;
+});
+
+musicList.addEventListener('click', (e)=>{
+  const btn = e.target.closest('.music-track');
+  if(!btn) return;
+  loadTrack(Number(btn.dataset.index), true);
+});
+
+function initMusicPlayer(){
+  buildMusicList();
+  musicVolumeInput.value = Math.round(musicVolume*100);
+  musicShuffleBtn.classList.toggle('active', musicShuffle);
+  musicShuffleBtn.setAttribute('aria-pressed', String(musicShuffle));
+  musicLoopBtn.classList.toggle('active', musicLoopOne);
+  musicLoopBtn.setAttribute('aria-pressed', String(musicLoopOne));
+  musicNowTitle.textContent = MUSIC_TRACKS[musicIndex].title;
 }
 
 /* ===================== BOOT ===================== */
@@ -2380,6 +2687,7 @@ generateBatch(24);
 
 renderAchievements();
 checkAchievements();
+initMusicPlayer();
 </script>
 </body>
-</html>
+</html>0
