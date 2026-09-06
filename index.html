@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<!--
+GITHUB MUSIC SETUP:
+1. Put your MP3 files in the /music folder.
+2. Change MUSIC_TRACKS above to match the filenames.
+3. Example: file: "music/morning.mp3"
+4. GitHub Pages will serve these files relative to index.html.
+-->
+
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <meta name="google-site-verification" content="W4KW9SkGeDnRAMtnggcePGGJCl001O2k9ayZcK1m_as" />
@@ -94,6 +102,24 @@
     }
   ]
 }
+
+const MUSIC_TRACKS = [
+  {
+    title: "Track 1",
+    artist: "Your Artist",
+    file: "music/track1.mp3"
+  },
+  {
+    title: "Track 2",
+    artist: "Your Artist",
+    file: "music/track2.mp3"
+  },
+  {
+    title: "Track 3",
+    artist: "Your Artist",
+    file: "music/track3.mp3"
+  }
+];
 </script>
 
 <style>
@@ -639,7 +665,7 @@
   </section>
 
   <footer>
-    Filed with care by <span class="fmark">Diovu Shadrach Chinecherem</span> · The Quote Archive · 820 cards across 20 drawers
+    Filed with care by <span class="fmark"><a href="https://shadrach1-cpu.github.io/SHADRACH.DEV/" target="_blank" style="color: var(--site-accent);>Diovu Shadrach Chinecherem</a></span> · The Quote Archive · 820 cards across 20 drawers
   </footer>
 </div>
 
