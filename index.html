@@ -2506,15 +2506,22 @@ const MUSIC_TRACKS = [
 
 const MUSIC_STATE_KEY = 'dqa_music_state_v1';
 const musicAudio = new Audio();
-musicAudio.preload = 'metadata';
-musicAudio.addEventListener('error', () => {
+musicAudio.preload = 'auto';
+musicAudio.setAttribute('playsinline', '');
+
+function musicErrorMessage(){
   const code = musicAudio.error?.code;
-  const reason = code === 1 ? 'loading was aborted'
-    : code === 2 ? 'a network/file read error occurred'
-    : code === 3 ? 'the audio could not be decoded'
-    : code === 4 ? 'the audio format or file path is unsupported'
-    : 'the audio file could not be loaded';
-  setStatus(`Music error: ${reason}. Check that the music folder is beside this HTML file.`);
+  if(code === 1) return 'loading was aborted';
+  if(code === 2) return 'a network/file read error occurred';
+  if(code === 3) return 'the audio could not be decoded';
+  if(code === 4) return 'the audio format or file path is unsupported';
+  return 'the audio file could not be loaded';
+}
+
+musicAudio.addEventListener('error', () => {
+  const track = MUSIC_TRACKS[musicIndex];
+  setPlayingUI(false);
+  setStatus(`Music error: ${musicErrorMessage()} — ${track.title}. File: ${track.file}`);
 });
 
 
@@ -2564,18 +2571,37 @@ function buildMusicList(){
     </button>`).join('');
 }
 
-function loadTrack(idx, autoplay){
+function loadTrack(idx, autoplay=false){
+  if(!Number.isInteger(idx) || idx < 0 || idx >= MUSIC_TRACKS.length) idx = 0;
+
   musicIndex = idx;
   const track = MUSIC_TRACKS[musicIndex];
-  musicAudio.src = track.file;
+  const source = new URL(track.file, document.baseURI).href;
+
+  musicAudio.pause();
+  musicAudio.removeAttribute('src');
+  musicAudio.load();
+  musicAudio.src = source;
+  musicAudio.load();
+
   musicNowTitle.textContent = track.title;
   [...musicList.children].forEach(btn=>btn.classList.toggle('active', Number(btn.dataset.index)===musicIndex));
   musicProgressFill.style.width = '0%';
   musicCurTime.textContent = '0:00';
   musicDurTime.textContent = '0:00';
+  setPlayingUI(false);
   saveMusicState();
+
   if(autoplay){
-    musicAudio.play().catch(()=>{ setStatus('Tap play again — your browser needs a direct click to start audio.'); });
+    musicAudio.play().catch((err)=>{
+      setPlayingUI(false);
+      const name = err?.name || 'PlaybackError';
+      if(name === 'NotAllowedError'){
+        setStatus('Playback was blocked by the browser. Click the Play button once to start the music.');
+      } else {
+        setStatus(`Could not play “${track.title}”. ${musicErrorMessage()}.`);
+      }
+    });
   }
 }
 
@@ -2587,9 +2613,21 @@ function setPlayingUI(playing){
 }
 
 function playPause(){
-  if(!musicAudio.src){ loadTrack(musicIndex, true); return; }
+  if(!musicAudio.src){
+    loadTrack(musicIndex, true);
+    return;
+  }
   if(musicAudio.paused){
-    musicAudio.play().then(()=>{}).catch(()=>{ setStatus('Playback blocked — click play once more to start music.'); });
+    musicAudio.play().catch((err)=>{
+      setPlayingUI(false);
+      const name = err?.name || 'PlaybackError';
+      if(name === 'NotAllowedError'){
+        setStatus('Playback was blocked by the browser. Click Play again to start the music.');
+      } else {
+        const track = MUSIC_TRACKS[musicIndex];
+        setStatus(`Could not play “${track.title}”. ${musicErrorMessage()}.`);
+      }
+    });
   } else {
     musicAudio.pause();
   }
@@ -2682,6 +2720,7 @@ function initMusicPlayer(){
   musicLoopBtn.classList.toggle('active', musicLoopOne);
   musicLoopBtn.setAttribute('aria-pressed', String(musicLoopOne));
   musicNowTitle.textContent = MUSIC_TRACKS[musicIndex].title;
+  loadTrack(musicIndex, false);
 }
 
 /* ===================== BOOT ===================== */
@@ -2705,4 +2744,4 @@ checkAchievements();
 initMusicPlayer();
 </script>
 </body>
-</html>0
+</html>
