@@ -2523,6 +2523,10 @@ musicAudio.addEventListener('error', () => {
   setPlayingUI(false);
   setStatus(`Music error: ${musicErrorMessage()} — ${track.title}. File: ${track.file}`);
 });
+musicAudio.addEventListener('stalled', () => {
+  setStatus(`Music is still loading: “${MUSIC_TRACKS[musicIndex].title}”.`);
+});
+musicAudio.addEventListener('abort', () => setPlayingUI(false));
 
 
 const storedMusicState = safeReadJSON(MUSIC_STATE_KEY, {});
@@ -2551,9 +2555,13 @@ const musicVolumeInput = document.getElementById('musicVolume');
 const musicList = document.getElementById('musicList');
 
 function saveMusicState(){
-  localStorage.setItem(MUSIC_STATE_KEY, JSON.stringify({
-    index: musicIndex, volume: musicVolume, shuffle: musicShuffle, loopOne: musicLoopOne
-  }));
+  try {
+    localStorage.setItem(MUSIC_STATE_KEY, JSON.stringify({
+      index: musicIndex, volume: musicVolume, shuffle: musicShuffle, loopOne: musicLoopOne
+    }));
+  } catch {
+    /* Storage can be unavailable in some privacy modes; music still works. */
+  }
 }
 
 function formatTime(sec){
@@ -2576,9 +2584,17 @@ function loadTrack(idx, autoplay=false){
 
   musicIndex = idx;
   const track = MUSIC_TRACKS[musicIndex];
-  const source = new URL(track.file, document.baseURI).href;
+  let source;
+  try {
+    source = new URL(track.file, document.baseURI).href;
+  } catch {
+    setPlayingUI(false);
+    setStatus(`Invalid music file path for “${track.title}”.`);
+    return;
+  }
 
   musicAudio.pause();
+  musicAudio.currentTime = 0;
   musicAudio.removeAttribute('src');
   musicAudio.load();
   musicAudio.src = source;
@@ -2593,15 +2609,23 @@ function loadTrack(idx, autoplay=false){
   saveMusicState();
 
   if(autoplay){
-    musicAudio.play().catch((err)=>{
-      setPlayingUI(false);
-      const name = err?.name || 'PlaybackError';
-      if(name === 'NotAllowedError'){
-        setStatus('Playback was blocked by the browser. Click the Play button once to start the music.');
-      } else {
-        setStatus(`Could not play “${track.title}”. ${musicErrorMessage()}.`);
-      }
-    });
+    const startPlayback = () => {
+      musicAudio.play().catch((err)=>{
+        setPlayingUI(false);
+        const name = err?.name || 'PlaybackError';
+        if(name === 'NotAllowedError'){
+          setStatus('Playback was blocked by the browser. Click Play once to start the music.');
+        } else {
+          setStatus(`Could not play “${track.title}”. ${musicErrorMessage()}.`);
+        }
+      });
+    };
+
+    if(musicAudio.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA){
+      startPlayback();
+    } else {
+      musicAudio.addEventListener('canplay', startPlayback, {once:true});
+    }
   }
 }
 
@@ -2650,8 +2674,9 @@ function prevTrack(){
 musicAudio.addEventListener('play', ()=>setPlayingUI(true));
 musicAudio.addEventListener('pause', ()=>setPlayingUI(false));
 musicAudio.addEventListener('timeupdate', ()=>{
-  if(musicAudio.duration){
-    musicProgressFill.style.width = `${(musicAudio.currentTime/musicAudio.duration)*100}%`;
+  if(Number.isFinite(musicAudio.duration) && musicAudio.duration > 0){
+    const percent = Math.min(100, Math.max(0, (musicAudio.currentTime / musicAudio.duration) * 100));
+    musicProgressFill.style.width = `${percent}%`;
     musicCurTime.textContent = formatTime(musicAudio.currentTime);
   }
 });
@@ -2700,9 +2725,10 @@ musicVolumeInput.addEventListener('input', (e)=>{
 });
 
 musicProgress.addEventListener('click', (e)=>{
-  if(!musicAudio.duration) return;
+  if(!Number.isFinite(musicAudio.duration) || musicAudio.duration <= 0) return;
   const rect = musicProgress.getBoundingClientRect();
-  const ratio = (e.clientX - rect.left) / rect.width;
+  if(rect.width <= 0) return;
+  const ratio = Math.min(1, Math.max(0, (e.clientX - rect.left) / rect.width));
   musicAudio.currentTime = ratio * musicAudio.duration;
 });
 
