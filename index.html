@@ -1682,6 +1682,7 @@ positivity:[
 };
 
 const quotes = [];
+let quoteView = quotes;
 CATS.forEach(cat=>{
   RAW[cat.key].forEach((text, i)=>{
     quotes.push({
@@ -1739,14 +1740,20 @@ const GEN_TEMPLATES = [
 ];
 
 const TOTAL_GENERATABLE = CATS.length * GEN_TEMPLATES.length * GEN_NOUNS.length * GEN_ACTIONS.length * GEN_OUTCOMES.length * 5;
+let generatedCursor = 0;
 
 function buildGeneratedQuote(catKey, templateIdx, ai, bi, ci, di){
   const cat = catInfo(catKey);
   if(!cat) return null;
-  ai = ai % GEN_NOUNS.length; bi = bi % GEN_ACTIONS.length; ci = ci % GEN_OUTCOMES.length;
+  const values = [templateIdx, ai, bi, ci, di];
+  if(!values.every(Number.isInteger)) return null;
+  if(templateIdx < 0 || templateIdx >= GEN_TEMPLATES.length) return null;
+  if(ai < 0 || ai >= GEN_NOUNS.length) return null;
+  if(bi < 0 || bi >= GEN_ACTIONS.length) return null;
+  if(ci < 0 || ci >= GEN_OUTCOMES.length) return null;
   const virtues = GEN_VIRTUES[catKey] || GEN_VIRTUES.motivation;
-  di = di % virtues.length;
-  const tmpl = GEN_TEMPLATES[templateIdx % GEN_TEMPLATES.length];
+  if(di < 0 || di >= virtues.length) return null;
+  const tmpl = GEN_TEMPLATES[templateIdx];
   const a = GEN_NOUNS[ai], b = GEN_ACTIONS[bi], c = GEN_OUTCOMES[ci], d = virtues[di];
   const text = tmpl(a,b,c,d);
   const id = `GEN-${cat.prefix}-${templateIdx}-${ai}-${bi}-${ci}-${di}`;
@@ -1755,13 +1762,15 @@ function buildGeneratedQuote(catKey, templateIdx, ai, bi, ci, di){
 }
 
 function parseGeneratedId(id){
+  if(typeof id !== 'string') return null;
   const parts = id.split('-');
-  if(parts[0] !== 'GEN') return null;
+  if(parts.length !== 7 || parts[0] !== 'GEN') return null;
   const prefix = parts[1];
   const cat = CATS.find(c=>c.prefix===prefix);
   if(!cat) return null;
-  const [templateIdx, ai, bi, ci, di] = parts.slice(2).map(n=>parseInt(n,10));
-  return buildGeneratedQuote(cat.key, templateIdx, ai, bi, ci, di);
+  const nums = parts.slice(2).map(n => /^\d+$/.test(n) ? Number(n) : NaN);
+  if(!nums.every(Number.isInteger)) return null;
+  return buildGeneratedQuote(cat.key, ...nums);
 }
 
 /* ===================== STATE ===================== */
@@ -1774,7 +1783,7 @@ const SOUND_KEY = 'dqa_sound_v1';
 
 function safeReadJSON(key, fallback) {
   try {
-    const raw = localStorage.getItem(key);
+    const raw = window.localStorage?.getItem(key);
     if (!raw) return fallback;
     const parsed = JSON.parse(raw);
     return parsed ?? fallback;
@@ -1782,8 +1791,25 @@ function safeReadJSON(key, fallback) {
     return fallback;
   }
 }
+function safeWriteJSON(key, value) {
+  try {
+    window.localStorage?.setItem(key, JSON.stringify(value));
+    return true;
+  } catch {
+    return false;
+  }
+}
+function safeWrite(key, value) {
+  try {
+    window.localStorage?.setItem(key, value);
+    return true;
+  } catch {
+    return false;
+  }
+}
 
-let favorites = new Set(safeReadJSON(FAV_KEY, []));
+const storedFavorites = safeReadJSON(FAV_KEY, []);
+let favorites = new Set(Array.isArray(storedFavorites) ? storedFavorites.filter(id => typeof id === 'string') : []);
 let currentCategory = 'all';
 let currentSearch = '';
 let visibleCount = 24;
@@ -1792,14 +1818,16 @@ let focusIndex = 0;
 let focusList = quotes;
 let currentStreak = 0;
 
-let stats = Object.assign({downloads:0, weaves:0, focusViews:0, searched:false}, safeReadJSON(STATS_KEY, {}));
-let unlocked = new Set(safeReadJSON(UNLOCKED_KEY, []));
-function saveStats(){ localStorage.setItem(STATS_KEY, JSON.stringify(stats)); }
+const storedStats = safeReadJSON(STATS_KEY, {});
+let stats = Object.assign({downloads:0, weaves:0, focusViews:0, searched:false}, storedStats && typeof storedStats === 'object' && !Array.isArray(storedStats) ? storedStats : {});
+const storedUnlocked = safeReadJSON(UNLOCKED_KEY, []);
+let unlocked = new Set(Array.isArray(storedUnlocked) ? storedUnlocked.filter(id => typeof id === 'string') : []);
+function saveStats(){ safeWriteJSON(STATS_KEY, stats); }
 
 /* ===================== SOUND ENGINE ===================== */
 // Every sound here is synthesized with the Web Audio API — no audio files, so
 // it works offline and adds nothing to the download size.
-let soundOn = localStorage.getItem(SOUND_KEY) === '1';
+let soundOn = (()=>{ try { return window.localStorage?.getItem(SOUND_KEY) === '1'; } catch { return false; } })();
 let audioCtx = null;
 function ensureAudio(){
   if(!audioCtx){
@@ -1841,7 +1869,7 @@ function applySoundBtn(){
 }
 soundBtn.addEventListener('click', ()=>{
   soundOn = !soundOn;
-  localStorage.setItem(SOUND_KEY, soundOn ? '1' : '0');
+  safeWrite(SOUND_KEY, soundOn ? '1' : '0');
   applySoundBtn();
   if(soundOn){ ensureAudio(); tone(660,0,.1,'sine'); }
 });
@@ -1914,7 +1942,7 @@ function checkAchievements(){
     }
   });
   if(newlyUnlocked){
-    localStorage.setItem(UNLOCKED_KEY, JSON.stringify([...unlocked]));
+    safeWriteJSON(UNLOCKED_KEY, [...unlocked]);
   }
   renderAchievements();
 }
@@ -1964,7 +1992,7 @@ const streakPill = document.getElementById('streakPill');
 function setStatus(msg){ statusEl.textContent = msg; }
 
 function saveFavs(){
-  localStorage.setItem(FAV_KEY, JSON.stringify([...favorites]));
+  safeWriteJSON(FAV_KEY, [...favorites]);
   statFav.textContent = favorites.size;
   renderFavorites();
 }
@@ -1980,8 +2008,9 @@ function toggleFav(id){
 }
 
 function findQuote(id){
+  if(typeof id !== 'string') return null;
   if(id.startsWith('GEN-')) return parseGeneratedId(id);
-  return quotes.find(q=>q.id===id);
+  return quotes.find(q=>q.id===id) || null;
 }
 
 /* ===================== DRAWER TABS + CABINET ===================== */
@@ -2034,7 +2063,7 @@ cabinetEl.addEventListener('click', (e)=>{
 /* ===================== FILTER + RENDER GRID ===================== */
 function getFiltered(){
   const t = currentSearch.toLowerCase().trim();
-  return quotes.filter(q=>{
+  return quoteView.filter(q=>{
     const matchesCat = currentCategory==='all' || q.category===currentCategory;
     const matchesSearch = !t || q.quote.toLowerCase().includes(t) || q.catLabel.toLowerCase().includes(t) || q.id.toLowerCase().includes(t);
     return matchesCat && matchesSearch;
@@ -2085,8 +2114,7 @@ function handleCardActionEvent(e){
   const q = findQuote(id);
   if(!q) return;
   if(e.target.closest('.copy-btn')){
-    copyText(`"${q.quote}" — ${q.author}`).then(ok => setStatus(ok ? 'Copied to clipboard.' : 'Could not copy — please copy the text manually.'));
-    setStatus(`Copied ${q.catNo} to clipboard.`);
+    copyText(`"${q.quote}" — ${q.author}`).then(ok => setStatus(ok ? `Copied ${q.catNo} to clipboard.` : 'Could not copy — please copy the text manually.'));
   } else if(e.target.closest('.fav-btn')){
     toggleFav(id);
     setStatus(favorites.has(id) ? `${q.catNo} added to favorites.` : `${q.catNo} removed from favorites.`);
@@ -2122,9 +2150,10 @@ searchInput.addEventListener('input',(e)=>{
 });
 
 document.getElementById('shuffleBtn').addEventListener('click', ()=>{
-  for(let i = quotes.length - 1; i > 0; i--){
+  quoteView = [...quotes];
+  for(let i = quoteView.length - 1; i > 0; i--){
     const j = Math.floor(Math.random()*(i+1));
-    [quotes[i], quotes[j]] = [quotes[j], quotes[i]];
+    [quoteView[i], quoteView[j]] = [quoteView[j], quoteView[i]];
   }
   renderGrid();
   setStatus('Grid shuffled.');
@@ -2144,17 +2173,39 @@ function buildGenCatSelect(){
 }
 
 function randomGenerated(catFilter){
-  let attempts = 0, q = null;
-  while(attempts < 100){
-    const cat = catFilter === 'all' ? CATS[Math.floor(Math.random()*CATS.length)] : catInfo(catFilter);
+  const allowedCats = catFilter === 'all' ? CATS : [catInfo(catFilter)].filter(Boolean);
+  if(!allowedCats.length) return null;
+
+  // Try random combinations first for variety.
+  for(let attempts = 0; attempts < 100; attempts++){
+    const cat = allowedCats[Math.floor(Math.random()*allowedCats.length)];
     const templateIdx = Math.floor(Math.random()*GEN_TEMPLATES.length);
     const ai = Math.floor(Math.random()*GEN_NOUNS.length);
     const bi = Math.floor(Math.random()*GEN_ACTIONS.length);
     const ci = Math.floor(Math.random()*GEN_OUTCOMES.length);
-    const di = Math.floor(Math.random()*5);
-    q = buildGeneratedQuote(cat.key, templateIdx, ai, bi, ci, di);
+    const di = Math.floor(Math.random()*(GEN_VIRTUES[cat.key]?.length || 5));
+    const q = buildGeneratedQuote(cat.key, templateIdx, ai, bi, ci, di);
     if(q && !usedGenIds.has(q.id)){ usedGenIds.add(q.id); return q; }
-    attempts++;
+  }
+
+  // Guaranteed fallback: walk a deterministic mixed-radix sequence instead
+  // of incorrectly reporting failure while unused combinations remain.
+  const catCount = allowedCats.length;
+  const perCat = GEN_TEMPLATES.length * GEN_NOUNS.length * GEN_ACTIONS.length * GEN_OUTCOMES.length * 5;
+  for(let scanned = 0; scanned < TOTAL_GENERATABLE; scanned++){
+    const n = generatedCursor++ % (perCat * catCount);
+    const cat = allowedCats[Math.floor(n / perCat)];
+    let rem = n % perCat;
+    const templateIdx = Math.floor(rem / (GEN_NOUNS.length * GEN_ACTIONS.length * GEN_OUTCOMES.length * 5));
+    rem %= GEN_NOUNS.length * GEN_ACTIONS.length * GEN_OUTCOMES.length * 5;
+    const ai = Math.floor(rem / (GEN_ACTIONS.length * GEN_OUTCOMES.length * 5));
+    rem %= GEN_ACTIONS.length * GEN_OUTCOMES.length * 5;
+    const bi = Math.floor(rem / (GEN_OUTCOMES.length * 5));
+    rem %= GEN_OUTCOMES.length * 5;
+    const ci = Math.floor(rem / 5);
+    const di = rem % 5;
+    const q = buildGeneratedQuote(cat.key, templateIdx, ai, bi, ci, di);
+    if(q && !usedGenIds.has(q.id)){ usedGenIds.add(q.id); return q; }
   }
   return null;
 }
@@ -2331,10 +2382,18 @@ function wrapCanvasText(ctx, text, x, y, maxWidth, lineHeight){
 }
 
 function downloadCard(q){
+  if(!q || typeof q.quote !== 'string'){
+    setStatus('Could not create the card image: quote data is invalid.');
+    return;
+  }
   const W = 1200, H = 675;
   const canvas = document.createElement('canvas');
   canvas.width = W; canvas.height = H;
   const ctx = canvas.getContext('2d');
+  if(!ctx){
+    setStatus('Could not create the card image in this browser.');
+    return;
+  }
 
   ctx.fillStyle = '#141a2c';
   ctx.fillRect(0,0,W,H);
@@ -2387,17 +2446,24 @@ function downloadCard(q){
 /* ===================== FOCUS MODE ===================== */
 const focusOverlay = document.getElementById('focusOverlay');
 function openFocus(q){
+  if(!q) return;
   focusList = getFiltered().length ? getFiltered() : quotes;
+  if(!focusList.length) return;
   focusIndex = focusList.findIndex(x=>x.id===q.id);
   if(focusIndex < 0) focusIndex = 0;
   renderFocus();
   focusOverlay.classList.add('open');
   document.body.style.overflow = 'hidden';
   document.getElementById('focusClose').focus();
+  stats.focusViews += 1;
+  saveStats();
+  checkAchievements();
   sfx.focusOpen();
 }
 function renderFocus(){
+  if(!focusList.length) return;
   const q = focusList[focusIndex];
+  if(!q) return;
   document.getElementById('focusCatNo').textContent = q.catNo;
   document.getElementById('focusText').textContent = `"${q.quote}"`;
   document.getElementById('focusAuthor').textContent = `— ${q.author}`;
@@ -2411,6 +2477,7 @@ function closeFocus(){
   sfx.focusClose();
 }
 function focusStep(dir){
+  if(!focusList.length) return;
   focusIndex = (focusIndex + dir + focusList.length) % focusList.length;
   renderFocus();
   stats.focusViews += 1;
@@ -2446,13 +2513,15 @@ document.addEventListener('keydown',(e)=>{
 function applyTheme(mode){
   document.body.classList.toggle('day', mode==='day');
   document.getElementById('themeBtn').setAttribute('aria-pressed', mode==='day');
-  localStorage.setItem(THEME_KEY, mode);
+  safeWrite(THEME_KEY, mode);
 }
 document.getElementById('themeBtn').addEventListener('click', ()=>{
   const next = document.body.classList.contains('day') ? 'night' : 'day';
   applyTheme(next);
 });
-applyTheme(localStorage.getItem(THEME_KEY) || 'night');
+let savedTheme = 'night';
+try { savedTheme = window.localStorage?.getItem(THEME_KEY) || 'night'; } catch {}
+applyTheme(savedTheme === 'day' ? 'day' : 'night');
 
 /* ===================== STREAK ===================== */
 function updateStreak(){
@@ -2461,7 +2530,7 @@ function updateStreak(){
   if(!Array.isArray(visits)) visits = [];
   if(!visits.includes(today)){
     visits.push(today);
-    localStorage.setItem(VISIT_KEY, JSON.stringify(visits));
+    safeWriteJSON(VISIT_KEY, visits);
   }
   visits = [...new Set(visits)].sort();
 
@@ -2518,19 +2587,24 @@ function musicErrorMessage(){
   return 'the audio file could not be loaded';
 }
 
+let musicLoadToken = 0;
+let activeMusicTrack = null;
 musicAudio.addEventListener('error', () => {
-  const track = MUSIC_TRACKS[musicIndex];
+  const track = activeMusicTrack || MUSIC_TRACKS[musicIndex];
+  if(!track) return;
   setPlayingUI(false);
   setStatus(`Music error: ${musicErrorMessage()} — ${track.title}. File: ${track.file}`);
 });
 musicAudio.addEventListener('stalled', () => {
-  setStatus(`Music is still loading: “${MUSIC_TRACKS[musicIndex].title}”.`);
+  const track = activeMusicTrack || MUSIC_TRACKS[musicIndex];
+  if(track) setStatus(`Music is still loading: “${track.title}”.`);
 });
 musicAudio.addEventListener('abort', () => setPlayingUI(false));
 
 
 const storedMusicState = safeReadJSON(MUSIC_STATE_KEY, {});
 let musicIndex = Number.isInteger(storedMusicState.index) && storedMusicState.index >= 0 && storedMusicState.index < MUSIC_TRACKS.length ? storedMusicState.index : 0;
+activeMusicTrack = MUSIC_TRACKS[musicIndex];
 let musicVolume = typeof storedMusicState.volume === 'number' && Number.isFinite(storedMusicState.volume) ? Math.min(1, Math.max(0, storedMusicState.volume)) : 0.55;
 let musicShuffle = !!storedMusicState.shuffle;
 let musicLoopOne = !!storedMusicState.loopOne;
@@ -2556,9 +2630,9 @@ const musicList = document.getElementById('musicList');
 
 function saveMusicState(){
   try {
-    localStorage.setItem(MUSIC_STATE_KEY, JSON.stringify({
+    safeWriteJSON(MUSIC_STATE_KEY, {
       index: musicIndex, volume: musicVolume, shuffle: musicShuffle, loopOne: musicLoopOne
-    }));
+    });
   } catch {
     /* Storage can be unavailable in some privacy modes; music still works. */
   }
@@ -2582,8 +2656,12 @@ function buildMusicList(){
 function loadTrack(idx, autoplay=false){
   if(!Number.isInteger(idx) || idx < 0 || idx >= MUSIC_TRACKS.length) idx = 0;
 
+  musicLoadToken++;
+  const loadToken = musicLoadToken;
+  musicAudio.oncanplay = null;
   musicIndex = idx;
   const track = MUSIC_TRACKS[musicIndex];
+  activeMusicTrack = track;
   let source;
   try {
     source = new URL(track.file, document.baseURI).href;
@@ -2610,7 +2688,9 @@ function loadTrack(idx, autoplay=false){
 
   if(autoplay){
     const startPlayback = () => {
+      if(loadToken !== musicLoadToken || activeMusicTrack !== track) return;
       musicAudio.play().catch((err)=>{
+        if(loadToken !== musicLoadToken) return;
         setPlayingUI(false);
         const name = err?.name || 'PlaybackError';
         if(name === 'NotAllowedError'){
@@ -2624,7 +2704,7 @@ function loadTrack(idx, autoplay=false){
     if(musicAudio.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA){
       startPlayback();
     } else {
-      musicAudio.addEventListener('canplay', startPlayback, {once:true});
+      musicAudio.oncanplay = startPlayback;
     }
   }
 }
@@ -2761,8 +2841,8 @@ statFav.textContent = favorites.size;
 pullRandom();
 
 buildGenCatSelect();
-document.getElementById('statGen').textContent = '50,000,000+';
-genCountText.textContent = `50,000,000+ possible combinations (${TOTAL_GENERATABLE.toLocaleString()} exactly) — ${CATS.length} drawers × ${GEN_TEMPLATES.length} patterns × ${GEN_NOUNS.length}×${GEN_ACTIONS.length}×${GEN_OUTCOMES.length}×5 word choices. Far too many to store, so each batch below is woven fresh.`;
+document.getElementById('statGen').textContent = TOTAL_GENERATABLE.toLocaleString();
+genCountText.textContent = `${TOTAL_GENERATABLE.toLocaleString()} possible combinations — ${CATS.length} drawers × ${GEN_TEMPLATES.length} patterns × ${GEN_NOUNS.length}×${GEN_ACTIONS.length}×${GEN_OUTCOMES.length}×5 word choices. Far too many to store, so each batch below is woven fresh.`;
 generateBatch(24);
 
 renderAchievements();
