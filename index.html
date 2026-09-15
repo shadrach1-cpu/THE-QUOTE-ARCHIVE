@@ -1978,17 +1978,19 @@ function saveStats(){ safeWriteJSON(STATS_KEY, stats); }
 let soundOn = (()=>{ try { return window.localStorage?.getItem(SOUND_KEY) === '1'; } catch { return false; } })();
 let audioCtx = null;
 function ensureAudio(){
-  if(!audioCtx){
-    const AC = window.AudioContext || window.webkitAudioContext;
-    if(AC) audioCtx = new AC();
+  try{
+    if(!audioCtx){
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if(AC) audioCtx = new AC();
+    }
+    // A previously-enabled sound preference can recreate the AudioContext
+    // outside a user gesture on page load. Resume it when a later interaction
+    // calls a sound effect, otherwise persisted sound can appear silently broken.
+    if(audioCtx && audioCtx.state === 'suspended') audioCtx.resume().catch(()=>{});
+    return audioCtx;
+  }catch{
+    return null;
   }
-  // A previously-enabled sound preference can recreate the AudioContext
-  // outside a user gesture on page load. Resume it when a later interaction
-  // calls a sound effect, otherwise persisted sound can appear silently broken.
-  if(audioCtx && audioCtx.state === 'suspended'){
-    audioCtx.resume().catch(()=>{});
-  }
-  return audioCtx;
 }
 function tone(freq, start, dur, type='sine', gain=0.06){
   if(!soundOn) return;
@@ -2655,6 +2657,8 @@ function renderGenGrid(){
 }
 
 function generateBatch(n){
+  n = Number.isFinite(n) ? Math.max(0, Math.floor(n)) : 0;
+  if(!n) return 0;
   const catFilter = genCatSelect.value;
   const batch = [];
   for(let i=0;i<n;i++){
@@ -2702,10 +2706,10 @@ async function copyText(text){
 function renderFavorites(){
   const favItems = [...favorites].map(id=>findQuote(id)).filter(Boolean);
   favList.innerHTML = favItems.length ? favItems.map(q=>`
-    <div class="fav-item" data-id="${q.id}">
+    <div class="fav-item" data-id="${escapeHTML(q.id)}">
       <div>
-        <p>&ldquo;${q.quote}&rdquo;</p>
-        <div class="meta">${q.catNo} · ${q.catLabel}</div>
+        <p>&ldquo;${escapeHTML(q.quote)}&rdquo;</p>
+        <div class="meta">${escapeHTML(q.catNo)} · ${escapeHTML(q.catLabel)}</div>
       </div>
       <div class="fav-actions">
         <button class="icon-btn dl-fav-btn" aria-label="Download card">⬇</button>
@@ -2806,9 +2810,14 @@ document.getElementById('pullBtn').addEventListener('click', pullRandom);
 
 /* ===================== SHARE / DOWNLOAD ===================== */
 function shareQuote(q){
-  const text = `"${q.quote}" — ${q.author}`;
-  if(navigator.share){
-    navigator.share({text, title:'The Quote Archive'}).catch(()=>{});
+  if(!q || typeof q.quote !== 'string'){
+    setStatus('Could not share this card: quote data is invalid.');
+    return;
+  }
+  const text = `"${q.quote}" — ${q.author || 'Diovu Shadrach'}`;
+  if(typeof navigator.share === 'function'){
+    try{ Promise.resolve(navigator.share({text, title:'The Quote Archive'})).catch(()=>{}); }
+    catch{ copyText(text).then(ok => setStatus(ok ? 'Sharing failed — quote copied instead.' : 'Sharing and clipboard are unavailable here — please copy the quote manually.')); }
   } else {
     copyText(text).then(ok => setStatus(ok ? 'Sharing not supported here — quote copied instead.' : 'Sharing and clipboard are unavailable here — please copy the quote manually.'));
   }
@@ -3290,6 +3299,15 @@ musicList.addEventListener('click', (e)=>{
 });
 
 function initMusicPlayer(){
+  if(!MUSIC_TRACKS.length){
+    musicNowTitle.textContent = 'No music tracks available';
+    musicPlayBtn.disabled = true;
+    musicPrevBtn.disabled = true;
+    musicNextBtn.disabled = true;
+    musicShuffleBtn.disabled = true;
+    musicLoopBtn.disabled = true;
+    return;
+  }
   buildMusicList();
   musicVolumeInput.value = Math.round(musicVolume*100);
   musicShuffleBtn.classList.toggle('active', musicShuffle);
