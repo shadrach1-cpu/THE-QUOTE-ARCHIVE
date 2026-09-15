@@ -1982,6 +1982,12 @@ function ensureAudio(){
     const AC = window.AudioContext || window.webkitAudioContext;
     if(AC) audioCtx = new AC();
   }
+  // A previously-enabled sound preference can recreate the AudioContext
+  // outside a user gesture on page load. Resume it when a later interaction
+  // calls a sound effect, otherwise persisted sound can appear silently broken.
+  if(audioCtx && audioCtx.state === 'suspended'){
+    audioCtx.resume().catch(()=>{});
+  }
   return audioCtx;
 }
 function tone(freq, start, dur, type='sine', gain=0.06){
@@ -2306,24 +2312,38 @@ function scoreSearchResult(q, rawQuery){
   const topic = q._searchTopic || normalizeSearchText(topicTextFor(q));
   const id = q._searchId || normalizeSearchText(q.id);
   const category = q._searchCategory || normalizeSearchText(q.catLabel);
-  let score = 0;
 
-  if(quote === query) score += 1000;
-  if(quote.includes(query)) score += 250;
-  if(topic.includes(query)) score += 120;
-  if(id === query) score += 220;
-  if(category === query) score += 180;
+  // Relevance must respect the Advanced Search field toggles. Previously a
+  // disabled field could still contribute to the score and change result order.
+  const quoteEnabled = searchInQuote.checked;
+  const topicEnabled = searchInTopic.checked;
+  const idEnabled = searchInId.checked;
+  const topicFields = topicEnabled ? [topic, category] : [];
+  const activeFields = [
+    ...(quoteEnabled ? [quote] : []),
+    ...topicFields,
+    ...(idEnabled ? [id] : [])
+  ];
+
+  let score = 0;
+  if(!activeFields.length) return 0;
+
+  if(quoteEnabled && quote === query) score += 1000;
+  if(quoteEnabled && quote.includes(query)) score += 250;
+  if(topicEnabled && (topic.includes(query) || category.includes(query))) score += 120;
+  if(idEnabled && id === query) score += 220;
+  if(topicEnabled && category === query) score += 180;
 
   tokens.forEach(token=>{
-    if(quote.includes(token)) score += 40;
-    if(topic.includes(token)) score += 24;
-    if(id.includes(token)) score += 18;
-    if(category.includes(token)) score += 16;
+    if(quoteEnabled && quote.includes(token)) score += 40;
+    if(topicEnabled && topic.includes(token)) score += 24;
+    if(idEnabled && id.includes(token)) score += 18;
+    if(topicEnabled && category.includes(token)) score += 16;
   });
   expanded.forEach(token=>{
     if(tokens.includes(token)) return;
-    if(topic.includes(token)) score += 9;
-    if(quote.includes(token)) score += 14;
+    if(topicEnabled && (topic.includes(token) || category.includes(token))) score += 9;
+    if(quoteEnabled && quote.includes(token)) score += 14;
   });
   return score;
 }
@@ -2574,7 +2594,10 @@ function buildGenCatSelect(){
 }
 
 function randomGenerated(catFilter){
-  const allowedCats = catFilter === 'all' ? CATS : [catInfo(catFilter)].filter(Boolean);
+  const requestedCats = catFilter === 'all' ? CATS : [catInfo(catFilter)].filter(Boolean);
+  // Only drawers with a real virtue bank can produce valid combinations.
+  // This keeps the random path consistent with TOTAL_GENERATABLE.
+  const allowedCats = requestedCats.filter(cat => (GEN_VIRTUES[cat.key]?.length || 0) > 0);
   if(!allowedCats.length) return null;
 
   // Try random combinations first for variety.
@@ -2584,7 +2607,9 @@ function randomGenerated(catFilter){
     const ai = Math.floor(Math.random()*GEN_NOUNS.length);
     const bi = Math.floor(Math.random()*GEN_ACTIONS.length);
     const ci = Math.floor(Math.random()*GEN_OUTCOMES.length);
-    const di = Math.floor(Math.random()*(GEN_VIRTUES[cat.key]?.length || 5));
+    const virtueCount = GEN_VIRTUES[cat.key]?.length || 0;
+    if(!virtueCount) continue;
+    const di = Math.floor(Math.random()*virtueCount);
     const q = buildGeneratedQuote(cat.key, templateIdx, ai, bi, ci, di);
     if(q && !usedGenIds.has(q.id)){ usedGenIds.add(q.id); return q; }
   }
@@ -2595,7 +2620,7 @@ function randomGenerated(catFilter){
   // actual selected drawer instead of assuming every drawer has five entries.
   const perCat = allowedCats.map(cat => ({
     cat,
-    virtues: GEN_VIRTUES[cat.key] || GEN_VIRTUES.motivation,
+    virtues: GEN_VIRTUES[cat.key] || [],
     size: GEN_TEMPLATES.length * GEN_NOUNS.length * GEN_ACTIONS.length * GEN_OUTCOMES.length * (GEN_VIRTUES[cat.key]?.length || 0)
   }));
   const totalAllowed = perCat.reduce((sum, item) => sum + item.size, 0);
@@ -2873,7 +2898,16 @@ function downloadCard(q){
 const focusOverlay = document.getElementById('focusOverlay');
 function openFocus(q){
   if(!q) return;
-  focusList = getFiltered().length ? getFiltered() : quotes;
+
+  // Generated cards live in generatedItems rather than quoteView. Previously
+  // clicking Focus on a generated card silently opened the first curated card.
+  if(q.generated){
+    focusList = generatedItems.length ? generatedItems : [q];
+  }else{
+    const filtered = getFiltered();
+    focusList = filtered.length ? filtered : quotes;
+  }
+
   if(!focusList.length) return;
   focusIndex = focusList.findIndex(x=>x.id===q.id);
   if(focusIndex < 0) focusIndex = 0;
@@ -3283,6 +3317,17 @@ document.addEventListener('keydown',(e)=>{
   if(e.key==='/' && !['input','textarea','select'].includes(tag)){
     e.preventDefault();
     searchInput.focus();
+    return;
+  }
+  if(e.key==='Escape' && focusOverlay.classList.contains('open')){
+    e.preventDefault();
+    closeFocus();
+    return;
+  }
+  if(e.key==='Escape' && achieveOverlay.classList.contains('open')){
+    e.preventDefault();
+    achieveOverlay.classList.remove('open');
+    document.body.style.overflow='';
     return;
   }
   if(e.key==='Escape' && document.activeElement===searchInput && searchInput.value){
