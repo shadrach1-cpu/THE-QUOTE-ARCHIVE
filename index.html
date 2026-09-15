@@ -2314,8 +2314,8 @@ function catInfo(key){ return CATS.find(c=>c.key===key); }
 function buildTabs(){
   const counts = {};
   CATS.forEach(c=>counts[c.key]=quotes.reduce((n,q)=>n + (q.category===c.key ? 1 : 0), 0));
-  const allTab = `<button class="drawer-tab ${currentCategory==='all'?'active':''}" data-cat="all" role="tab" aria-selected="${currentCategory==='all'}"><span class="dot" style="--dc:var(--gold)"></span>All <span class="n">${quotes.length}</span></button>`;
-  const catTabs = CATS.map(c=>`<button class="drawer-tab ${currentCategory===c.key?'active':''}" data-cat="${c.key}" role="tab" aria-selected="${currentCategory===c.key}" style="--dc:${c.color}"><span class="dot"></span>${c.label} <span class="n">${counts[c.key]}</span></button>`).join('');
+  const allTab = `<button type="button" class="drawer-tab ${currentCategory==='all'?'active':''}" data-cat="all" role="tab" aria-selected="${currentCategory==='all'}"><span class="dot" style="--dc:var(--gold)"></span>All <span class="n">${quotes.length}</span></button>`;
+  const catTabs = CATS.map(c=>`<button type="button" class="drawer-tab ${currentCategory===c.key?'active':''}" data-cat="${c.key}" role="tab" aria-selected="${currentCategory===c.key}" style="--dc:${c.color}"><span class="dot"></span>${c.label} <span class="n">${counts[c.key]}</span></button>`).join('');
   drawerTabs.innerHTML = allTab + catTabs;
 }
 
@@ -2339,8 +2339,8 @@ const cabinetEl = document.getElementById('cabinet');
 function buildCabinet(){
   const counts = {};
   CATS.forEach(c=>counts[c.key]=quotes.reduce((n,q)=>n + (q.category===c.key ? 1 : 0), 0));
-  const allBtn = `<button class="drawer-btn ${currentCategory==='all'?'active':''}" data-cat="all" style="--dc:var(--gold)"><span class="di">✦</span><span class="dl">All Cards</span><span class="dn">${quotes.length} indexed quotes</span></button>`;
-  const catBtns = CATS.map(c=>`<button class="drawer-btn ${currentCategory===c.key?'active':''}" data-cat="${c.key}" style="--dc:${c.color}"><span class="di">${c.icon}</span><span class="dl">${c.label}</span><span class="dn">${counts[c.key]} indexed</span></button>`).join('');
+  const allBtn = `<button type="button" class="drawer-btn ${currentCategory==='all'?'active':''}" data-cat="all" style="--dc:var(--gold)"><span class="di">✦</span><span class="dl">All Cards</span><span class="dn">${quotes.length} indexed quotes</span></button>`;
+  const catBtns = CATS.map(c=>`<button type="button" class="drawer-btn ${currentCategory===c.key?'active':''}" data-cat="${c.key}" style="--dc:${c.color}"><span class="di">${c.icon}</span><span class="dl">${c.label}</span><span class="dn">${counts[c.key]} indexed</span></button>`).join('');
   cabinetEl.innerHTML = allBtn + catBtns;
 }
 
@@ -2568,12 +2568,12 @@ function cardHTML(q){
     </div>
     <div class="perf"></div>
     <div class="actions">
-      <button class="copy-btn" title="Copy quote" aria-label="Copy quote">⧉</button>
-      <button class="fav-btn ${fav?'active':''}" title="${fav?'Remove favorite':'Add favorite'}" aria-label="Toggle favorite">${fav?'♥':'♡'}</button>
-      <button class="dl-btn" title="Download card image" aria-label="Download card image">⬇</button>
-      <button class="share-btn" title="Share quote" aria-label="Share quote">↗</button>
-      <button class="focus-open-btn" title="Open in focus mode" aria-label="Open in focus mode">▣</button>
-      <button class="details-btn" title="Open quote record" aria-label="Open quote record">ⓘ</button>
+      <button type="button" class="copy-btn" title="Copy quote" aria-label="Copy quote">⧉</button>
+      <button type="button" class="fav-btn ${fav?'active':''}" title="${fav?'Remove favorite':'Add favorite'}" aria-label="Toggle favorite">${fav?'♥':'♡'}</button>
+      <button type="button" class="dl-btn" title="Download card image" aria-label="Download card image">⬇</button>
+      <button type="button" class="share-btn" title="Share quote" aria-label="Share quote">↗</button>
+      <button type="button" class="focus-open-btn" title="Open in focus mode" aria-label="Open in focus mode">▣</button>
+      <button type="button" class="details-btn" title="Open quote record" aria-label="Open quote record">ⓘ</button>
     </div>
   </article>`;
 }
@@ -2930,8 +2930,8 @@ function renderFavorites(){
         <div class="meta">${escapeHTML(q.catNo)} · ${escapeHTML(q.catLabel)}</div>
       </div>
       <div class="fav-actions">
-        <button class="icon-btn dl-fav-btn" aria-label="Download card">⬇</button>
-        <button class="icon-btn remove-fav-btn" aria-label="Remove favorite">Remove</button>
+        <button type="button" class="icon-btn dl-fav-btn" aria-label="Download card">⬇</button>
+        <button type="button" class="icon-btn remove-fav-btn" aria-label="Remove favorite">Remove</button>
       </div>
     </div>
   `).join('') : `<div class="fav-empty">No favorites yet. Tap the ♡ on any card to file it here.</div>`;
@@ -3409,7 +3409,7 @@ function formatTime(sec){
 
 function buildMusicList(){
   musicList.innerHTML = MUSIC_TRACKS.map((t,i)=>`
-    <button class="music-track ${i===musicIndex?'active':''}" data-index="${i}">
+    <button type="button" class="music-track ${i===musicIndex?'active':''}" data-index="${i}">
       <span class="tnum">${String(i+1).padStart(2,'0')}</span>
       <span>${t.title}</span>
     </button>`).join('');
