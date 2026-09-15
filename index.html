@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <meta name="google-site-verification" content="W4KW9SkGeDnRAMtnggcePGGJCl001O2k9ayZcK1m_as" />
 <title>Motivational Quotes &amp; Quote Generator | The Quote Archive</title>
-<meta name="description" content="Explore 820 original motivational and inspirational quotes by Diovu Shadrach. Search quotes, save favorites, generate unique quotes, and download quote images for free." />
+<meta name="description" content="Explore original motivational quotes by Diovu Shadrach alongside a large searchable public quote library. Search by quote, author, topic, or card ID, save favorites, generate unique quotes, and download quote images for free." />
 <meta name="author" content="Diovu Shadrach Chinecherem" />
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
 <meta name="language" content="English" />
@@ -16,7 +16,7 @@
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="The Quote Archive" />
 <meta property="og:title" content="Motivational Quotes &amp; Quote Generator | The Quote Archive" />
-<meta property="og:description" content="Explore 820 original motivational and inspirational quotes by Diovu Shadrach. Search, save, generate and download quotes for free." />
+<meta property="og:description" content="Explore original motivational quotes by Diovu Shadrach plus a large searchable public quote library. Search, save, generate and download quotes for free." />
 <meta property="og:url" content="https://shadrach1-cpu.github.io/THE-QUOTE-ARCHIVE/" />
 <meta property="og:image" content="https://shadrach1-cpu.github.io/THE-QUOTE-ARCHIVE/og-card-catalog.png" />
 <meta property="og:image:width" content="1200" />
@@ -56,7 +56,7 @@
       "name": "The Quote Archive",
       "alternateName": "Diovu Shadrach Quote Archive",
       "url": "https://shadrach1-cpu.github.io/THE-QUOTE-ARCHIVE/",
-      "description": "A collection of original motivational and inspirational quotes by Diovu Shadrach, with a free quote generator.",
+      "description": "A hand-curated collection of original motivational quotes by Diovu Shadrach plus a large searchable public quote library, with a free quote generator.",
       "inLanguage": "en",
       "publisher": {"@id": "https://shadrach1-cpu.github.io/THE-QUOTE-ARCHIVE/#person"},
       "potentialAction": {
@@ -486,9 +486,15 @@
     .toast-stack{left:12px;right:12px;top:12px;max-width:none}
   }
 
+  .library-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+  .library-note{margin:8px 0 0;color:var(--site-muted);font-size:.78rem;line-height:1.55}
+
   footer{margin-top:50px;padding:26px;text-align:center;color:var(--site-muted);border-top:1px solid rgba(224,168,63,.15);font-size:.9rem}
   footer .fmark a{color:var(--gold);text-decoration:none;font-weight:700}
   footer .fmark a:hover{text-decoration:underline}
+  .library-status{margin-top:10px;font-size:.78rem;opacity:.82}
+  .library-status strong{color:var(--gold)}
+  .tag.external{border-color:rgba(224,168,63,.45);color:var(--gold)}
 
   .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 
@@ -639,6 +645,28 @@
     .music-fab{right:14px;bottom:14px;width:52px;height:52px}
     .music-panel{right:8px;left:8px;width:auto;bottom:76px}
   }
+
+  /* QUOTE DETAIL / PROVENANCE */
+  .quote-detail-overlay{position:fixed;inset:0;z-index:220;display:none;align-items:center;justify-content:center;background:rgba(6,8,14,.86);backdrop-filter:blur(8px);padding:18px}
+  .quote-detail-overlay.open{display:flex}
+  .quote-detail{width:min(760px,100%);max-height:min(88vh,820px);overflow:auto;background:var(--paper);color:var(--ink-text);border:1px solid var(--line);border-top:4px solid var(--gold);border-radius:18px;box-shadow:0 30px 90px rgba(0,0,0,.5);padding:24px}
+  .quote-detail-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .quote-detail-kicker{font:700 .68rem 'IBM Plex Mono',monospace;letter-spacing:.12em;color:var(--ink-muted);text-transform:uppercase}
+  .quote-detail blockquote{font-family:'Fraunces',serif;font-style:italic;font-size:clamp(1.35rem,3vw,2rem);line-height:1.55;margin:24px 0 12px}
+  .quote-detail-author{font-weight:800;color:var(--teal-deep);text-transform:uppercase;letter-spacing:.04em}
+  .provenance-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:20px 0}
+  .provenance-item{padding:12px;border:1px dashed var(--line);border-radius:10px;background:rgba(0,0,0,.025)}
+  .provenance-item span{display:block;font:700 .64rem 'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-muted);margin-bottom:4px}
+  .provenance-item strong{font-size:.82rem;line-height:1.45}
+  .related-quotes{border-top:1px solid var(--line);padding-top:16px;margin-top:8px}
+  .related-quotes h3{font-family:'Playfair Display',serif;margin:0 0 10px}
+  .related-list{display:grid;gap:7px}
+  .related-btn{width:100%;text-align:left;border:1px solid var(--line);background:rgba(0,0,0,.025);color:var(--ink-text);border-radius:10px;padding:10px 12px;cursor:pointer;font:inherit}
+  .related-btn:hover{background:rgba(224,168,63,.1)}
+  .detail-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}
+  .detail-actions .btn,.detail-actions .mini-btn{min-height:42px}
+  @media(max-width:560px){.quote-detail{padding:18px}.provenance-grid{grid-template-columns:1fr}.quote-detail blockquote{font-size:1.3rem}}
+
 </style>
 </head>
 <body>
@@ -683,7 +711,7 @@
         <a class="btn ghost" href="#generator">Try the Generator</a>
       </div>
       <div class="stat-row">
-        <span class="stat-chip"><b id="statTotal">0</b> hand-filed quotes</span>
+        <span class="stat-chip"><b id="statTotal">0</b> indexed quotations</span>
         <span class="stat-chip"><b>20</b> drawers</span>
         <span class="stat-chip"><b id="statGen">0</b> generatable combinations</span>
         <span class="stat-chip"><b id="statFav">0</b> favorited</span>
@@ -694,7 +722,7 @@
         <div class="scale-grid">
           <div class="scale-item">
             <strong id="scaleCurated">0</strong>
-            <span>curated cards</span>
+            <span>original cards</span>
           </div>
           <div class="scale-item">
             <strong id="scaleDrawers">0</strong>
@@ -706,9 +734,15 @@
           </div>
         </div>
         <p class="scale-note">
-          The curated cards are the archive's filed collection. The generator does not pretend to store
+          The original cards are the archive's filed collection. The generator does not pretend to store
           millions of historical quotes; it weaves new combinations on demand from its phrase banks.
         </p>
+        <p class="library-status" id="libraryStatus" aria-live="polite"><strong>Public Quote Library:</strong> loading a large open quotation corpus…</p>
+        <div class="library-actions" aria-label="Expanded quotation libraries">
+          <button class="mini-btn" id="loadCommunityLibraryBtn" type="button">＋ Load 100,000+ Community Quotes</button>
+          <button class="mini-btn" id="searchGlobalLibraryBtn" type="button">⌕ Search Global QuoteKG</button>
+        </div>
+        <p class="library-note">Global QuoteKG access covers a multilingual research dataset of nearly 1 million quotations from nearly 70,000 people in 55 languages. Its data is licensed CC BY-SA 4.0; external records are kept clearly attributed and are not presented as Shadrach originals.</p>
       </div>
     </div>
 
@@ -795,6 +829,7 @@
             <label>Search in</label>
             <div class="check-row">
               <label><input type="checkbox" id="searchInQuote" checked> quote</label>
+              <label><input type="checkbox" id="searchInAuthor" checked> author</label>
               <label><input type="checkbox" id="searchInTopic" checked> topics</label>
               <label><input type="checkbox" id="searchInId" checked> ID</label>
             </div>
@@ -850,8 +885,42 @@
   </section>
 
   <footer>
-    Filed with care by <span class="fmark"><a href="https://shadrach1-cpu.github.io/SHADRACH.DEV/" target="_blank" rel="noopener noreferrer">Diovu Shadrach Chinecherem</a></span> · The Quote Archive · original cards across 20 drawers
+    Filed with care by <span class="fmark"><a href="https://shadrach1-cpu.github.io/SHADRACH.DEV/" target="_blank" rel="noopener noreferrer">Diovu Shadrach Chinecherem</a></span> · The Quote Archive · original cards across 20 drawers · expanded open quotation libraries · QuoteKG research access
   </footer>
+</div>
+
+
+<!-- QUOTE DETAIL / PROVENANCE -->
+<div class="quote-detail-overlay" id="quoteDetailOverlay" role="dialog" aria-modal="true" aria-labelledby="quoteDetailTitle">
+  <div class="quote-detail" role="document">
+    <div class="quote-detail-head">
+      <div>
+        <div class="quote-detail-kicker" id="quoteDetailKicker">Archive record</div>
+        <div class="cat-no" id="quoteDetailId">MOT·01</div>
+      </div>
+      <button class="icon-btn" id="quoteDetailClose" type="button" aria-label="Close quote details">✕ Close</button>
+    </div>
+    <h2 id="quoteDetailTitle" class="sr-only">Quote details</h2>
+    <blockquote id="quoteDetailText">Quote</blockquote>
+    <div class="quote-detail-author" id="quoteDetailAuthor">— Author</div>
+    <div class="provenance-grid">
+      <div class="provenance-item"><span>Record type</span><strong id="quoteDetailType">Original archive card</strong></div>
+      <div class="provenance-item"><span>Drawer</span><strong id="quoteDetailDrawer">Motivation</strong></div>
+      <div class="provenance-item"><span>Provenance</span><strong id="quoteDetailSource">Original work filed in The Quote Archive</strong></div>
+      <div class="provenance-item"><span>Status / license</span><strong id="quoteDetailStatus">Archive original · rights retained by creator</strong></div>
+    </div>
+    <div class="related-quotes">
+      <h3>Related cards</h3>
+      <div class="related-list" id="quoteRelatedList"></div>
+    </div>
+    <div class="detail-actions">
+      <button class="btn primary" id="quoteDetailCopy" type="button">⧉ Copy</button>
+      <button class="btn" id="quoteDetailFav" type="button">♡ Favorite</button>
+      <button class="btn" id="quoteDetailDownload" type="button">⬇ Download</button>
+      <button class="btn" id="quoteDetailShare" type="button">↗ Share</button>
+      <button class="btn ghost" id="quoteDetailFocus" type="button">▣ Focus</button>
+    </div>
+  </div>
 </div>
 
 <!-- FOCUS MODE OVERLAY -->
@@ -1866,10 +1935,10 @@ const GEN_TEMPLATES = [
   (a,b,c,d)=>`${cap(b)} — that is what ${d} really means when ${a} tries to stop you, and it leads to ${c}.`
 ];
 
-const TOTAL_GENERATABLE = CATS.reduce(
-  (total, cat) => total + GEN_TEMPLATES.length * GEN_NOUNS.length * GEN_ACTIONS.length * GEN_OUTCOMES.length * (GEN_VIRTUES[cat.key]?.length || 0),
-  0
-);
+const TOTAL_GENERATABLE = CATS.reduce((total, cat) => {
+  const virtueCount = Array.isArray(GEN_VIRTUES[cat.key]) ? GEN_VIRTUES[cat.key].length : 0;
+  return total + GEN_TEMPLATES.length * GEN_NOUNS.length * GEN_ACTIONS.length * GEN_OUTCOMES.length * virtueCount;
+}, 0);
 let generatedCursor = 0;
 
 function buildGeneratedQuote(catKey, templateIdx, ai, bi, ci, di){
@@ -1881,7 +1950,7 @@ function buildGeneratedQuote(catKey, templateIdx, ai, bi, ci, di){
   if(ai < 0 || ai >= GEN_NOUNS.length) return null;
   if(bi < 0 || bi >= GEN_ACTIONS.length) return null;
   if(ci < 0 || ci >= GEN_OUTCOMES.length) return null;
-  const virtues = GEN_VIRTUES[catKey] || GEN_VIRTUES.motivation;
+  const virtues = Array.isArray(GEN_VIRTUES[catKey]) ? GEN_VIRTUES[catKey] : GEN_VIRTUES.motivation;
   if(di < 0 || di >= virtues.length) return null;
   const tmpl = GEN_TEMPLATES[templateIdx];
   const a = GEN_NOUNS[ai], b = GEN_ACTIONS[bi], c = GEN_OUTCOMES[ci], d = virtues[di];
@@ -1905,6 +1974,7 @@ function parseGeneratedId(id){
 
 /* ===================== STATE ===================== */
 const FAV_KEY = 'dqa_favorites_v1';
+const FAV_SNAPSHOT_KEY = 'dqa_favorite_snapshots_v1';
 const VISIT_KEY = 'dqa_visits_v1';
 const THEME_KEY = 'dqa_theme_v1';
 const STATS_KEY = 'dqa_stats_v1';
@@ -1939,6 +2009,8 @@ function safeWrite(key, value) {
 }
 
 const storedFavorites = safeReadJSON(FAV_KEY, []);
+const storedFavoriteSnapshots = safeReadJSON(FAV_SNAPSHOT_KEY, {});
+const favoriteSnapshots = storedFavoriteSnapshots && typeof storedFavoriteSnapshots === 'object' && !Array.isArray(storedFavoriteSnapshots) ? storedFavoriteSnapshots : {};
 let favorites = new Set(Array.isArray(storedFavorites) ? storedFavorites.filter(id => typeof id === 'string') : []);
 let currentCategory = 'all';
 let currentSearch = '';
@@ -1960,7 +2032,12 @@ const SEARCH_SYNONYMS = {
   'confidence':['self-belief','self-trust','conviction','courage'],
   'focus':['attention','concentration','clarity','presence'],
   'success':['achievement','results','progress','discipline'],
-  'motivation':['drive','momentum','action','purpose']
+  'motivation':['drive','momentum','action','purpose','inspiration','determination','encouragement'],
+  'burnout':['rest','renewal','balance','patience','boundaries','recovery'],
+  'procrastination':['action','discipline','momentum','consistency','start','follow-through'],
+  'overthinking':['clarity','focus','action','courage','decision','perspective'],
+  'lonely':['courage','self-trust','purpose','resilience','belonging'],
+  'stuck':['momentum','action','change','courage','progress','persistence']
 };
 let focusIndex = 0;
 let focusList = quotes;
@@ -1968,6 +2045,10 @@ let currentStreak = 0;
 
 const storedStats = safeReadJSON(STATS_KEY, {});
 let stats = Object.assign({downloads:0, weaves:0, focusViews:0, searched:false}, storedStats && typeof storedStats === 'object' && !Array.isArray(storedStats) ? storedStats : {});
+stats.downloads = Number.isFinite(Number(stats.downloads)) && Number(stats.downloads) >= 0 ? Math.floor(Number(stats.downloads)) : 0;
+stats.weaves = Number.isFinite(Number(stats.weaves)) && Number(stats.weaves) >= 0 ? Math.floor(Number(stats.weaves)) : 0;
+stats.focusViews = Number.isFinite(Number(stats.focusViews)) && Number(stats.focusViews) >= 0 ? Math.floor(Number(stats.focusViews)) : 0;
+stats.searched = stats.searched === true;
 const storedUnlocked = safeReadJSON(UNLOCKED_KEY, []);
 let unlocked = new Set(Array.isArray(storedUnlocked) ? storedUnlocked.filter(id => typeof id === 'string') : []);
 function saveStats(){ safeWriteJSON(STATS_KEY, stats); }
@@ -1978,19 +2059,11 @@ function saveStats(){ safeWriteJSON(STATS_KEY, stats); }
 let soundOn = (()=>{ try { return window.localStorage?.getItem(SOUND_KEY) === '1'; } catch { return false; } })();
 let audioCtx = null;
 function ensureAudio(){
-  try{
-    if(!audioCtx){
-      const AC = window.AudioContext || window.webkitAudioContext;
-      if(AC) audioCtx = new AC();
-    }
-    // A previously-enabled sound preference can recreate the AudioContext
-    // outside a user gesture on page load. Resume it when a later interaction
-    // calls a sound effect, otherwise persisted sound can appear silently broken.
-    if(audioCtx && audioCtx.state === 'suspended') audioCtx.resume().catch(()=>{});
-    return audioCtx;
-  }catch{
-    return null;
+  if(!audioCtx){
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if(AC) audioCtx = new AC();
   }
+  return audioCtx;
 }
 function tone(freq, start, dur, type='sine', gain=0.06){
   if(!soundOn) return;
@@ -2067,9 +2140,27 @@ const achieveOverlay = document.getElementById('achieveOverlay');
 const toastStack = document.getElementById('toastStack');
 
 function showToast(icon, title, desc){
+  // Support both the rich 3-argument form and the simple message form.
+  if(arguments.length === 1){
+    desc = '';
+    title = String(icon ?? '');
+    icon = 'ℹ️';
+  }
   const el = document.createElement('div');
   el.className = 'toast';
-  el.innerHTML = `<span class="ticon">${icon}</span><span><b>${title}</b>${desc}</span>`;
+  const iconEl = document.createElement('span');
+  iconEl.className = 'ticon';
+  iconEl.textContent = String(icon ?? '');
+  const textEl = document.createElement('span');
+  const titleEl = document.createElement('b');
+  titleEl.textContent = String(title ?? '');
+  textEl.appendChild(titleEl);
+  if(desc){
+    const descEl = document.createElement('span');
+    descEl.textContent = String(desc);
+    textEl.appendChild(descEl);
+  }
+  el.append(iconEl, textEl);
   toastStack.appendChild(el);
   setTimeout(()=>{ el.style.transition='opacity .4s ease, transform .4s ease'; el.style.opacity='0'; el.style.transform='translateX(30px)'; setTimeout(()=>el.remove(), 400); }, 4200);
 }
@@ -2117,10 +2208,16 @@ window.addEventListener('beforeinstallprompt', (e)=>{
 });
 installBtn.addEventListener('click', async ()=>{
   if(!deferredInstallPrompt) return;
-  deferredInstallPrompt.prompt();
-  await deferredInstallPrompt.userChoice;
+  const promptEvent = deferredInstallPrompt;
   deferredInstallPrompt = null;
-  installBtn.hidden = true;
+  try{
+    promptEvent.prompt();
+    await promptEvent.userChoice;
+  }catch(err){
+    console.warn('Install prompt was not completed:', err);
+  }finally{
+    installBtn.hidden = true;
+  }
 });
 window.addEventListener('appinstalled', ()=>{
   installBtn.hidden = true;
@@ -2128,7 +2225,7 @@ window.addEventListener('appinstalled', ()=>{
 });
 if('serviceWorker' in navigator){
   window.addEventListener('load', ()=>{
-    navigator.serviceWorker.register('./sw.js').catch(()=>{ /* offline install still works without it */ });
+    navigator.serviceWorker.register('./sw.js').catch(()=>{ /* core site remains usable if the optional worker is unavailable */ });
   });
 }
 
@@ -2143,6 +2240,7 @@ const searchHint = document.getElementById('searchHint');
 const searchCategory = document.getElementById('searchCategory');
 const searchSort = document.getElementById('searchSort');
 const searchInQuote = document.getElementById('searchInQuote');
+const searchInAuthor = document.getElementById('searchInAuthor');
 const searchInTopic = document.getElementById('searchInTopic');
 const searchInId = document.getElementById('searchInId');
 const loadMoreBtn = document.getElementById('loadMoreBtn');
@@ -2155,19 +2253,48 @@ const streakPill = document.getElementById('streakPill');
 const scaleCurated = document.getElementById('scaleCurated');
 const scaleDrawers = document.getElementById('scaleDrawers');
 const scaleGenerated = document.getElementById('scaleGenerated');
+const quoteDetailOverlay = document.getElementById('quoteDetailOverlay');
+const quoteDetailId = document.getElementById('quoteDetailId');
+const quoteDetailText = document.getElementById('quoteDetailText');
+const quoteDetailAuthor = document.getElementById('quoteDetailAuthor');
+const quoteDetailType = document.getElementById('quoteDetailType');
+const quoteDetailDrawer = document.getElementById('quoteDetailDrawer');
+const quoteDetailSource = document.getElementById('quoteDetailSource');
+const quoteDetailStatus = document.getElementById('quoteDetailStatus');
+const quoteRelatedList = document.getElementById('quoteRelatedList');
+let detailQuote = null;
 
 /* ===================== INIT ===================== */
 function setStatus(msg){ statusEl.textContent = msg; }
 
 function saveFavs(){
   safeWriteJSON(FAV_KEY, [...favorites]);
+  // Keep a compact snapshot for externally loaded quotations so favorites
+  // remain visible even when an external library is temporarily offline.
+  const activeIds = new Set(favorites);
+  Object.keys(favoriteSnapshots).forEach(id=>{ if(!activeIds.has(id)) delete favoriteSnapshots[id]; });
+  safeWriteJSON(FAV_SNAPSHOT_KEY, favoriteSnapshots);
   statFav.textContent = favorites.size;
   renderFavorites();
 }
 
 function toggleFav(id){
+  if(typeof id !== 'string' || !id) return;
   const adding = !favorites.has(id);
-  if(favorites.has(id)) favorites.delete(id); else favorites.add(id);
+  const quote = findQuote(id);
+  if(favorites.has(id)){
+    favorites.delete(id);
+    delete favoriteSnapshots[id];
+  } else {
+    favorites.add(id);
+    if(quote && quote.external){
+      favoriteSnapshots[id] = {
+        id: quote.id, catNo: quote.catNo, quote: quote.quote, author: quote.author,
+        category: quote.category, catLabel: quote.catLabel, external: true,
+        sourceLabel: quote.sourceLabel, sourceLicense: quote.sourceLicense
+      };
+    }
+  }
   saveFavs();
   renderGrid();
   refreshQotdFavButton();
@@ -2178,7 +2305,7 @@ function toggleFav(id){
 function findQuote(id){
   if(typeof id !== 'string') return null;
   if(id.startsWith('GEN-')) return parseGeneratedId(id);
-  return quotes.find(q=>q.id===id) || null;
+  return quotes.find(q=>q.id===id) || favoriteSnapshots[id] || null;
 }
 
 /* ===================== DRAWER TABS + CABINET ===================== */
@@ -2186,9 +2313,9 @@ function catInfo(key){ return CATS.find(c=>c.key===key); }
 
 function buildTabs(){
   const counts = {};
-  CATS.forEach(c=>counts[c.key]=RAW[c.key].length);
-  const allTab = `<button class="drawer-tab active" data-cat="all" role="tab" aria-selected="true"><span class="dot" style="--dc:var(--gold)"></span>All <span class="n">${quotes.length}</span></button>`;
-  const catTabs = CATS.map(c=>`<button class="drawer-tab" data-cat="${c.key}" role="tab" aria-selected="false" style="--dc:${c.color}"><span class="dot"></span>${c.label} <span class="n">${counts[c.key]}</span></button>`).join('');
+  CATS.forEach(c=>counts[c.key]=quotes.reduce((n,q)=>n + (q.category===c.key ? 1 : 0), 0));
+  const allTab = `<button class="drawer-tab ${currentCategory==='all'?'active':''}" data-cat="all" role="tab" aria-selected="${currentCategory==='all'}"><span class="dot" style="--dc:var(--gold)"></span>All <span class="n">${quotes.length}</span></button>`;
+  const catTabs = CATS.map(c=>`<button class="drawer-tab ${currentCategory===c.key?'active':''}" data-cat="${c.key}" role="tab" aria-selected="${currentCategory===c.key}" style="--dc:${c.color}"><span class="dot"></span>${c.label} <span class="n">${counts[c.key]}</span></button>`).join('');
   drawerTabs.innerHTML = allTab + catTabs;
 }
 
@@ -2204,16 +2331,24 @@ function setCategory(key){
     b.classList.toggle('active', b.dataset.cat === key);
   });
   visibleCount = BATCH;
+  syncSearchURL();
   renderGrid();
 }
 
 const cabinetEl = document.getElementById('cabinet');
 function buildCabinet(){
   const counts = {};
-  CATS.forEach(c=>counts[c.key]=RAW[c.key].length);
-  const allBtn = `<button class="drawer-btn active" data-cat="all" style="--dc:var(--gold)"><span class="di">✦</span><span class="dl">All Cards</span><span class="dn">${quotes.length} quotes</span></button>`;
-  const catBtns = CATS.map(c=>`<button class="drawer-btn" data-cat="${c.key}" style="--dc:${c.color}"><span class="di">${c.icon}</span><span class="dl">${c.label}</span><span class="dn">${counts[c.key]} quotes</span></button>`).join('');
+  CATS.forEach(c=>counts[c.key]=quotes.reduce((n,q)=>n + (q.category===c.key ? 1 : 0), 0));
+  const allBtn = `<button class="drawer-btn ${currentCategory==='all'?'active':''}" data-cat="all" style="--dc:var(--gold)"><span class="di">✦</span><span class="dl">All Cards</span><span class="dn">${quotes.length} indexed quotes</span></button>`;
+  const catBtns = CATS.map(c=>`<button class="drawer-btn ${currentCategory===c.key?'active':''}" data-cat="${c.key}" style="--dc:${c.color}"><span class="di">${c.icon}</span><span class="dl">${c.label}</span><span class="dn">${counts[c.key]} indexed</span></button>`).join('');
   cabinetEl.innerHTML = allBtn + catBtns;
+}
+
+function refreshArchiveDirectories(){
+  const selectedDrawer = searchCategory?.value || currentCategory || 'all';
+  buildTabs();
+  buildCabinet();
+  searchCategory.value = CATS.some(c=>c.key===selectedDrawer) || selectedDrawer==='all' ? selectedDrawer : currentCategory;
 }
 
 drawerTabs.addEventListener('click', (e)=>{
@@ -2235,7 +2370,7 @@ function normalizeSearchText(value){
     .toLowerCase()
     .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
     .replace(/[“”‘’]/g,"'")
-    .replace(/[^a-z0-9·\s-]/g,' ')
+    .replace(/[^\p{L}\p{N}·\s-]/gu,' ')
     .replace(/\s+/g,' ')
     .trim();
 }
@@ -2286,6 +2421,7 @@ function buildSearchIndex(){
   quoteView.forEach(q=>{
     if(q._searchIndexVersion === 2) return;
     q._searchQuote = normalizeSearchText(q.quote);
+    q._searchAuthor = normalizeSearchText(q.author);
     q._searchTopic = normalizeSearchText(topicTextFor(q));
     q._searchId = normalizeSearchText(q.id);
     q._searchCategory = normalizeSearchText(q.catLabel);
@@ -2311,41 +2447,29 @@ function scoreSearchResult(q, rawQuery){
   const tokens = searchTokens(query);
   const expanded = expandSearchTokens(tokens);
   const quote = q._searchQuote || normalizeSearchText(q.quote);
+  const author = q._searchAuthor || normalizeSearchText(q.author);
   const topic = q._searchTopic || normalizeSearchText(topicTextFor(q));
   const id = q._searchId || normalizeSearchText(q.id);
   const category = q._searchCategory || normalizeSearchText(q.catLabel);
-
-  // Relevance must respect the Advanced Search field toggles. Previously a
-  // disabled field could still contribute to the score and change result order.
-  const quoteEnabled = searchInQuote.checked;
-  const topicEnabled = searchInTopic.checked;
-  const idEnabled = searchInId.checked;
-  const topicFields = topicEnabled ? [topic, category] : [];
-  const activeFields = [
-    ...(quoteEnabled ? [quote] : []),
-    ...topicFields,
-    ...(idEnabled ? [id] : [])
-  ];
-
+  const selected = [];
+  if(searchInQuote.checked) selected.push(['quote',quote]);
+  if(searchInAuthor.checked) selected.push(['author',author]);
+  if(searchInTopic.checked){ selected.push(['topic',topic]); selected.push(['category',category]); }
+  if(searchInId.checked) selected.push(['id',id]);
+  if(!selected.length) return 0;
   let score = 0;
-  if(!activeFields.length) return 0;
-
-  if(quoteEnabled && quote === query) score += 1000;
-  if(quoteEnabled && quote.includes(query)) score += 250;
-  if(topicEnabled && (topic.includes(query) || category.includes(query))) score += 120;
-  if(idEnabled && id === query) score += 220;
-  if(topicEnabled && category === query) score += 180;
-
-  tokens.forEach(token=>{
-    if(quoteEnabled && quote.includes(token)) score += 40;
-    if(topicEnabled && topic.includes(token)) score += 24;
-    if(idEnabled && id.includes(token)) score += 18;
-    if(topicEnabled && category.includes(token)) score += 16;
-  });
+  for(const [kind,field] of selected){
+    if(field === query) score += kind==='quote' ? 1000 : kind==='author' ? 900 : kind==='id' ? 220 : 180;
+    if(field.includes(query)) score += kind==='quote' ? 250 : kind==='author' ? 210 : kind==='topic' ? 120 : kind==='id' ? 60 : 100;
+    tokens.forEach(token=>{
+      if(field.includes(token)) score += kind==='quote' ? 40 : kind==='author' ? 38 : kind==='topic' ? 24 : kind==='id' ? 18 : 16;
+    });
+  }
   expanded.forEach(token=>{
     if(tokens.includes(token)) return;
-    if(topicEnabled && (topic.includes(token) || category.includes(token))) score += 9;
-    if(quoteEnabled && quote.includes(token)) score += 14;
+    for(const [kind,field] of selected){
+      if(field.includes(token)) score += kind==='quote' ? 14 : kind==='topic' ? 9 : 7;
+    }
   });
   return score;
 }
@@ -2356,11 +2480,13 @@ function matchesSearch(q){
   const tokens = searchTokens(query);
   const expanded = expandSearchTokens(tokens);
   const quote = q._searchQuote || normalizeSearchText(q.quote);
+  const author = q._searchAuthor || normalizeSearchText(q.author);
   const topic = q._searchTopic || normalizeSearchText(topicTextFor(q));
   const id = q._searchId || normalizeSearchText(q.id);
   const category = q._searchCategory || normalizeSearchText(q.catLabel);
   const fields = [];
   if(searchInQuote.checked) fields.push(quote);
+  if(searchInAuthor.checked) fields.push(author);
   if(searchInTopic.checked) fields.push(topic, category);
   if(searchInId.checked) fields.push(id);
   if(!fields.length) return {match:false,score:0};
@@ -2421,7 +2547,7 @@ function updateSearchUI(total){
     searchHint.textContent = 'Tip: try a feeling, idea, phrase, drawer name or card ID';
   }else{
     searchResultText.innerHTML = `<strong>${total}</strong> cards in this view`;
-    searchHint.textContent = 'Searches quote text, topics, categories and card IDs';
+    searchHint.textContent = 'Searches quote text, authors, topics, categories and card IDs';
   }
 }
 
@@ -2438,7 +2564,7 @@ function cardHTML(q){
     <p class="qtext">&ldquo;${escapeHTML(q.quote)}&rdquo;</p>
     <div class="qfoot">
       <span class="qauth">— ${escapeHTML(q.author)}</span>
-      <span class="tag">${escapeHTML(q.catLabel)}</span>
+      <span class="tag ${q.external?'external':''}" title="${escapeHTML(q.external ? `${q.sourceLabel || 'External source'} · ${q.sourceLicense || 'License information unavailable'}` : q.catLabel)}">${escapeHTML(q.external ? `PUBLIC · ${q.sourceLabel || 'External source'}` : q.catLabel)}</span>
     </div>
     <div class="perf"></div>
     <div class="actions">
@@ -2447,9 +2573,103 @@ function cardHTML(q){
       <button class="dl-btn" title="Download card image" aria-label="Download card image">⬇</button>
       <button class="share-btn" title="Share quote" aria-label="Share quote">↗</button>
       <button class="focus-open-btn" title="Open in focus mode" aria-label="Open in focus mode">▣</button>
+      <button class="details-btn" title="Open quote record" aria-label="Open quote record">ⓘ</button>
     </div>
   </article>`;
 }
+
+function quoteDeepLink(id){
+  try{
+    const url = new URL(window.location.href);
+    url.searchParams.set('quote', id);
+    return url.href;
+  }catch{ return ''; }
+}
+
+function relatedQuotesFor(q, limit=5){
+  if(!q) return [];
+  const sameCategory = quotes.filter(x=>x.id!==q.id && x.category===q.category);
+  const pool = sameCategory.length ? sameCategory : quotes.filter(x=>x.id!==q.id);
+  return pool.sort((a,b)=>{
+    const aWords = new Set(searchTokens(`${a.quote} ${topicTextFor(a)}`));
+    const bWords = new Set(searchTokens(`${b.quote} ${topicTextFor(b)}`));
+    const base = new Set(searchTokens(`${q.quote} ${topicTextFor(q)}`));
+    const sa=[...aWords].filter(w=>base.has(w)).length;
+    const sb=[...bWords].filter(w=>base.has(w)).length;
+    return sb-sa;
+  }).slice(0,limit);
+}
+
+function renderQuoteDetail(){
+  const q = detailQuote;
+  if(!q) return;
+  const info = catInfo(q.category);
+  quoteDetailId.textContent = q.catNo || q.id;
+  quoteDetailText.textContent = `“${q.quote}”`;
+  quoteDetailAuthor.textContent = `— ${q.author || 'Unknown author'}`;
+  quoteDetailDrawer.textContent = q.catLabel || (info?.label || 'Uncategorized');
+  if(q.generated){
+    quoteDetailType.textContent = 'Generated on demand';
+    quoteDetailSource.textContent = 'Woven locally from the archive generator phrase banks';
+    quoteDetailStatus.textContent = 'Generated record · not a historical quotation';
+  }else if(q.external){
+    quoteDetailType.textContent = 'External quotation';
+    quoteDetailSource.textContent = q.sourceLabel || 'External quotation database';
+    quoteDetailStatus.textContent = q.sourceLicense || 'License information unavailable';
+  }else{
+    quoteDetailType.textContent = 'Original archive card';
+    quoteDetailSource.textContent = 'Original work filed in The Quote Archive';
+    quoteDetailStatus.textContent = 'Archive original · rights retained by creator';
+  }
+  quoteRelatedList.innerHTML = relatedQuotesFor(q).map(r=>`<button class="related-btn" type="button" data-related-id="${escapeHTML(r.id)}"><strong>${escapeHTML(r.catNo)}</strong> · ${escapeHTML(r.quote)}</button>`).join('') || '<span style="color:var(--ink-muted)">No related cards found.</span>';
+  document.getElementById('quoteDetailFav').textContent = favorites.has(q.id) ? '♥ Favorited' : '♡ Favorite';
+}
+
+function openQuoteDetail(q, updateURL=false){
+  if(!q || !quoteDetailOverlay) return;
+  detailQuote = q;
+  renderQuoteDetail();
+  quoteDetailOverlay.classList.add('open');
+  document.body.style.overflow='hidden';
+  if(updateURL){
+    try{ const url=new URL(window.location.href); url.searchParams.set('quote',q.id); window.history.pushState({quote:q.id},'',url); }catch{}
+  }
+  document.getElementById('quoteDetailClose').focus();
+}
+
+function closeQuoteDetail(updateURL=true){
+  if(!quoteDetailOverlay) return;
+  quoteDetailOverlay.classList.remove('open');
+  document.body.style.overflow='';
+  detailQuote=null;
+  if(updateURL){
+    try{ const url=new URL(window.location.href); url.searchParams.delete('quote'); window.history.pushState({},'',url); }catch{}
+  }
+}
+
+function openQuoteFromURL(){
+  try{
+    const id=new URL(window.location.href).searchParams.get('quote');
+    if(!id) return;
+    const q=findQuote(id);
+    if(q) openQuoteDetail(q,false);
+  }catch{}
+}
+
+quoteDetailOverlay.addEventListener('click',e=>{
+  if(e.target===quoteDetailOverlay) closeQuoteDetail();
+  const related=e.target.closest('[data-related-id]');
+  if(related){ const q=findQuote(related.dataset.relatedId); if(q) openQuoteDetail(q,true); }
+});
+document.getElementById('quoteDetailClose').addEventListener('click',()=>closeQuoteDetail());
+document.getElementById('quoteDetailCopy').addEventListener('click',()=>{ if(detailQuote) copyText(`“${detailQuote.quote}” — ${detailQuote.author}`).then(ok=>showToast(ok?'Quote copied.':'Copy unavailable — select the text manually.')); });
+document.getElementById('quoteDetailFav').addEventListener('click',()=>{ if(detailQuote){ toggleFav(detailQuote.id); renderQuoteDetail(); } });
+document.getElementById('quoteDetailDownload').addEventListener('click',()=>{ if(detailQuote) downloadCard(detailQuote); });
+document.getElementById('quoteDetailShare').addEventListener('click',async()=>{ if(detailQuote){ await shareQuote(detailQuote); } });
+document.getElementById('quoteDetailFocus').addEventListener('click',()=>{ if(detailQuote){ const q=detailQuote; closeQuoteDetail(false); openFocus(q); } });
+window.addEventListener('popstate',()=>{
+  try{ const id=new URL(window.location.href).searchParams.get('quote'); const q=id?findQuote(id):null; if(q) openQuoteDetail(q,false); else if(quoteDetailOverlay.classList.contains('open')) closeQuoteDetail(false); }catch{}
+});
 
 function renderGrid(){
   const filtered = getFiltered();
@@ -2567,7 +2787,7 @@ searchCategory.addEventListener('change',()=>{
   runSearch();
 });
 searchSort.addEventListener('change',()=>{ searchSortMode=searchSort.value; visibleCount=BATCH; renderGrid(); });
-[searchInQuote,searchInTopic,searchInId].forEach(el=>el.addEventListener('change',()=>{ visibleCount=BATCH; renderGrid(); }));
+[searchInQuote,searchInAuthor,searchInTopic,searchInId].forEach(el=>el.addEventListener('change',()=>{ visibleCount=BATCH; renderGrid(); }));
 grid.addEventListener('click',(e)=>{
   if(e.target.closest('#emptySearchClear')){ searchClearBtn.click(); }
 });
@@ -2596,10 +2816,7 @@ function buildGenCatSelect(){
 }
 
 function randomGenerated(catFilter){
-  const requestedCats = catFilter === 'all' ? CATS : [catInfo(catFilter)].filter(Boolean);
-  // Only drawers with a real virtue bank can produce valid combinations.
-  // This keeps the random path consistent with TOTAL_GENERATABLE.
-  const allowedCats = requestedCats.filter(cat => (GEN_VIRTUES[cat.key]?.length || 0) > 0);
+  const allowedCats = catFilter === 'all' ? CATS : [catInfo(catFilter)].filter(Boolean);
   if(!allowedCats.length) return null;
 
   // Try random combinations first for variety.
@@ -2609,7 +2826,7 @@ function randomGenerated(catFilter){
     const ai = Math.floor(Math.random()*GEN_NOUNS.length);
     const bi = Math.floor(Math.random()*GEN_ACTIONS.length);
     const ci = Math.floor(Math.random()*GEN_OUTCOMES.length);
-    const virtueCount = GEN_VIRTUES[cat.key]?.length || 0;
+    const virtueCount = Array.isArray(GEN_VIRTUES[cat.key]) ? GEN_VIRTUES[cat.key].length : 0;
     if(!virtueCount) continue;
     const di = Math.floor(Math.random()*virtueCount);
     const q = buildGeneratedQuote(cat.key, templateIdx, ai, bi, ci, di);
@@ -2622,8 +2839,9 @@ function randomGenerated(catFilter){
   // actual selected drawer instead of assuming every drawer has five entries.
   const perCat = allowedCats.map(cat => ({
     cat,
-    virtues: GEN_VIRTUES[cat.key] || [],
-    size: GEN_TEMPLATES.length * GEN_NOUNS.length * GEN_ACTIONS.length * GEN_OUTCOMES.length * (GEN_VIRTUES[cat.key]?.length || 0)
+    virtues: Array.isArray(GEN_VIRTUES[cat.key]) ? GEN_VIRTUES[cat.key] : GEN_VIRTUES.motivation,
+    size: GEN_TEMPLATES.length * GEN_NOUNS.length * GEN_ACTIONS.length * GEN_OUTCOMES.length *
+      (Array.isArray(GEN_VIRTUES[cat.key]) ? GEN_VIRTUES[cat.key].length : GEN_VIRTUES.motivation.length)
   }));
   const totalAllowed = perCat.reduce((sum, item) => sum + item.size, 0);
   for(let scanned = 0; scanned < totalAllowed; scanned++){
@@ -2657,8 +2875,6 @@ function renderGenGrid(){
 }
 
 function generateBatch(n){
-  n = Number.isFinite(n) ? Math.max(0, Math.floor(n)) : 0;
-  if(!n) return 0;
   const catFilter = genCatSelect.value;
   const batch = [];
   for(let i=0;i<n;i++){
@@ -2739,7 +2955,7 @@ document.getElementById('exportFavBtn').addEventListener('click',()=>{
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url; a.download = 'my-favorite-quotes.txt'; a.click();
-  URL.revokeObjectURL(url);
+  window.setTimeout(() => URL.revokeObjectURL(url), 1000);
   setStatus('Favorites exported as a text file.');
 });
 
@@ -2770,7 +2986,8 @@ function renderQOTD(){
   document.getElementById('qotdText').textContent = `"${qotdItem.quote}"`;
   document.getElementById('qotdMeta').textContent = `— ${qotdItem.author} · ${qotdItem.catNo}`;
   const info = catInfo(qotdItem.category);
-  document.querySelector('.qotd').style.setProperty('--cat-color', info ? info.color : '#e0a83f');
+  const qotdBox = document.querySelector('.qotd');
+  if(qotdBox) qotdBox.style.setProperty('--cat-color', info ? info.color : '#e0a83f');
   refreshQotdFavButton();
 }
 function refreshQotdFavButton(){
@@ -2799,6 +3016,10 @@ document.getElementById('qotdShare').addEventListener('click',()=>{ if(qotdItem)
 
 /* ===================== RANDOM PULL / HERO CARD ===================== */
 function pullRandom(){
+  if(!quotes.length){
+    setStatus('The archive is empty — no quote can be pulled yet.');
+    return null;
+  }
   const q = quotes[Math.floor(Math.random()*quotes.length)];
   document.getElementById('heroCatNo').textContent = q.catNo;
   document.getElementById('heroQuoteText').textContent = `"${q.quote}"`;
@@ -2809,35 +3030,58 @@ function pullRandom(){
 document.getElementById('pullBtn').addEventListener('click', pullRandom);
 
 /* ===================== SHARE / DOWNLOAD ===================== */
-function shareQuote(q){
-  if(!q || typeof q.quote !== 'string'){
-    setStatus('Could not share this card: quote data is invalid.');
-    return;
+async function shareQuote(q){
+  if(!q || typeof q.quote !== 'string') return;
+  const text = `"${q.quote}" — ${q.author || 'Unknown author'}`;
+  const url = quoteDeepLink(q.id);
+  if(navigator.share){
+    try{
+      await navigator.share({text, title:'The Quote Archive', ...(url ? {url} : {})});
+      return;
+    }catch(err){
+      if(err?.name === 'AbortError') return;
+    }
   }
-  const text = `"${q.quote}" — ${q.author || 'Diovu Shadrach'}`;
-  if(typeof navigator.share === 'function'){
-    try{ Promise.resolve(navigator.share({text, title:'The Quote Archive'})).catch(()=>{}); }
-    catch{ copyText(text).then(ok => setStatus(ok ? 'Sharing failed — quote copied instead.' : 'Sharing and clipboard are unavailable here — please copy the quote manually.')); }
-  } else {
-    copyText(text).then(ok => setStatus(ok ? 'Sharing not supported here — quote copied instead.' : 'Sharing and clipboard are unavailable here — please copy the quote manually.'));
-  }
+  const shareText = url ? `${text}\n${url}` : text;
+  const ok = await copyText(shareText);
+  setStatus(ok ? 'Share link copied to clipboard.' : 'Sharing and clipboard are unavailable here — please copy the quote manually.');
 }
 
-function wrapCanvasText(ctx, text, x, y, maxWidth, lineHeight){
-  const words = text.split(' ');
+function wrapCanvasText(ctx, text, x, y, maxWidth, lineHeight, maxLines=7){
+  const words = String(text || '').trim().split(/\s+/).filter(Boolean);
   let line = '';
   let curY = y;
+  let lines = 0;
   for(let n=0;n<words.length;n++){
-    const test = line + words[n] + ' ';
-    if(ctx.measureText(test).width > maxWidth && n>0){
+    const test = line ? `${line} ${words[n]}` : words[n];
+    if(ctx.measureText(test).width > maxWidth && line){
+      lines++;
+      if(lines >= maxLines){
+        let clipped = line.trim();
+        while(clipped && ctx.measureText(`${clipped}…`).width > maxWidth){
+          clipped = clipped.slice(0, -1).trimEnd();
+        }
+        ctx.fillText(`${clipped}…`, x, curY);
+        return curY;
+      }
       ctx.fillText(line, x, curY);
-      line = words[n] + ' ';
+      line = words[n];
       curY += lineHeight;
     } else {
       line = test;
     }
   }
-  ctx.fillText(line, x, curY);
+  if(line){
+    lines++;
+    if(lines > maxLines){
+      let clipped = line.trim();
+      while(clipped && ctx.measureText(`${clipped}…`).width > maxWidth){
+        clipped = clipped.slice(0, -1).trimEnd();
+      }
+      line = `${clipped}…`;
+    }
+    ctx.fillText(line, x, curY);
+  }
   return curY;
 }
 
@@ -2877,26 +3121,45 @@ function downloadCard(q){
   ctx.fillStyle = '#6b5f4c';
   ctx.font = '600 20px "IBM Plex Mono", monospace';
   ctx.textAlign = 'right';
-  ctx.fillText(q.catNo, W-pad-24, pad+42);
+  ctx.fillText(String(q.catNo || q.id || 'QUOTE'), W-pad-24, pad+42);
   ctx.textAlign = 'left';
 
   ctx.fillStyle = '#1d1811';
-  ctx.font = 'italic 44px Georgia, serif';
-  const endY = wrapCanvasText(ctx, `"${q.quote}"`, pad+50, pad+140, W-(pad+50)*2, 56);
+  ctx.font = 'italic 42px Georgia, serif';
+  const imageQuote = String(q.quote).trim();
+  const endY = wrapCanvasText(ctx, `"${imageQuote}"`, pad+50, pad+140, W-(pad+50)*2, 50, 7);
 
   ctx.fillStyle = '#b9822a';
-  ctx.font = 'bold 26px Arial';
-  ctx.fillText(`— ${q.author}`, pad+50, Math.max(endY+70, H-140));
+  ctx.font = 'bold 24px Arial';
+  const author = String(q.author || 'Unknown author');
+  let authorText = `— ${author}`;
+  const authorMaxWidth = W-(pad+50)*2;
+  while(authorText.length > 1 && ctx.measureText(authorText).width > authorMaxWidth){
+    const trimmed = authorText.slice(0,-1).trimEnd();
+    authorText = trimmed ? `${trimmed}…` : '…';
+    if(authorText === '…') break;
+  }
+  const authorY = Math.min(Math.max(endY+56, H-145), H-105);
+  ctx.fillText(authorText, pad+50, authorY);
 
   ctx.fillStyle = '#4a9089';
   ctx.font = '600 18px "IBM Plex Mono", monospace';
-  ctx.fillText(`${q.catLabel.toUpperCase()} · THE QUOTE ARCHIVE`, pad+50, H-pad-24);
+  const catLabel = String(q.catLabel || 'The Quote Archive');
+  ctx.fillText(`${catLabel.toUpperCase()} · THE QUOTE ARCHIVE`, pad+50, H-pad-24);
 
   const link = document.createElement('a');
-  link.download = `${q.catNo.replace('·','-')}.png`;
-  link.href = canvas.toDataURL('image/png');
+  const safeFileBase = String(q.catNo || q.id || 'quote-card').replace(/[^a-zA-Z0-9._-]+/g, '-').replace(/^-+|-+$/g, '') || 'quote-card';
+  link.download = `${safeFileBase}.png`;
+  try {
+    link.href = canvas.toDataURL('image/png');
+  } catch {
+    setStatus('Could not create the card image in this browser.');
+    return;
+  }
+  document.body.appendChild(link);
   link.click();
-  setStatus(`Downloaded card ${q.catNo} as an image.`);
+  link.remove();
+  setStatus(`Downloaded card ${q.catNo || q.id || 'quote'} as an image.`);
   stats.downloads += 1;
   saveStats();
   sfx.download();
@@ -2907,16 +3170,12 @@ function downloadCard(q){
 const focusOverlay = document.getElementById('focusOverlay');
 function openFocus(q){
   if(!q) return;
-
-  // Generated cards live in generatedItems rather than quoteView. Previously
-  // clicking Focus on a generated card silently opened the first curated card.
   if(q.generated){
     focusList = generatedItems.length ? generatedItems : [q];
-  }else{
+  } else {
     const filtered = getFiltered();
     focusList = filtered.length ? filtered : quotes;
   }
-
   if(!focusList.length) return;
   focusIndex = focusList.findIndex(x=>x.id===q.id);
   if(focusIndex < 0) focusIndex = 0;
@@ -2953,13 +3212,19 @@ function focusStep(dir){
   saveStats();
   checkAchievements();
 }
-document.getElementById('focusBtn').addEventListener('click', ()=> openFocus(quotes[Math.floor(Math.random()*quotes.length)]));
-document.getElementById('focusBtn2').addEventListener('click', ()=> openFocus(quotes[Math.floor(Math.random()*quotes.length)]));
+function openRandomFocus(){
+  if(!quotes.length){ setStatus('The archive is empty — Focus Mode has no card to open.'); return; }
+  openFocus(quotes[Math.floor(Math.random()*quotes.length)]);
+}
+document.getElementById('focusBtn').addEventListener('click', openRandomFocus);
+document.getElementById('focusBtn2').addEventListener('click', openRandomFocus);
 document.getElementById('focusClose').addEventListener('click', closeFocus);
 document.getElementById('focusNext').addEventListener('click', ()=>focusStep(1));
 document.getElementById('focusPrev').addEventListener('click', ()=>focusStep(-1));
 document.getElementById('focusFav').addEventListener('click', ()=>{
-  toggleFav(focusList[focusIndex].id);
+  const q = focusList[focusIndex];
+  if(!q) return;
+  toggleFav(q.id);
   renderFocus();
 });
 focusOverlay.addEventListener('click',(e)=>{ if(e.target===focusOverlay) closeFocus(); });
@@ -2970,6 +3235,10 @@ document.addEventListener('keydown',(e)=>{
     if(e.key==='Escape') closeFocus();
     if(e.key==='ArrowRight' || e.key===' ') { e.preventDefault(); focusStep(1); }
     if(e.key==='ArrowLeft') focusStep(-1);
+    return;
+  }
+  if(quoteDetailOverlay.classList.contains('open')){
+    if(e.key==='Escape') closeQuoteDetail();
     return;
   }
   const tag = document.activeElement.tagName;
@@ -3058,18 +3327,27 @@ function musicErrorMessage(){
 
 let musicLoadToken = 0;
 let activeMusicTrack = null;
+let activeMusicSource = '';
 let musicErrorToken = 0;
+const musicFailedTracks = new Set();
 musicAudio.addEventListener('error', () => {
   const track = activeMusicTrack || MUSIC_TRACKS[musicIndex];
   if(!track) return;
   const failedToken = musicLoadToken;
+  // Ignore stale media errors from a source that has already been replaced.
+  if(activeMusicSource && musicAudio.currentSrc && musicAudio.currentSrc !== activeMusicSource) return;
   if(failedToken !== musicErrorToken){
     musicErrorToken = failedToken;
+    musicFailedTracks.add(musicIndex);
     setPlayingUI(false);
+    if(musicFailedTracks.size >= MUSIC_TRACKS.length){
+      setStatus('None of the music files could be loaded. Check that the /music folder and MP3 files are deployed.');
+      return;
+    }
     setStatus(`Could not load “${track.title}”. Skipping to the next available track.`);
     if(MUSIC_TRACKS.length > 1){
       window.setTimeout(() => {
-        if(failedToken === musicLoadToken && activeMusicTrack === track) nextTrack();
+        if(failedToken === musicLoadToken && activeMusicTrack === track) nextTrack(true);
       }, 250);
     }
   }
@@ -3084,9 +3362,9 @@ musicAudio.addEventListener('abort', () => setPlayingUI(false));
 const storedMusicState = safeReadJSON(MUSIC_STATE_KEY, {});
 let musicIndex = Number.isInteger(storedMusicState.index) && storedMusicState.index >= 0 && storedMusicState.index < MUSIC_TRACKS.length ? storedMusicState.index : 0;
 activeMusicTrack = MUSIC_TRACKS[musicIndex];
-let musicVolume = typeof storedMusicState.volume === 'number' && Number.isFinite(storedMusicState.volume) ? Math.min(1, Math.max(0, storedMusicState.volume)) : 0.55;
-let musicShuffle = !!storedMusicState.shuffle;
-let musicLoopOne = !!storedMusicState.loopOne;
+let musicVolume = Number.isFinite(Number(storedMusicState.volume)) ? Math.min(1, Math.max(0, Number(storedMusicState.volume))) : 0.55;
+let musicShuffle = storedMusicState.shuffle === true;
+let musicLoopOne = storedMusicState.loopOne === true;
 let musicIsPlaying = false;
 
 musicAudio.volume = musicVolume;
@@ -3132,8 +3410,9 @@ function buildMusicList(){
     </button>`).join('');
 }
 
-function loadTrack(idx, autoplay=false){
+function loadTrack(idx, autoplay=false, retryFailed=false){
   if(!Number.isInteger(idx) || idx < 0 || idx >= MUSIC_TRACKS.length) idx = 0;
+  if(retryFailed) musicFailedTracks.delete(idx);
 
   musicLoadToken++;
   musicErrorToken = 0;
@@ -3142,10 +3421,12 @@ function loadTrack(idx, autoplay=false){
   musicIndex = idx;
   const track = MUSIC_TRACKS[musicIndex];
   activeMusicTrack = track;
+  activeMusicSource = '';
   let source;
   try {
     source = new URL(track.file, document.baseURI).href;
   } catch {
+    activeMusicSource = '';
     setPlayingUI(false);
     setStatus(`Invalid music file path for “${track.title}”.`);
     return;
@@ -3154,6 +3435,7 @@ function loadTrack(idx, autoplay=false){
   musicAudio.pause();
   musicAudio.removeAttribute('src');
   musicAudio.load();
+  activeMusicSource = source;
   musicAudio.src = source;
   musicAudio.load();
   try { musicAudio.currentTime = 0; } catch {}
@@ -3197,6 +3479,10 @@ function setPlayingUI(playing){
 }
 
 function playPause(){
+  if(musicFailedTracks.has(musicIndex)){
+    loadTrack(musicIndex, true, true);
+    return;
+  }
   if(!musicAudio.src){
     loadTrack(musicIndex, true);
     return;
@@ -3217,18 +3503,34 @@ function playPause(){
   }
 }
 
-function nextTrack(){
+function nextTrack(automatic=false){
+  if(MUSIC_TRACKS.length < 1) return;
+  const available = MUSIC_TRACKS.map((_,i)=>i).filter(i=>!automatic || !musicFailedTracks.has(i));
+  if(!available.length){
+    setPlayingUI(false);
+    setStatus('No working music tracks are available. Check the deployed /music files.');
+    return;
+  }
   let idx;
   if(musicShuffle){
-    do { idx = Math.floor(Math.random()*MUSIC_TRACKS.length); } while(idx===musicIndex && MUSIC_TRACKS.length>1);
+    const pool = available.filter(i=>i!==musicIndex);
+    const choices = pool.length ? pool : available;
+    idx = choices[Math.floor(Math.random()*choices.length)];
   } else {
-    idx = (musicIndex + 1) % MUSIC_TRACKS.length;
+    idx = available.find(i=>i > musicIndex);
+    if(idx === undefined) idx = available[0];
   }
-  loadTrack(idx, true);
+  loadTrack(idx, true, !automatic);
 }
+
 function prevTrack(){
-  const idx = (musicIndex - 1 + MUSIC_TRACKS.length) % MUSIC_TRACKS.length;
-  loadTrack(idx, true);
+  if(MUSIC_TRACKS.length < 1) return;
+  let idx = (musicIndex - 1 + MUSIC_TRACKS.length) % MUSIC_TRACKS.length;
+  for(let i=0;i<MUSIC_TRACKS.length;i++){
+    if(!musicFailedTracks.has(idx)) break;
+    idx = (idx - 1 + MUSIC_TRACKS.length) % MUSIC_TRACKS.length;
+  }
+  loadTrack(idx, true, true);
 }
 
 musicAudio.addEventListener('play', ()=>setPlayingUI(true));
@@ -3243,7 +3545,7 @@ musicAudio.addEventListener('timeupdate', ()=>{
 musicAudio.addEventListener('loadedmetadata', ()=>{ musicDurTime.textContent = formatTime(musicAudio.duration); });
 musicAudio.addEventListener('ended', ()=>{
   if(musicLoopOne){ musicAudio.currentTime = 0; musicAudio.play().catch(() => setPlayingUI(false)); }
-  else nextTrack();
+  else nextTrack(true);
 });
 
 musicFab.addEventListener('click', ()=>{
@@ -3295,19 +3597,10 @@ musicProgress.addEventListener('click', (e)=>{
 musicList.addEventListener('click', (e)=>{
   const btn = e.target.closest('.music-track');
   if(!btn) return;
-  loadTrack(Number(btn.dataset.index), true);
+  loadTrack(Number(btn.dataset.index), true, true);
 });
 
 function initMusicPlayer(){
-  if(!MUSIC_TRACKS.length){
-    musicNowTitle.textContent = 'No music tracks available';
-    musicPlayBtn.disabled = true;
-    musicPrevBtn.disabled = true;
-    musicNextBtn.disabled = true;
-    musicShuffleBtn.disabled = true;
-    musicLoopBtn.disabled = true;
-    return;
-  }
   buildMusicList();
   musicVolumeInput.value = Math.round(musicVolume*100);
   musicShuffleBtn.classList.toggle('active', musicShuffle);
@@ -3317,6 +3610,291 @@ function initMusicPlayer(){
   musicNowTitle.textContent = MUSIC_TRACKS[musicIndex].title;
   loadTrack(musicIndex, false);
 }
+
+/* ===================== OVERLAY ESCAPE HANDLING ===================== */
+document.addEventListener('keydown',(e)=>{
+  if(e.key !== 'Escape') return;
+  if(achieveOverlay.classList.contains('open')){
+    achieveOverlay.classList.remove('open');
+    document.body.style.overflow='';
+  }
+  if(musicPanel.classList.contains('open')){
+    musicPanel.classList.remove('open');
+    musicFab.setAttribute('aria-expanded','false');
+  }
+});
+
+
+/* ===================== EXPANDED QUOTATION LIBRARIES ===================== */
+const MASSIVE_LIBRARY_URL = 'https://raw.githubusercontent.com/alvations/Quotables/master/author-quote.txt';
+const COMMUNITY_LIBRARY_URL = 'https://raw.githubusercontent.com/ConceptJunkie/quote/master/quote.txt';
+const MASSIVE_LIBRARY_CACHE = 'quote-archive-public-library-v3';
+let publicLibraryLoaded = false;
+let publicLibraryLoading = false;
+let communityLibraryLoading = false;
+const QUOTEKG_ENDPOINT = 'https://quotekg.l3s.uni-hannover.de/sparql';
+let publicLibraryCount = 0;
+let communityLibraryCount = 0;
+let globalLibraryCount = 0;
+let communityLibraryLoaded = false;
+
+const LIBRARY_CATEGORY_RULES = {
+  motivation: ['motivat','inspire','dream','goal','achieve','success','effort','work','try','attempt','ambition','purpose'],
+  discipline: ['discipline','habit','consisten','practice','routine','duty','self-control','control'],
+  success: ['success','achieve','victory','win','excel','accomplish','result','mastery'],
+  mindset: ['mind','think','thought','belief','attitude','perspective','wisdom'],
+  growth: ['grow','growth','learn','learning','develop','improve','progress','education'],
+  focus: ['focus','attention','concentrat','observe','listen','silence'],
+  resilience: ['resilien','endure','endurance','hardship','adversity','suffer','survive','strong'],
+  action: ['action','act','doing','do ','begin','start','move','create','build'],
+  creativity: ['creativ','imagin','invent','art','artist','idea','curious','curiosity'],
+  leadership: ['leader','leadership','command','influence','responsib','govern'],
+  courage: ['courage','brave','fear','bold','dare','fearless'],
+  gratitude: ['gratitude','grateful','thank','thanks','bless','appreciat'],
+  patience: ['patien','wait','calm','quiet','steady','steadiness'],
+  confidence: ['confiden','self-belief','self respect','assurance','conviction'],
+  purpose: ['purpose','meaning','reason','why ','calling','destiny'],
+  change: ['change','transform','adapt','different','renew','reinvent'],
+  perseverance: ['persist','persever','continue','never give','keep going','tenacity'],
+  selfbelief: ['believe in yourself','self-belief','self trust','self-worth','self respect'],
+  ambition: ['ambition','aspire','aspiration','hunger','greatness'],
+  positivity: ['hope','hopeful','optimis','positive','joy','happiness','happy','cheer']
+};
+
+function inferLibraryCategory(text){
+  const value = normalizeSearchText(text);
+  let best = 'mindset', bestScore = 0;
+  for(const [key, words] of Object.entries(LIBRARY_CATEGORY_RULES)){
+    let score = 0;
+    words.forEach(word=>{ if(value.includes(normalizeSearchText(word))) score += word.length > 7 ? 3 : 1; });
+    if(score > bestScore){ bestScore = score; best = key; }
+  }
+  return best;
+}
+
+function normalizeExternalLine(line){ return String(line || '').replace(/\r/g,'').replace(/\s+/g,' ').trim(); }
+
+async function fetchTextWithTimeout(url, timeoutMs=20000){
+  const controller = typeof AbortController === 'function' ? new AbortController() : null;
+  const timer = controller ? window.setTimeout(() => controller.abort(), timeoutMs) : null;
+  try{
+    const response = await fetch(url, {
+      mode:'cors',
+      cache:'no-store',
+      signal: controller?.signal
+    });
+    if(!response.ok) throw new Error(`Library request failed: ${response.status}`);
+    return await response.text();
+  }catch(err){
+    if(err?.name === 'AbortError') throw new Error('Library request timed out. Please try again.');
+    throw err;
+  }finally{
+    if(timer) window.clearTimeout(timer);
+  }
+}
+
+async function getCachedText(url, cacheKey){
+  try{
+    if('caches' in window){
+      const cache = await caches.open(cacheKey);
+      const cached = await cache.match(url);
+      if(cached) return await cached.text();
+      const text = await fetchTextWithTimeout(url);
+      try{
+        await cache.put(url, new Response(text, {headers:{'Content-Type':'text/plain; charset=utf-8'}}));
+      }catch(cacheErr){
+        console.warn('Could not cache quotation library; continuing without cache.', cacheErr);
+      }
+      return text;
+    }
+  }catch(err){
+    console.warn('Cached library load failed; retrying normally.', err);
+  }
+  return fetchTextWithTimeout(url);
+}
+
+function yieldToUI(){
+  return new Promise(resolve => window.setTimeout(resolve, 0));
+}
+
+function updateIndexedCount(){
+  statTotal.textContent = quotes.length.toLocaleString();
+}
+
+function appendExternalQuote({id, quote, author, sourceLabel, sourceLicense, index}){
+  const text = normalizeExternalLine(quote);
+  const person = normalizeExternalLine(author || 'Unknown author');
+  if(!text || text.length < 8 || text.length > 1200) return false;
+  const key = normalizeSearchText(text);
+  if(!key) return false;
+  const existing = appendExternalQuote._seen || (appendExternalQuote._seen = new Set(quotes.map(q=>normalizeSearchText(q.quote))));
+  if(existing.has(key)) return false;
+  existing.add(key);
+  const category = inferLibraryCategory(text);
+  const cat = catInfo(category) || CATS[0];
+  const prefix = sourceLabel === 'QuoteKG' ? 'QKG' : sourceLabel === 'Community Public-Domain' ? 'COM' : 'LIB';
+  quotes.push({
+    id: `${prefix}-${String(index).padStart(7,'0')}`,
+    catNo: `${prefix}·${String(index).padStart(7,'0')}`,
+    quote: text,
+    author: person,
+    category: cat.key,
+    catLabel: cat.label,
+    external: true,
+    sourceLabel,
+    sourceLicense
+  });
+  return true;
+}
+
+async function loadMassiveQuoteLibrary(){
+  const libraryStatus = document.getElementById('libraryStatus');
+  if(publicLibraryLoaded || publicLibraryLoading) return;
+  publicLibraryLoading = true;
+  try{
+    libraryStatus.innerHTML = '<strong>Public Quote Library:</strong> loading the open Quotables corpus…';
+    const rawText = await getCachedText(MASSIVE_LIBRARY_URL, MASSIVE_LIBRARY_CACHE);
+    const lines = rawText.split(/\r?\n/);
+    let added = 0, index = 0;
+    for(let i=0;i<lines.length;i++){
+      const rawLine = lines[i];
+      const line = normalizeExternalLine(rawLine).replace(/^\uFEFF/, '');
+      if(!line || line.startsWith('#')) continue;
+      const tab = line.indexOf('\t');
+      if(tab < 1) continue;
+      if(appendExternalQuote({author:line.slice(0,tab), quote:line.slice(tab+1), sourceLabel:'Public Quote Library', sourceLicense:'CC0', index:++index})) added++;
+      if((i % 1000) === 0) await yieldToUI();
+    }
+    publicLibraryCount = added;
+    publicLibraryLoaded = true;
+    quoteView = quotes;
+    refreshArchiveDirectories();
+    renderGrid(); renderFavorites();
+    updateIndexedCount();
+    libraryStatus.innerHTML = `<strong>Public Quote Library:</strong> ${added.toLocaleString()} additional CC0 quotations loaded · community and global libraries are also available.`;
+    showToast(`Open library added ${added.toLocaleString()} quotations.`);
+  }catch(err){
+    console.warn('Large public quote library unavailable:', err);
+    libraryStatus.innerHTML = '<strong>Public Quote Library:</strong> unavailable right now; the original archive remains usable. You can still try the global QuoteKG search.';
+  }finally{
+    publicLibraryLoading = false;
+  }
+}
+
+async function loadCommunityQuoteLibrary(){
+  if(communityLibraryLoaded){ showToast(`Community library already loaded: ${communityLibraryCount.toLocaleString()} quotations.`); return; }
+  if(communityLibraryLoading) return;
+  const btn = document.getElementById('loadCommunityLibraryBtn');
+  const libraryStatus = document.getElementById('libraryStatus');
+  communityLibraryLoading = true;
+  try{
+    btn.disabled = true;
+    btn.textContent = 'Loading 100,000+ community quotes…';
+    libraryStatus.innerHTML = '<strong>Community Library:</strong> downloading and indexing the public-domain quote collection…';
+    const rawText = await getCachedText(COMMUNITY_LIBRARY_URL, MASSIVE_LIBRARY_CACHE);
+    const chunks = rawText.split(/\r?\n[ \t]*%[ \t]*(?:\r?\n|$)/);
+    let added = 0, index = 0;
+    for(let i=0;i<chunks.length;i++){
+      const text = normalizeExternalLine(chunks[i]);
+      if(!text || text.length < 8 || text.length > 1200) continue;
+      if(appendExternalQuote({quote:text, author:'Community quotation database', sourceLabel:'Community Public-Domain', sourceLicense:'Repository states public domain to the best of its knowledge', index:++index})) added++;
+      if((i % 1000) === 0) await yieldToUI();
+    }
+    communityLibraryCount = added;
+    communityLibraryLoaded = true;
+    quoteView = quotes;
+    refreshArchiveDirectories();
+    renderGrid(); renderFavorites();
+    updateIndexedCount();
+    btn.textContent = `✓ Community library loaded (${added.toLocaleString()})`;
+    libraryStatus.innerHTML = `<strong>Community Library:</strong> ${added.toLocaleString()} additional quotations loaded. Provenance is marked on every card.`;
+    showToast(`Community library added ${added.toLocaleString()} quotations.`);
+  }catch(err){
+    console.warn('Community quote library unavailable:', err);
+    btn.disabled = false;
+    btn.textContent = '＋ Load 100,000+ Community Quotes';
+    libraryStatus.innerHTML = '<strong>Community Library:</strong> could not be loaded right now.';
+  }finally{
+    communityLibraryLoading = false;
+  }
+}
+
+function quoteKgQuery(term, limit=60){
+  const safe = String(term || '').replace(/[^\p{L}\p{N}\s'’-]/gu,' ').replace(/\s+/g,' ').trim().slice(0,120);
+  if(!safe) return '';
+  const escaped = safe.replace(/\\/g,'\\\\').replace(/"/g,'\\"');
+  return `PREFIX so: <https://schema.org/>
+PREFIX qkg: <https://quotekg.l3s.uni-hannover.de/resource/>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+SELECT DISTINCT ?quotation ?personLabel ?text WHERE {
+  ?quotation a so:Quotation .
+  ?quotation qkg:hasMention/so:text ?text .
+  ?quotation so:spokenByCharacter ?person .
+  ?person skos:prefLabel ?personLabel .
+  FILTER(
+    CONTAINS(LCASE(STR(?text)), LCASE("${escaped}")) ||
+    CONTAINS(LCASE(STR(?personLabel)), LCASE("${escaped}"))
+  )
+} LIMIT ${Math.max(1,Math.min(100,limit))}`;
+}
+
+async function searchGlobalQuoteKG(){
+  const term = (searchInput.value || '').trim();
+  const libraryStatus = document.getElementById('libraryStatus');
+  const btn = document.getElementById('searchGlobalLibraryBtn');
+  if(!term){ showToast('Enter a word, phrase or author name first.'); searchInput.focus(); return; }
+  try{
+    btn.disabled = true;
+    btn.textContent = 'Searching QuoteKG…';
+    libraryStatus.innerHTML = `<strong>Global QuoteKG:</strong> searching nearly 1 million multilingual quotation records for “${escapeHTML(term)}”…`;
+    const query = quoteKgQuery(term, 80);
+    if(!query) throw new Error('Empty query');
+    const url = `${QUOTEKG_ENDPOINT}?format=json&query=${encodeURIComponent(query)}`;
+    const kgController = typeof AbortController === 'function' ? new AbortController() : null;
+    const kgTimer = kgController ? window.setTimeout(() => kgController.abort(), 20000) : null;
+    let response;
+    try{
+      response = await fetch(url, {
+        mode:'cors',
+        cache:'no-store',
+        headers:{'Accept':'application/sparql-results+json'},
+        signal: kgController?.signal
+      });
+      if(!response.ok) throw new Error(`QuoteKG request failed: ${response.status}`);
+    }catch(err){
+      if(err?.name === 'AbortError') throw new Error('QuoteKG search timed out. Please try again.');
+      throw err;
+    }finally{
+      if(kgTimer) window.clearTimeout(kgTimer);
+    }
+    const data = await response.json();
+    const rows = data?.results?.bindings || [];
+    let added = 0, index = quotes.length + 1;
+    for(const row of rows){
+      const text = row?.text?.value || '';
+      const author = row?.personLabel?.value || 'Unknown author';
+      if(appendExternalQuote({quote:text, author, sourceLabel:'QuoteKG', sourceLicense:'CC BY-SA 4.0', index:index++})) added++;
+    }
+    globalLibraryCount += added;
+    quoteView = quotes;
+    currentSearch = term;
+    searchInput.value = term;
+    visibleCount = BATCH;
+    renderGrid();
+    updateIndexedCount();
+    libraryStatus.innerHTML = `<strong>Global QuoteKG:</strong> ${added.toLocaleString()} new sourced results imported for this search · QuoteKG contains nearly 1 million quotations across 55 languages.`;
+    showToast(`QuoteKG added ${added.toLocaleString()} sourced results.`);
+  }catch(err){
+    console.warn('QuoteKG search failed:', err);
+    libraryStatus.innerHTML = '<strong>Global QuoteKG:</strong> search unavailable right now. The local libraries remain usable.';
+  }finally{
+    btn.disabled = false;
+    btn.textContent = '⌕ Search Global QuoteKG';
+  }
+}
+
+document.getElementById('loadCommunityLibraryBtn').addEventListener('click', loadCommunityQuoteLibrary);
+document.getElementById('searchGlobalLibraryBtn').addEventListener('click', searchGlobalQuoteKG);
 
 /* ===================== BOOT ===================== */
 buildSearchControls();
@@ -3337,17 +3915,6 @@ document.addEventListener('keydown',(e)=>{
     searchInput.focus();
     return;
   }
-  if(e.key==='Escape' && focusOverlay.classList.contains('open')){
-    e.preventDefault();
-    closeFocus();
-    return;
-  }
-  if(e.key==='Escape' && achieveOverlay.classList.contains('open')){
-    e.preventDefault();
-    achieveOverlay.classList.remove('open');
-    document.body.style.overflow='';
-    return;
-  }
   if(e.key==='Escape' && document.activeElement===searchInput && searchInput.value){
     searchClearBtn.click();
   }
@@ -3355,11 +3922,12 @@ document.addEventListener('keydown',(e)=>{
 
 renderGrid();
 renderFavorites();
+openQuoteFromURL();
 renderQOTD();
 updateStreak();
-statTotal.textContent = quotes.length;
+updateIndexedCount();
 statFav.textContent = favorites.size;
-scaleCurated.textContent = quotes.length.toLocaleString() + '+';
+scaleCurated.textContent = CATS.reduce((n,c)=>n + RAW[c.key].length, 0).toLocaleString();
 scaleDrawers.textContent = CATS.length;
 scaleGenerated.textContent = TOTAL_GENERATABLE.toLocaleString() + '+';
 pullRandom();
@@ -3372,6 +3940,7 @@ generateBatch(24);
 renderAchievements();
 checkAchievements();
 initMusicPlayer();
+loadMassiveQuoteLibrary();
 </script>
 </body>
 </html>
