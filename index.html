@@ -3928,7 +3928,8 @@ pullRandom();
 buildGenCatSelect();
 document.getElementById('statGen').textContent = TOTAL_GENERATABLE.toLocaleString();
 genCountText.textContent = `${TOTAL_GENERATABLE.toLocaleString()} possible combinations across ${CATS.length} drawers. Each card is woven fresh from ${GEN_TEMPLATES.length} patterns and the archive's phrase banks, rather than stored as millions of literal strings.`;
-generateBatch(24);
+// Keep the generator idle on first load so generation stats/achievements reflect real user actions.
+renderGenGrid();
 
 renderAchievements();
 checkAchievements();
