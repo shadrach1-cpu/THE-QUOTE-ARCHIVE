@@ -322,7 +322,61 @@
   .drawer-tab.active{background:var(--paper);color:var(--ink-text);border-color:var(--line);font-weight:600}
   .drawer-tab .n{opacity:.6;margin-left:2px}
 
+  .search-tools{display:grid;gap:12px;margin-bottom:18px}
+  .search-main{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  .search-main .search-wrap{min-width:260px}
+  .search-meta{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;color:var(--site-muted);font-family:'IBM Plex Mono',monospace;font-size:.72rem}
+  .search-meta strong{color:var(--gold)}
+  .search-clear{display:none}
+  .search-clear.show{display:inline-flex}
+  .topic-chips{display:flex;gap:7px;flex-wrap:wrap}
+  .topic-chip{border:1px solid rgba(224,168,63,.22);background:rgba(255,255,255,.035);color:var(--site-muted);border-radius:999px;padding:7px 10px;cursor:pointer;font:500 .72rem 'IBM Plex Mono',monospace}
+  .topic-chip:hover,.topic-chip.active{color:var(--ink-text);background:var(--gold);border-color:var(--gold);}
+  .advanced-search{border:1px solid rgba(224,168,63,.18);border-radius:14px;background:rgba(255,255,255,.025);padding:14px 16px}
+  .advanced-search summary{cursor:pointer;color:var(--site-text);font-weight:700;list-style:none}
+  .advanced-search summary::-webkit-details-marker{display:none}
+  .advanced-search summary:before{content:'＋';display:inline-block;margin-right:7px;color:var(--gold)}
+  .advanced-search[open] summary:before{content:'−'}
+  .advanced-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:14px}
+  .advanced-field{display:grid;gap:6px}
+  .advanced-field label{font:600 .68rem 'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.06em;color:var(--site-muted)}
+  .advanced-field select{width:100%;background:rgba(255,255,255,.05);color:var(--site-text);border:1px solid rgba(224,168,63,.25);border-radius:9px;padding:10px 12px;font:inherit;min-height:42px}
+  .check-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .check-row label{font:500 .78rem 'Inter',sans-serif;color:var(--site-muted);text-transform:none;letter-spacing:0}
+  .check-row input{accent-color:var(--gold)}
+  .search-empty{grid-column:1/-1;padding:34px 20px;text-align:center;border:1px dashed rgba(224,168,63,.25);border-radius:14px;color:var(--site-muted)}
+  .search-empty b{display:block;color:var(--site-text);font-family:'Fraunces',serif;font-size:1.25rem;margin-bottom:6px}
+  .search-empty button{margin-top:12px}
   .controls{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:22px}
+  .archive-scale{
+    margin-top:18px;padding:16px 18px;border:1px solid var(--line);
+    border-radius:14px;background:linear-gradient(135deg,rgba(255,255,255,.34),rgba(224,168,63,.08));
+    box-shadow:0 8px 24px rgba(50,35,20,.07);
+  }
+  .scale-kicker,.search-banner-kicker{
+    display:block;font-family:'IBM Plex Mono',monospace;font-size:.66rem;
+    letter-spacing:.14em;color:var(--ink-muted);font-weight:800;margin-bottom:9px;
+  }
+  .scale-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+  .scale-item{
+    padding:10px 12px;border:1px dashed var(--line);border-radius:10px;background:rgba(255,255,255,.22);
+  }
+  .scale-item strong{display:block;font-family:'IBM Plex Mono',monospace;font-size:1.2rem;line-height:1.1}
+  .scale-item span{display:block;color:var(--ink-muted);font-size:.74rem;margin-top:4px}
+  .scale-item.featured{border-style:solid;background:color-mix(in srgb,var(--gold) 12%,transparent)}
+  .scale-note{margin:11px 0 0;color:var(--ink-muted);font-size:.76rem;line-height:1.55}
+  .search-banner{
+    display:flex;align-items:center;justify-content:space-between;gap:16px;
+    margin-top:20px;padding:15px 17px;border:1px solid var(--line);border-radius:12px;
+    background:rgba(0,0,0,.025);
+  }
+  .search-banner strong{display:block;font-family:'Playfair Display',serif;font-size:1.05rem}
+  .search-banner span:last-child{display:block;color:var(--ink-muted);font-size:.76rem;margin-top:3px}
+  .search-banner kbd{
+    flex:0 0 auto;border:1px solid var(--line);border-bottom-width:2px;border-radius:7px;
+    padding:4px 8px;font-family:'IBM Plex Mono',monospace;font-size:.72rem;background:var(--paper);
+  }
+
   .search-wrap{position:relative;flex:1;min-width:220px}
   .search-wrap input{
     width:100%;background:rgba(255,255,255,.05);color:var(--site-text);
@@ -482,6 +536,9 @@
     .cabinet{grid-template-columns:repeat(auto-fill,minmax(126px,1fr));gap:8px}
     .drawer-btn{padding:12px 12px 10px}
 
+    .advanced-grid{grid-template-columns:1fr}
+    .search-main{align-items:stretch}
+    .search-main .search-wrap{min-width:0}
     .controls{flex-direction:column;align-items:stretch}
     .search-wrap{min-width:0}
     #shuffleBtn{width:100%;justify-content:center;min-height:44px}
@@ -573,6 +630,11 @@
   .music-track.active{background:color-mix(in srgb, var(--gold) 22%, transparent);font-weight:700}
   .music-track .tnum{font-family:'IBM Plex Mono',monospace;font-size:.7rem;color:var(--ink-muted);width:18px;flex:0 0 auto}
 
+  @media (max-width:640px){
+    .scale-grid{grid-template-columns:1fr}
+    .search-banner{align-items:flex-start}
+  }
+
   @media (max-width:520px){
     .music-fab{right:14px;bottom:14px;width:52px;height:52px}
     .music-panel{right:8px;left:8px;width:auto;bottom:76px}
@@ -605,7 +667,7 @@
 
   <section class="hero">
     <div>
-      <div class="eyebrow"><span class="dot"></span> Personal archive · 820 hand-filed cards · a 50,000,000+ card loom</div>
+      <div class="eyebrow"><span class="dot"></span> Personal archive · hand-filed cards · an on-demand quote loom</div>
       <h1>Motivational &amp; Inspirational Quotes</h1>
       <p class="hero-tagline">Words worth <em>keeping</em>, filed one card at a time.</p>
       <p class="lead">
@@ -626,6 +688,27 @@
         <span class="stat-chip"><b id="statGen">0</b> generatable combinations</span>
         <span class="stat-chip"><b id="statFav">0</b> favorited</span>
         <span class="stat-chip"><b id="statShown">0</b> currently shown</span>
+      </div>
+      <div class="archive-scale" aria-label="Archive scale">
+        <div class="scale-kicker">THE ARCHIVE AT A GLANCE</div>
+        <div class="scale-grid">
+          <div class="scale-item">
+            <strong id="scaleCurated">0</strong>
+            <span>curated cards</span>
+          </div>
+          <div class="scale-item">
+            <strong id="scaleDrawers">0</strong>
+            <span>themed drawers</span>
+          </div>
+          <div class="scale-item featured">
+            <strong id="scaleGenerated">0</strong>
+            <span>possible generated cards</span>
+          </div>
+        </div>
+        <p class="scale-note">
+          The curated cards are the archive's filed collection. The generator does not pretend to store
+          millions of historical quotes; it weaves new combinations on demand from its phrase banks.
+        </p>
       </div>
     </div>
 
@@ -661,19 +744,63 @@
     <div class="section-head">
       <div>
         <h2>Motivational Quote Categories</h2>
-        <p>Twenty drawers, 820 cards. Open one to filter, or search across all of them below.</p>
+        <p>Browse the drawers when you want to discover something unexpected — or use Archive Search when you already know what you're looking for.</p>
       </div>
     </div>
 
     <div class="cabinet" id="cabinet" aria-label="Category directory"></div>
 
-    <div class="controls">
-      <div class="search-wrap">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/></svg>
-        <label class="sr-only" for="search">Search quotes</label>
-        <input id="search" type="text" placeholder="Search quotes… (press / to focus)" aria-label="Search quotes" />
+    <div class="search-banner">
+      <div>
+        <span class="search-banner-kicker">ARCHIVE SEARCH</span>
+        <strong>Search the collection like a real digital library.</strong>
+        <span>Find words, ideas, topics, drawer names and card IDs — then narrow the results with advanced filters.</span>
       </div>
-      <button class="icon-btn focus-mode" id="shuffleBtn" type="button">🔀 Shuffle Grid</button>
+      <kbd>/</kbd>
+    </div>
+
+    <div class="search-tools" aria-label="Archive search tools">
+      <div class="search-main">
+        <div class="search-wrap">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/></svg>
+          <label class="sr-only" for="search">Search the quote archive</label>
+          <input id="search" type="search" autocomplete="off" spellcheck="false" placeholder="Search the archive… try “discipline”, “giving up”, “MOT·01”" aria-label="Search the quote archive" />
+        </div>
+        <button class="icon-btn search-clear" id="searchClearBtn" type="button">✕ Clear</button>
+        <button class="icon-btn focus-mode" id="shuffleBtn" type="button">🔀 Shuffle Grid</button>
+      </div>
+      <div class="topic-chips" id="topicChips" aria-label="Popular search topics"></div>
+      <div class="search-meta">
+        <span id="searchResultText">Showing all cards</span>
+        <span id="searchHint">Searches quote text, topics, categories and card IDs</span>
+      </div>
+      <details class="advanced-search" id="advancedSearch">
+        <summary>Advanced archive search</summary>
+        <div class="advanced-grid">
+          <div class="advanced-field">
+            <label for="searchCategory">Drawer</label>
+            <select id="searchCategory" aria-label="Search drawer"></select>
+          </div>
+          <div class="advanced-field">
+            <label for="searchSort">Sort results</label>
+            <select id="searchSort" aria-label="Sort search results">
+              <option value="relevance">Best match</option>
+              <option value="random">Random order</option>
+              <option value="az">A–Z quote</option>
+              <option value="category">By drawer</option>
+              <option value="favorites">Favorites first</option>
+            </select>
+          </div>
+          <div class="advanced-field">
+            <label>Search in</label>
+            <div class="check-row">
+              <label><input type="checkbox" id="searchInQuote" checked> quote</label>
+              <label><input type="checkbox" id="searchInTopic" checked> topics</label>
+              <label><input type="checkbox" id="searchInId" checked> ID</label>
+            </div>
+          </div>
+        </div>
+      </details>
     </div>
 
     <div class="drawers" id="drawerTabs" role="tablist" aria-label="Category filter"></div>
@@ -723,7 +850,7 @@
   </section>
 
   <footer>
-    Filed with care by <span class="fmark"><a href="https://shadrach1-cpu.github.io/SHADRACH.DEV/" target="_blank" rel="noopener noreferrer">Diovu Shadrach Chinecherem</a></span> · The Quote Archive · 820 cards across 20 drawers
+    Filed with care by <span class="fmark"><a href="https://shadrach1-cpu.github.io/SHADRACH.DEV/" target="_blank" rel="noopener noreferrer">Diovu Shadrach Chinecherem</a></span> · The Quote Archive · original cards across 20 drawers
   </footer>
 </div>
 
@@ -1739,7 +1866,10 @@ const GEN_TEMPLATES = [
   (a,b,c,d)=>`${cap(b)} — that is what ${d} really means when ${a} tries to stop you, and it leads to ${c}.`
 ];
 
-const TOTAL_GENERATABLE = CATS.length * GEN_TEMPLATES.length * GEN_NOUNS.length * GEN_ACTIONS.length * GEN_OUTCOMES.length * 5;
+const TOTAL_GENERATABLE = CATS.reduce(
+  (total, cat) => total + GEN_TEMPLATES.length * GEN_NOUNS.length * GEN_ACTIONS.length * GEN_OUTCOMES.length * (GEN_VIRTUES[cat.key]?.length || 0),
+  0
+);
 let generatedCursor = 0;
 
 function buildGeneratedQuote(catKey, templateIdx, ai, bi, ci, di){
@@ -1812,8 +1942,26 @@ const storedFavorites = safeReadJSON(FAV_KEY, []);
 let favorites = new Set(Array.isArray(storedFavorites) ? storedFavorites.filter(id => typeof id === 'string') : []);
 let currentCategory = 'all';
 let currentSearch = '';
+let searchSortMode = 'relevance';
 let visibleCount = 24;
 const BATCH = 24;
+const SEARCH_TOPIC_LIMIT = 9;
+const SEARCH_SYNONYMS = {
+  'giving up':['quit','quitting','surrender','persistence','perseverance','resilience','tenacity','staying power'],
+  'give up':['quit','quitting','surrender','persistence','perseverance','resilience','tenacity'],
+  'quit':['giving up','persistence','perseverance','resilience'],
+  'hard':['difficulty','struggle','challenge','resilience','discipline'],
+  'failure':['setback','feedback','resilience','perseverance','growth'],
+  'fear':['courage','boldness','bravery','confidence'],
+  'lazy':['discipline','consistency','habits','action'],
+  'money':['success','ambition','achievement','results'],
+  'work':['discipline','action','effort','consistency'],
+  'future':['purpose','ambition','growth','success'],
+  'confidence':['self-belief','self-trust','conviction','courage'],
+  'focus':['attention','concentration','clarity','presence'],
+  'success':['achievement','results','progress','discipline'],
+  'motivation':['drive','momentum','action','purpose']
+};
 let focusIndex = 0;
 let focusList = quotes;
 let currentStreak = 0;
@@ -1980,6 +2128,15 @@ if('serviceWorker' in navigator){
 const grid = document.getElementById('grid');
 const drawerTabs = document.getElementById('drawerTabs');
 const searchInput = document.getElementById('search');
+const searchClearBtn = document.getElementById('searchClearBtn');
+const topicChips = document.getElementById('topicChips');
+const searchResultText = document.getElementById('searchResultText');
+const searchHint = document.getElementById('searchHint');
+const searchCategory = document.getElementById('searchCategory');
+const searchSort = document.getElementById('searchSort');
+const searchInQuote = document.getElementById('searchInQuote');
+const searchInTopic = document.getElementById('searchInTopic');
+const searchInId = document.getElementById('searchInId');
 const loadMoreBtn = document.getElementById('loadMoreBtn');
 const statusEl = document.getElementById('status');
 const favList = document.getElementById('favList');
@@ -1987,6 +2144,9 @@ const statTotal = document.getElementById('statTotal');
 const statFav = document.getElementById('statFav');
 const statShown = document.getElementById('statShown');
 const streakPill = document.getElementById('streakPill');
+const scaleCurated = document.getElementById('scaleCurated');
+const scaleDrawers = document.getElementById('scaleDrawers');
+const scaleGenerated = document.getElementById('scaleGenerated');
 
 /* ===================== INIT ===================== */
 function setStatus(msg){ statusEl.textContent = msg; }
@@ -2026,6 +2186,7 @@ function buildTabs(){
 
 function setCategory(key){
   currentCategory = key;
+  if(searchCategory) searchCategory.value = key;
   [...drawerTabs.children].forEach(b=>{
     const match = b.dataset.cat === key;
     b.classList.toggle('active', match);
@@ -2060,14 +2221,186 @@ cabinetEl.addEventListener('click', (e)=>{
   document.getElementById('grid').scrollIntoView({behavior:'smooth', block:'nearest'});
 });
 
-/* ===================== FILTER + RENDER GRID ===================== */
-function getFiltered(){
-  const t = currentSearch.toLowerCase().trim();
-  return quoteView.filter(q=>{
-    const matchesCat = currentCategory==='all' || q.category===currentCategory;
-    const matchesSearch = !t || q.quote.toLowerCase().includes(t) || q.catLabel.toLowerCase().includes(t) || q.id.toLowerCase().includes(t);
-    return matchesCat && matchesSearch;
+/* ===================== POWERFUL ARCHIVE SEARCH ===================== */
+function normalizeSearchText(value){
+  return String(value || '')
+    .toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+    .replace(/[“”‘’]/g,"'")
+    .replace(/[^a-z0-9·\s-]/g,' ')
+    .replace(/\s+/g,' ')
+    .trim();
+}
+
+function searchTokens(value){
+  return normalizeSearchText(value).split(/\s+/).filter(Boolean);
+}
+
+function topicTextFor(q){
+  const cat = q.category || '';
+  const label = q.catLabel || '';
+  // Keep this field genuinely topic/category-focused. The quote itself belongs
+  // to the quote field, so unchecking "quote" in Advanced Search must work.
+  const sourceText = normalizeSearchText(`${cat} ${label}`);
+  const topics = new Set([cat, label]);
+  Object.entries(SEARCH_SYNONYMS).forEach(([term, words])=>{
+    if(sourceText.includes(normalizeSearchText(term))) words.forEach(w=>topics.add(w));
   });
+  // Category-aware vocabulary makes searches such as “grit”, “bravery”,
+  // “habits” and “purpose” useful even when the exact word is absent.
+  const categoryTopics = {
+    motivation:['drive','momentum','starting','effort','action','determination'],
+    discipline:['habits','consistency','routine','standards','practice','self-control'],
+    success:['achievement','results','winning','progress','excellence'],
+    mindset:['perspective','belief','thinking','mental strength','feedback'],
+    growth:['learning','development','progress','comfort zone','improvement'],
+    focus:['attention','concentration','clarity','deep work','distraction'],
+    resilience:['grit','toughness','endurance','setbacks','recovery'],
+    action:['initiative','momentum','execution','decisiveness','doing'],
+    creativity:['ideas','imagination','originality','curiosity','innovation'],
+    leadership:['vision','influence','integrity','responsibility','decision'],
+    courage:['bravery','boldness','fear','risk','fearlessness'],
+    gratitude:['appreciation','thankfulness','contentment','perspective'],
+    patience:['calm','steadiness','waiting','composure','restraint'],
+    confidence:['self-belief','self-trust','conviction','assurance'],
+    purpose:['meaning','direction','why','intention','mission'],
+    change:['adaptability','reinvention','flexibility','transition'],
+    perseverance:['persistence','tenacity','stamina','endurance','grit'],
+    selfbelief:['self-belief','self-trust','inner confidence','self-respect'],
+    ambition:['hunger','vision','drive','aspiration','achievement'],
+    positivity:['optimism','hope','gratitude','bright mindset','perspective']
+  };
+  (categoryTopics[cat] || []).forEach(t=>topics.add(t));
+  return [...topics].join(' ');
+}
+
+function buildSearchIndex(){
+  quoteView.forEach(q=>{
+    if(q._searchIndexVersion === 2) return;
+    q._searchQuote = normalizeSearchText(q.quote);
+    q._searchTopic = normalizeSearchText(topicTextFor(q));
+    q._searchId = normalizeSearchText(q.id);
+    q._searchCategory = normalizeSearchText(q.catLabel);
+    q._searchIndexVersion = 2;
+  });
+}
+
+function expandSearchTokens(tokens){
+  const expanded = new Set(tokens);
+  const joined = tokens.join(' ');
+  Object.entries(SEARCH_SYNONYMS).forEach(([term, words])=>{
+    const normalizedTerm = normalizeSearchText(term);
+    if(joined.includes(normalizedTerm) || tokens.some(t=>normalizedTerm === t)){
+      words.forEach(w=>searchTokens(w).forEach(x=>expanded.add(x)));
+    }
+  });
+  return [...expanded];
+}
+
+function scoreSearchResult(q, rawQuery){
+  const query = normalizeSearchText(rawQuery);
+  if(!query) return 0;
+  const tokens = searchTokens(query);
+  const expanded = expandSearchTokens(tokens);
+  const quote = q._searchQuote || normalizeSearchText(q.quote);
+  const topic = q._searchTopic || normalizeSearchText(topicTextFor(q));
+  const id = q._searchId || normalizeSearchText(q.id);
+  const category = q._searchCategory || normalizeSearchText(q.catLabel);
+  let score = 0;
+
+  if(quote === query) score += 1000;
+  if(quote.includes(query)) score += 250;
+  if(topic.includes(query)) score += 120;
+  if(id === query) score += 220;
+  if(category === query) score += 180;
+
+  tokens.forEach(token=>{
+    if(quote.includes(token)) score += 40;
+    if(topic.includes(token)) score += 24;
+    if(id.includes(token)) score += 18;
+    if(category.includes(token)) score += 16;
+  });
+  expanded.forEach(token=>{
+    if(tokens.includes(token)) return;
+    if(topic.includes(token)) score += 9;
+    if(quote.includes(token)) score += 14;
+  });
+  return score;
+}
+
+function matchesSearch(q){
+  const query = normalizeSearchText(currentSearch);
+  if(!query) return {match:true,score:0};
+  const tokens = searchTokens(query);
+  const expanded = expandSearchTokens(tokens);
+  const quote = q._searchQuote || normalizeSearchText(q.quote);
+  const topic = q._searchTopic || normalizeSearchText(topicTextFor(q));
+  const id = q._searchId || normalizeSearchText(q.id);
+  const category = q._searchCategory || normalizeSearchText(q.catLabel);
+  const fields = [];
+  if(searchInQuote.checked) fields.push(quote);
+  if(searchInTopic.checked) fields.push(topic, category);
+  if(searchInId.checked) fields.push(id);
+  if(!fields.length) return {match:false,score:0};
+
+  const exact = fields.some(field=>field.includes(query));
+  if(exact) return {match:true,score:scoreSearchResult(q,query)};
+
+  // Whole-phrase intent mapping: “giving up” can find cards tagged with
+  // persistence/resilience even if those exact two words never occur.
+  const synonymPhrase = Object.entries(SEARCH_SYNONYMS).find(([term])=>normalizeSearchText(term)===query);
+  if(synonymPhrase){
+    const related = synonymPhrase[1].map(normalizeSearchText);
+    const relatedHit = related.some(term=>fields.some(field=>field.includes(term)));
+    if(relatedHit) return {match:true,score:scoreSearchResult(q,query)+35};
+  }
+
+  const allTokens = tokens.every(token=>fields.some(field=>field.includes(token)));
+  if(allTokens) return {match:true,score:scoreSearchResult(q,query)};
+
+  // For short single-word searches, related topic vocabulary can broaden the
+  // result set without making multi-word searches noisy.
+  if(tokens.length===1){
+    const relatedHit = expanded.some(token=>!tokens.includes(token) && fields.some(field=>field.includes(token)));
+    if(relatedHit) return {match:true,score:scoreSearchResult(q,query)};
+  }
+  return {match:false,score:0};
+}
+
+function sortSearchResults(items){
+  const copy = [...items];
+  if(searchSortMode === 'random'){
+    for(let i=copy.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [copy[i],copy[j]]=[copy[j],copy[i]]; }
+    return copy;
+  }
+  if(searchSortMode === 'az') return copy.sort((a,b)=>a.quote.localeCompare(b.quote));
+  if(searchSortMode === 'category') return copy.sort((a,b)=>(a.catLabel||'').localeCompare(b.catLabel)||a.quote.localeCompare(b.quote));
+  if(searchSortMode === 'favorites') return copy.sort((a,b)=>(favorites.has(b.id)-favorites.has(a.id)) || a.quote.localeCompare(b.quote));
+  return copy.sort((a,b)=>(b._searchScore||0)-(a._searchScore||0));
+}
+
+function getFiltered(){
+  buildSearchIndex();
+  const drawer = searchCategory.value || currentCategory;
+  const filtered = quoteView.filter(q=>{
+    const matchesCat = (drawer === 'all' || q.category === drawer) && (currentCategory === 'all' || q.category === currentCategory);
+    const result = matchesSearch(q);
+    q._searchScore = result.score;
+    return matchesCat && result.match;
+  });
+  return sortSearchResults(filtered);
+}
+
+function updateSearchUI(total){
+  const query = currentSearch.trim();
+  searchClearBtn.classList.toggle('show', !!query);
+  if(query){
+    searchResultText.innerHTML = `<strong>${total}</strong> match${total===1?'':'es'} for “${escapeHTML(currentSearch.trim())}”`;
+    searchHint.textContent = 'Tip: try a feeling, idea, phrase, drawer name or card ID';
+  }else{
+    searchResultText.innerHTML = `<strong>${total}</strong> cards in this view`;
+    searchHint.textContent = 'Searches quote text, topics, categories and card IDs';
+  }
 }
 
 function cardHTML(q){
@@ -2076,14 +2409,14 @@ function cardHTML(q){
   const color = info ? info.color : 'var(--gold)';
   const icon = info ? info.icon : '✦';
   return `
-  <article class="qcard" data-id="${q.id}" aria-label="${q.catLabel} quote ${q.catNo}" style="--cat-color:${color}">
+  <article class="qcard" data-id="${escapeHTML(q.id)}" aria-label="${escapeHTML(q.catLabel)} quote ${escapeHTML(q.catNo)}" style="--cat-color:${color}">
     <span class="hole" aria-hidden="true"></span>
     <span class="cat-icon" aria-hidden="true">${icon}</span>
-    <span class="cat-no">${q.catNo}</span>
-    <p class="qtext">&ldquo;${q.quote}&rdquo;</p>
+    <span class="cat-no">${escapeHTML(q.catNo)}</span>
+    <p class="qtext">&ldquo;${escapeHTML(q.quote)}&rdquo;</p>
     <div class="qfoot">
-      <span class="qauth">— ${q.author}</span>
-      <span class="tag">${q.catLabel}</span>
+      <span class="qauth">— ${escapeHTML(q.author)}</span>
+      <span class="tag">${escapeHTML(q.catLabel)}</span>
     </div>
     <div class="perf"></div>
     <div class="actions">
@@ -2102,9 +2435,57 @@ function renderGrid(){
   const slice = filtered.slice(0, visibleCount);
   grid.innerHTML = slice.length
     ? slice.map(cardHTML).join('')
-    : `<p style="color:var(--site-muted);grid-column:1/-1;text-align:center;padding:30px;">No cards match that search. Try another word or drawer.</p>`;
+    : `<div class="search-empty"><b>No cards found</b><span>Try a broader word, another drawer, or one of the topic suggestions above.</span><br><button class="icon-btn" id="emptySearchClear" type="button">Clear search</button></div>`;
   statShown.textContent = slice.length;
+  updateSearchUI(filtered.length);
   loadMoreBtn.style.display = filtered.length > visibleCount ? 'inline-flex' : 'none';
+}
+
+function escapeHTML(value){
+  return String(value ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+}
+
+function buildSearchControls(){
+  searchCategory.innerHTML = `<option value="all">All drawers</option>` + CATS.map(c=>`<option value="${c.key}">${c.icon} ${c.label}</option>`).join('');
+  searchCategory.value = currentCategory;
+  const popular = ['discipline','success','courage','growth','focus','resilience','purpose','confidence','perseverance'];
+  topicChips.innerHTML = popular.slice(0,SEARCH_TOPIC_LIMIT).map(key=>{
+    const cat = catInfo(key);
+    return `<button class="topic-chip" type="button" data-topic="${key}">${cat ? cat.label : key}</button>`;
+  }).join('');
+}
+
+function applyURLSearch(){
+  try{
+    const params = new URLSearchParams(window.location.search);
+    const q = params.get('q') || '';
+    const drawer = params.get('drawer');
+    if(q){ currentSearch=q; searchInput.value=q; }
+    if(drawer && CATS.some(c=>c.key===drawer)){
+      currentCategory=drawer;
+      searchCategory.value=drawer;
+    }
+  }catch{}
+}
+
+function syncSearchURL(){
+  try{
+    const url = new URL(window.location.href);
+    if(currentSearch.trim()) url.searchParams.set('q',currentSearch.trim()); else url.searchParams.delete('q');
+    if(currentCategory !== 'all') url.searchParams.set('drawer',currentCategory); else url.searchParams.delete('drawer');
+    window.history.replaceState({},'',url);
+  }catch{}
+}
+
+function runSearch(){
+  visibleCount = BATCH;
+  syncSearchURL();
+  renderGrid();
+  if(currentSearch.trim() && !stats.searched){
+    stats.searched = true;
+    saveStats();
+    checkAchievements();
+  }
 }
 
 function handleCardActionEvent(e){
@@ -2139,14 +2520,34 @@ searchInput.addEventListener('input',(e)=>{
   clearTimeout(searchDebounce);
   searchDebounce = setTimeout(()=>{
     currentSearch = e.target.value;
-    visibleCount = BATCH;
-    renderGrid();
-    if(currentSearch.trim() && !stats.searched){
-      stats.searched = true;
-      saveStats();
-      checkAchievements();
-    }
-  }, 150);
+    runSearch();
+  }, 120);
+});
+searchInput.addEventListener('search',()=>{ currentSearch = searchInput.value; runSearch(); });
+searchClearBtn.addEventListener('click',()=>{
+  searchInput.value='';
+  currentSearch='';
+  runSearch();
+  searchInput.focus();
+});
+topicChips.addEventListener('click',(e)=>{
+  const chip=e.target.closest('[data-topic]');
+  if(!chip) return;
+  searchInput.value=chip.dataset.topic;
+  currentSearch=chip.dataset.topic;
+  runSearch();
+  document.getElementById('drawers').scrollIntoView({behavior:'smooth',block:'start'});
+});
+searchCategory.addEventListener('change',()=>{
+  currentCategory=searchCategory.value;
+  [...drawerTabs.children].forEach(b=>{ const match=b.dataset.cat===currentCategory; b.classList.toggle('active',match); b.setAttribute('aria-selected',match?'true':'false'); });
+  [...cabinetEl.children].forEach(b=>b.classList.toggle('active',b.dataset.cat===currentCategory));
+  runSearch();
+});
+searchSort.addEventListener('change',()=>{ searchSortMode=searchSort.value; visibleCount=BATCH; renderGrid(); });
+[searchInQuote,searchInTopic,searchInId].forEach(el=>el.addEventListener('change',()=>{ visibleCount=BATCH; renderGrid(); }));
+grid.addEventListener('click',(e)=>{
+  if(e.target.closest('#emptySearchClear')){ searchClearBtn.click(); }
 });
 
 document.getElementById('shuffleBtn').addEventListener('click', ()=>{
@@ -2190,21 +2591,33 @@ function randomGenerated(catFilter){
 
   // Guaranteed fallback: walk a deterministic mixed-radix sequence instead
   // of incorrectly reporting failure while unused combinations remain.
-  const catCount = allowedCats.length;
-  const perCat = GEN_TEMPLATES.length * GEN_NOUNS.length * GEN_ACTIONS.length * GEN_OUTCOMES.length * 5;
-  for(let scanned = 0; scanned < TOTAL_GENERATABLE; scanned++){
-    const n = generatedCursor++ % (perCat * catCount);
-    const cat = allowedCats[Math.floor(n / perCat)];
-    let rem = n % perCat;
-    const templateIdx = Math.floor(rem / (GEN_NOUNS.length * GEN_ACTIONS.length * GEN_OUTCOMES.length * 5));
-    rem %= GEN_NOUNS.length * GEN_ACTIONS.length * GEN_OUTCOMES.length * 5;
-    const ai = Math.floor(rem / (GEN_ACTIONS.length * GEN_OUTCOMES.length * 5));
-    rem %= GEN_ACTIONS.length * GEN_OUTCOMES.length * 5;
-    const bi = Math.floor(rem / (GEN_OUTCOMES.length * 5));
-    rem %= GEN_OUTCOMES.length * 5;
-    const ci = Math.floor(rem / 5);
-    const di = rem % 5;
-    const q = buildGeneratedQuote(cat.key, templateIdx, ai, bi, ci, di);
+  // Deterministic mixed-radix fallback. The virtue-bank size is read from the
+  // actual selected drawer instead of assuming every drawer has five entries.
+  const perCat = allowedCats.map(cat => ({
+    cat,
+    virtues: GEN_VIRTUES[cat.key] || GEN_VIRTUES.motivation,
+    size: GEN_TEMPLATES.length * GEN_NOUNS.length * GEN_ACTIONS.length * GEN_OUTCOMES.length * (GEN_VIRTUES[cat.key]?.length || 0)
+  }));
+  const totalAllowed = perCat.reduce((sum, item) => sum + item.size, 0);
+  for(let scanned = 0; scanned < totalAllowed; scanned++){
+    let n = generatedCursor++ % totalAllowed;
+    let selected = perCat[perCat.length - 1];
+    for(const item of perCat){
+      if(n < item.size){ selected = item; break; }
+      n -= item.size;
+    }
+    const virtueCount = selected.virtues.length;
+    if(!virtueCount) continue;
+    let rem = n;
+    const ci = rem % GEN_OUTCOMES.length;
+    rem = Math.floor(rem / GEN_OUTCOMES.length);
+    const bi = rem % GEN_ACTIONS.length;
+    rem = Math.floor(rem / GEN_ACTIONS.length);
+    const ai = rem % GEN_NOUNS.length;
+    rem = Math.floor(rem / GEN_NOUNS.length);
+    const templateIdx = Math.floor(rem / virtueCount);
+    const di = rem % virtueCount;
+    const q = buildGeneratedQuote(selected.cat.key, templateIdx, ai, bi, ci, di);
     if(q && !usedGenIds.has(q.id)){ usedGenIds.add(q.id); return q; }
   }
   return null;
@@ -2312,6 +2725,7 @@ function localDateKey(date = new Date()) {
 }
 
 function getQOTD(){
+  if(!allQuotes.length) return null;
   const d = new Date();
   const dayNum = Math.floor(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) / 86400000);
   return allQuotes[dayNum % allQuotes.length];
@@ -2319,6 +2733,11 @@ function getQOTD(){
 let qotdItem = getQOTD();
 
 function renderQOTD(){
+  if(!qotdItem){
+    document.getElementById('qotdText').textContent = 'No quote is available yet.';
+    document.getElementById('qotdMeta').textContent = '— The Quote Archive';
+    return;
+  }
   document.getElementById('qotdText').textContent = `"${qotdItem.quote}"`;
   document.getElementById('qotdMeta').textContent = `— ${qotdItem.author} · ${qotdItem.catNo}`;
   const info = catInfo(qotdItem.category);
@@ -2327,20 +2746,27 @@ function renderQOTD(){
 }
 function refreshQotdFavButton(){
   const btn = document.getElementById('qotdFav');
+  if(!qotdItem){
+    btn.textContent = '♡ Favorite';
+    btn.classList.remove('active');
+    return;
+  }
   const fav = favorites.has(qotdItem.id);
   btn.textContent = fav ? '♥ Favorited' : '♡ Favorite';
   btn.classList.toggle('active', fav);
 }
 document.getElementById('qotdCopy').addEventListener('click', async ()=>{
+  if(!qotdItem) return;
   const ok = await copyText(`"${qotdItem.quote}" — ${qotdItem.author}`);
   setStatus(ok ? 'Card of the Day copied to clipboard.' : 'Could not copy — please copy the text manually.');
 });
 document.getElementById('qotdFav').addEventListener('click',()=>{
+  if(!qotdItem) return;
   toggleFav(qotdItem.id);
   refreshQotdFavButton();
 });
-document.getElementById('qotdDownload').addEventListener('click',()=> downloadCard(qotdItem));
-document.getElementById('qotdShare').addEventListener('click',()=> shareQuote(qotdItem));
+document.getElementById('qotdDownload').addEventListener('click',()=>{ if(qotdItem) downloadCard(qotdItem); });
+document.getElementById('qotdShare').addEventListener('click',()=>{ if(qotdItem) shareQuote(qotdItem); });
 
 /* ===================== RANDOM PULL / HERO CARD ===================== */
 function pullRandom(){
@@ -2683,11 +3109,11 @@ function loadTrack(idx, autoplay=false){
   }
 
   musicAudio.pause();
-  musicAudio.currentTime = 0;
   musicAudio.removeAttribute('src');
   musicAudio.load();
   musicAudio.src = source;
   musicAudio.load();
+  try { musicAudio.currentTime = 0; } catch {}
 
   musicNowTitle.textContent = track.title;
   [...musicList.children].forEach(btn=>btn.classList.toggle('active', Number(btn.dataset.index)===musicIndex));
@@ -2841,19 +3267,43 @@ function initMusicPlayer(){
 }
 
 /* ===================== BOOT ===================== */
+buildSearchControls();
 buildTabs();
 buildCabinet();
+applyURLSearch();
+if(currentCategory !== 'all') setCategory(currentCategory);
+else {
+  [...drawerTabs.children].forEach(b=>{ b.classList.toggle('active', b.dataset.cat==='all'); b.setAttribute('aria-selected', b.dataset.cat==='all' ? 'true' : 'false'); });
+  [...cabinetEl.children].forEach(b=>b.classList.toggle('active', b.dataset.cat==='all'));
+}
+searchCategory.value = currentCategory;
+
+document.addEventListener('keydown',(e)=>{
+  const tag=(document.activeElement?.tagName||'').toLowerCase();
+  if(e.key==='/' && !['input','textarea','select'].includes(tag)){
+    e.preventDefault();
+    searchInput.focus();
+    return;
+  }
+  if(e.key==='Escape' && document.activeElement===searchInput && searchInput.value){
+    searchClearBtn.click();
+  }
+});
+
 renderGrid();
 renderFavorites();
 renderQOTD();
 updateStreak();
 statTotal.textContent = quotes.length;
 statFav.textContent = favorites.size;
+scaleCurated.textContent = quotes.length.toLocaleString() + '+';
+scaleDrawers.textContent = CATS.length;
+scaleGenerated.textContent = TOTAL_GENERATABLE.toLocaleString() + '+';
 pullRandom();
 
 buildGenCatSelect();
 document.getElementById('statGen').textContent = TOTAL_GENERATABLE.toLocaleString();
-genCountText.textContent = `${TOTAL_GENERATABLE.toLocaleString()} possible combinations — ${CATS.length} drawers × ${GEN_TEMPLATES.length} patterns × ${GEN_NOUNS.length}×${GEN_ACTIONS.length}×${GEN_OUTCOMES.length}×5 word choices. Far too many to store, so each batch below is woven fresh.`;
+genCountText.textContent = `${TOTAL_GENERATABLE.toLocaleString()} possible combinations across ${CATS.length} drawers. Each card is woven fresh from ${GEN_TEMPLATES.length} patterns and the archive's phrase banks, rather than stored as millions of literal strings.`;
 generateBatch(24);
 
 renderAchievements();
