@@ -2748,6 +2748,8 @@ function handleCardActionEvent(e){
     shareQuote(q);
   } else if(e.target.closest('.focus-open-btn')){
     openFocus(q);
+  } else if(e.target.closest('.details-btn')){
+    openQuoteDetail(q, true);
   }
 }
 grid.addEventListener('click', handleCardActionEvent);
@@ -2954,7 +2956,10 @@ document.getElementById('exportFavBtn').addEventListener('click',()=>{
   const blob = new Blob([`THE QUOTE ARCHIVE — Favorites\n\n${text}`], {type:'text/plain'});
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
-  a.href = url; a.download = 'my-favorite-quotes.txt'; a.click();
+  a.href = url; a.download = 'my-favorite-quotes.txt';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
   window.setTimeout(() => URL.revokeObjectURL(url), 1000);
   setStatus('Favorites exported as a text file.');
 });
@@ -3908,18 +3913,6 @@ else {
 }
 searchCategory.value = currentCategory;
 
-document.addEventListener('keydown',(e)=>{
-  const tag=(document.activeElement?.tagName||'').toLowerCase();
-  if(e.key==='/' && !['input','textarea','select'].includes(tag)){
-    e.preventDefault();
-    searchInput.focus();
-    return;
-  }
-  if(e.key==='Escape' && document.activeElement===searchInput && searchInput.value){
-    searchClearBtn.click();
-  }
-});
-
 renderGrid();
 renderFavorites();
 openQuoteFromURL();
@@ -3940,7 +3933,13 @@ generateBatch(24);
 renderAchievements();
 checkAchievements();
 initMusicPlayer();
-loadMassiveQuoteLibrary();
+// Do not download a large external corpus during every page load.
+// The archive is fully usable offline/without third-party data; users can opt in
+// to the expanded public library when they actually need it.
+const libraryStatusEl = document.getElementById('libraryStatus');
+if(libraryStatusEl){
+  libraryStatusEl.innerHTML = '<strong>Public Quote Library:</strong> ready — use the Community Library button to load additional quotations.';
+}
 </script>
 </body>
 </html>
