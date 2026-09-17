@@ -1,3 +1,13 @@
+<!--
+  THE QUOTE ARCHIVE
+  Copyright © 2026 Diovu Shadrach Chinecherem.
+  All Rights Reserved.
+
+  This website's source code, original design, original written content,
+  quote collection, UI, and custom functionality are proprietary.
+  Unauthorized copying, redistribution, modification, or substantial reuse
+  is prohibited without prior written permission.
+--> 
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -496,6 +506,23 @@
   .library-status strong{color:var(--gold)}
   .tag.external{border-color:rgba(224,168,63,.45);color:var(--gold)}
 
+  /* ===================== COPYRIGHT / LICENSE ===================== */
+  .copyright-notice{
+    margin-top:12px;
+    font-size:.76rem;
+    line-height:1.65;
+    color:var(--site-muted);
+  }
+  .copyright-notice strong{color:var(--site-text)}
+  .copyright-notice a{color:var(--gold);text-decoration:none;font-weight:700}
+  .copyright-notice a:hover{text-decoration:underline}
+  .license-badge{
+    display:inline-flex;align-items:center;gap:6px;
+    margin-left:6px;padding:3px 8px;border:1px solid rgba(224,168,63,.28);
+    border-radius:999px;font:600 .66rem 'IBM Plex Mono',monospace;
+    color:var(--gold);background:rgba(224,168,63,.07);
+  }
+
   .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 
   @media (max-width:900px){
@@ -885,7 +912,14 @@
   </section>
 
   <footer>
-    Filed with care by <span class="fmark"><a href="https://shadrach1-cpu.github.io/SHADRACH.DEV/" target="_blank" rel="noopener noreferrer">Diovu Shadrach Chinecherem</a></span> · The Quote Archive · curated cards across 20 drawers · expanded human quotation library · multi-source provenance
+    Filed with care by <span class="fmark"><a href="https://shadrach1-cpu.github.io/SHADRACH.DEV/" target="_blank" rel="noopener noreferrer">Diovu Shadrach Chinecherem</a></span>
+    · The Quote Archive · curated cards across 20 drawers · expanded human quotation library · multi-source provenance
+    <div class="copyright-notice">
+      <strong>© 2026 Diovu Shadrach Chinecherem. All Rights Reserved.</strong>
+      · The Quote Archive source code, original design, original content and custom functionality are proprietary.
+      <span class="license-badge">PROPRIETARY · NO REUSE</span>
+      · <a href="./license.html">View License</a>
+    </div>
   </footer>
 </div>
 
