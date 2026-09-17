@@ -1,0 +1,40 @@
+THE QUOTE ARCHIVE — PROPRIETARY LICENSE
+Copyright © 2026 Diovu Shadrach Chinecherem. All Rights Reserved.
+
+1. OWNERSHIP
+The Quote Archive, including its original source code, HTML, CSS, JavaScript,
+user interface, visual design, original written content, quote collection,
+custom functionality, naming, branding, and overall structure, is the
+intellectual property of Diovu Shadrach Chinecherem, except for third-party
+materials that remain subject to their own licenses.
+
+2. PERMITTED USE
+Visitors may access and use the publicly available website for personal,
+non-commercial viewing and ordinary website functionality.
+
+3. RESTRICTIONS
+Without prior written permission from Diovu Shadrach Chinecherem, you may not:
+- copy or redistribute the source code;
+- reproduce or substantially reuse the website's HTML, CSS, or JavaScript;
+- copy or substantially recreate the website's user interface or design;
+- republish the website or a substantially similar version;
+- sell, sublicense, or commercially exploit the proprietary portions;
+- remove or alter copyright or ownership notices; or
+- present the proprietary work as your own.
+
+4. THIRD-PARTY MATERIAL
+Third-party libraries, fonts, images, music, icons, APIs, and other resources
+are governed by their respective owners' licenses and terms. This license
+does not claim ownership of third-party material.
+
+5. PERMISSION REQUESTS
+For permission to reuse proprietary material, contact the copyright owner
+through the creator's website:
+https://shadrach1-cpu.github.io/SHADRACH.DEV/
+
+6. NO LICENSE TRANSFER
+Access to the website does not transfer ownership or grant a license to the
+proprietary source code, design, or original content beyond the limited use
+described above.
+
+Copyright © 2026 Diovu Shadrach Chinecherem. All Rights Reserved.
