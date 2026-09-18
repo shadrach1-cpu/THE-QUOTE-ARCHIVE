@@ -14,8 +14,8 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <meta name="google-site-verification" content="W4KW9SkGeDnRAMtnggcePGGJCl001O2k9ayZcK1m_as" />
-<title>Motivational Quotes &amp; Quote Generator | The Quote Archive</title>
-<meta name="description" content="Explore a curated collection of motivational quotes alongside a large searchable public quote library. Search by quote, author, topic, or card ID, save favorites, generate unique quotes, and download quote images for free." />
+<title>The Quote Archive V2 | Motivational Quotes &amp; Quote Generator</title>
+<meta name="description" content="The Quote Archive V2: explore motivational quotes, search by quote or author, save favorites, generate quote cards, share deep links, download cards, and revisit recent quote records." />
 <meta name="author" content="Diovu Shadrach Chinecherem" />
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
 <meta name="language" content="English" />
@@ -694,6 +694,31 @@
   .detail-actions .btn,.detail-actions .mini-btn{min-height:42px}
   @media(max-width:560px){.quote-detail{padding:18px}.provenance-grid{grid-template-columns:1fr}.quote-detail blockquote{font-size:1.3rem}}
 
+
+/* ===================== QUOTE ARCHIVE V2 ===================== */
+.v2-section{margin:28px auto;max-width:1180px;padding:0 18px}
+.v2-panel{background:var(--surface,rgba(255,255,255,.72));border:1px solid var(--line,rgba(20,26,44,.12));border-radius:22px;padding:20px;box-shadow:0 12px 35px rgba(0,0,0,.06)}
+.v2-head{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:14px;flex-wrap:wrap}
+.v2-head h2{margin:0}
+.v2-sub{margin:5px 0 0;color:var(--site-muted);font-size:.92rem}
+.v2-actions{display:flex;gap:8px;flex-wrap:wrap}
+.v2-history-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.v2-history-card{position:relative;border:1px solid var(--line,rgba(20,26,44,.12));border-radius:16px;padding:15px;background:var(--card,rgba(255,255,255,.5));cursor:pointer;transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}
+.v2-history-card:hover,.v2-history-card:focus-visible{transform:translateY(-2px);box-shadow:0 10px 25px rgba(0,0,0,.08);border-color:var(--gold,#e0a83f);outline:none}
+.v2-history-card p{margin:8px 0 10px;line-height:1.55}
+.v2-history-meta{font-size:.78rem;color:var(--site-muted);display:flex;gap:6px;flex-wrap:wrap}
+.v2-empty{padding:22px;text-align:center;color:var(--site-muted);border:1px dashed var(--line,rgba(20,26,44,.15));border-radius:14px}
+.v2-shortcuts{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:9px;margin-top:14px}
+.v2-key{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px;border-radius:12px;background:rgba(127,127,127,.07);color:var(--site-muted);font-size:.86rem}
+.v2-key kbd{font:600 .76rem "IBM Plex Mono",monospace;border:1px solid var(--line,rgba(20,26,44,.18));border-bottom-width:2px;border-radius:6px;padding:3px 7px;color:var(--ink,#141a2c);background:var(--surface,#fff)}
+.v2-link-btn{border:0;background:none;color:inherit;font:inherit;cursor:pointer;text-decoration:underline;text-decoration-color:transparent}
+.v2-link-btn:hover{text-decoration-color:currentColor}
+@media(max-width:620px){
+  .v2-section{padding:0 12px;margin:20px auto}
+  .v2-panel{padding:15px;border-radius:18px}
+  .v2-history-grid{grid-template-columns:1fr}
+}
+
 </style>
 </head>
 <body>
@@ -911,7 +936,44 @@
     <div id="favList" class="fav-list" aria-live="polite"></div>
   </section>
 
-  <footer>
+  
+<!-- ===================== QUOTE ARCHIVE V2 FEATURES ===================== -->
+<section class="v2-section" id="recentlyViewed" aria-labelledby="recentlyViewedTitle">
+  <div class="v2-panel">
+    <div class="v2-head">
+      <div>
+        <h2 id="recentlyViewedTitle">Recently Viewed</h2>
+        <p class="v2-sub">Your latest quote records, saved only in this browser.</p>
+      </div>
+      <div class="v2-actions">
+        <button class="btn ghost" id="recentClearBtn" type="button">Clear history</button>
+      </div>
+    </div>
+    <div class="v2-history-grid" id="recentGrid">
+      <div class="v2-empty">Open a quote record and it will appear here.</div>
+    </div>
+  </div>
+</section>
+
+<section class="v2-section" aria-labelledby="quickToolsTitle">
+  <div class="v2-panel">
+    <div class="v2-head">
+      <div>
+        <h2 id="quickToolsTitle">Quick Tools</h2>
+        <p class="v2-sub">Fast keyboard controls for desktop users.</p>
+      </div>
+    </div>
+    <div class="v2-shortcuts" aria-label="Keyboard shortcuts">
+      <div class="v2-key"><span>Focus search</span><kbd>/</kbd></div>
+      <div class="v2-key"><span>Pull random quote</span><kbd>R</kbd></div>
+      <div class="v2-key"><span>Open generator</span><kbd>G</kbd></div>
+      <div class="v2-key"><span>Open favorites</span><kbd>F</kbd></div>
+      <div class="v2-key"><span>Close dialog</span><kbd>Esc</kbd></div>
+    </div>
+  </div>
+</section>
+
+<footer>
     Filed with care by <span class="fmark"><a href="https://shadrach1-cpu.github.io/SHADRACH.DEV/" target="_blank" rel="noopener noreferrer">Diovu Shadrach Chinecherem</a></span>
     · The Quote Archive · curated cards across 20 drawers · expanded human quotation library · multi-source provenance
     <div class="copyright-notice">
@@ -952,6 +1014,7 @@
       <button class="btn" id="quoteDetailFav" type="button">♡ Favorite</button>
       <button class="btn" id="quoteDetailDownload" type="button">⬇ Download</button>
       <button class="btn" id="quoteDetailShare" type="button">↗ Share</button>
+      <button class="btn ghost" id="quoteDetailLink" type="button">🔗 Copy Link</button>
       <button class="btn ghost" id="quoteDetailFocus" type="button">▣ Focus</button>
     </div>
   </div>
@@ -2044,9 +2107,7 @@ function safeReadJSON(key, fallback) {
 }
 function safeWriteJSON(key, value) {
   try {
-    const storage = window.localStorage;
-    if (!storage) return false;
-    storage.setItem(key, JSON.stringify(value));
+    window.localStorage?.setItem(key, JSON.stringify(value));
     return true;
   } catch {
     return false;
@@ -2054,9 +2115,7 @@ function safeWriteJSON(key, value) {
 }
 function safeWrite(key, value) {
   try {
-    const storage = window.localStorage;
-    if (!storage) return false;
-    storage.setItem(key, value);
+    window.localStorage?.setItem(key, value);
     return true;
   } catch {
     return false;
@@ -2277,18 +2336,12 @@ if(installBtn){
   });
 }
 window.addEventListener('appinstalled', ()=>{
-  if(installBtn) installBtn.hidden = true;
+  if(installBtn) if(installBtn) installBtn.hidden = true;
   setStatus('Installed — find The Quote Archive on your home screen or app list.');
 });
-if(
-  'serviceWorker' in navigator &&
-  /^https?:$/i.test(window.location.protocol)
-){
+if('serviceWorker' in navigator){
   window.addEventListener('load', ()=>{
-    navigator.serviceWorker.register('./sw.js').catch((err)=>{
-      console.warn('Optional service worker registration failed:', err);
-      /* The core site remains usable without the worker. */
-    });
+    navigator.serviceWorker.register('./sw.js').catch(()=>{ /* core site remains usable if the optional worker is unavailable */ });
   });
 }
 
@@ -2391,12 +2444,8 @@ function toggleFav(id){
 
 function findQuote(id){
   if(typeof id !== 'string') return null;
-  // Older rendered cards used a "quote-" DOM prefix. Accept it so
-  // existing markup remains harmless, while all new markup uses the
-  // canonical archive ID directly.
-  const canonicalId = id.startsWith('quote-') ? id.slice(6) : id;
-  if(canonicalId.startsWith('GEN-')) return parseGeneratedId(canonicalId);
-  return quotes.find(q=>q.id===canonicalId) || favoriteSnapshots[canonicalId] || null;
+  if(id.startsWith('GEN-')) return parseGeneratedId(id);
+  return quotes.find(q=>q.id===id) || favoriteSnapshots[id] || null;
 }
 
 /* ===================== DRAWER TABS + CABINET ===================== */
@@ -2652,7 +2701,7 @@ function cardHTML(q){
   const color = info ? info.color : 'var(--gold)';
   const icon = info ? info.icon : '✦';
   return `
-  <article class="qcard" data-id="${escapeHTML(String(q.id))}" aria-label="${escapeHTML(q.catLabel)} quote ${escapeHTML(q.catNo)}" style="--cat-color:${color}">
+  <article class="qcard" data-id="quote-${escapeHTML(String(q.id).replace(/[^a-zA-Z0-9_-]/g, "-"))}" aria-label="${escapeHTML(q.catLabel)} quote ${escapeHTML(q.catNo)}" style="--cat-color:${color}">
     <span class="hole" aria-hidden="true"></span>
     <span class="cat-icon" aria-hidden="true">${icon}</span>
     <span class="cat-no">${escapeHTML(q.catNo)}</span>
@@ -3033,7 +3082,7 @@ async function copyText(text){
 function renderFavorites(){
   const favItems = [...favorites].map(id=>findQuote(id)).filter(Boolean);
   favList.innerHTML = favItems.length ? favItems.map(q=>`
-    <div class="fav-item" data-id="${escapeHTML(String(q.id))}">
+    <div class="fav-item" data-id="quote-${escapeHTML(String(q.id).replace(/[^a-zA-Z0-9_-]/g, "-"))}">
       <div>
         <p>&ldquo;${escapeHTML(q.quote)}&rdquo;</p>
         <div class="meta">${escapeHTML(q.catNo)} · ${escapeHTML(q.catLabel)}</div>
@@ -3215,14 +3264,11 @@ function wrapCanvasText(ctx, text, x, y, maxWidth, lineHeight, maxLines=7){
   return curY;
 }
 
-async function downloadCard(q){
+function downloadCard(q){
   if(!q || typeof q.quote !== 'string'){
     setStatus('Could not create the card image: quote data is invalid.');
     return;
   }
-  try{
-    if(document.fonts?.ready) await document.fonts.ready;
-  }catch{}
   const W = 1200, H = 675;
   const canvas = document.createElement('canvas');
   canvas.width = W; canvas.height = H;
@@ -3472,10 +3518,6 @@ let musicLoadToken = 0;
 let activeMusicTrack = null;
 let activeMusicSource = '';
 let musicErrorToken = 0;
-// Do not auto-scan/skip through every missing MP3 during page load.
-// Automatic recovery is only allowed after the visitor has actually asked
-// the player to start playback.
-let musicWantsPlayback = false;
 const musicFailedTracks = new Set();
 musicAudio.addEventListener('error', () => {
   const track = activeMusicTrack || MUSIC_TRACKS[musicIndex];
@@ -3491,13 +3533,11 @@ musicAudio.addEventListener('error', () => {
       setStatus('None of the music files could be loaded. Check that the /music folder and MP3 files are deployed.');
       return;
     }
-    if(musicWantsPlayback && MUSIC_TRACKS.length > 1){
-      setStatus(`Could not load “${track.title}”. Skipping to the next available track.`);
+    setStatus(`Could not load “${track.title}”. Skipping to the next available track.`);
+    if(MUSIC_TRACKS.length > 1){
       window.setTimeout(() => {
-        if(failedToken === musicLoadToken && activeMusicTrack === track && musicWantsPlayback) nextTrack(true);
+        if(failedToken === musicLoadToken && activeMusicTrack === track) nextTrack(true);
       }, 250);
-    } else {
-      setStatus(`Could not load “${track.title}”. Click Play to try another track.`);
     }
   }
 });
@@ -3629,17 +3669,14 @@ function setPlayingUI(playing){
 
 function playPause(){
   if(musicFailedTracks.has(musicIndex)){
-    musicWantsPlayback = true;
     loadTrack(musicIndex, true, true);
     return;
   }
   if(!musicAudio.src){
-    musicWantsPlayback = true;
     loadTrack(musicIndex, true);
     return;
   }
   if(musicAudio.paused){
-    musicWantsPlayback = true;
     musicAudio.play().catch((err)=>{
       setPlayingUI(false);
       const name = err?.name || 'PlaybackError';
@@ -3651,14 +3688,12 @@ function playPause(){
       }
     });
   } else {
-    musicWantsPlayback = false;
     musicAudio.pause();
   }
 }
 
 function nextTrack(automatic=false){
   if(MUSIC_TRACKS.length < 1) return;
-  if(automatic && !musicWantsPlayback) return;
   const available = MUSIC_TRACKS.map((_,i)=>i).filter(i=>!automatic || !musicFailedTracks.has(i));
   if(!available.length){
     setPlayingUI(false);
@@ -3698,7 +3733,6 @@ musicAudio.addEventListener('timeupdate', ()=>{
 });
 musicAudio.addEventListener('loadedmetadata', ()=>{ musicDurTime.textContent = formatTime(musicAudio.duration); });
 musicAudio.addEventListener('ended', ()=>{
-  if(!musicWantsPlayback) return;
   if(musicLoopOne){ musicAudio.currentTime = 0; musicAudio.play().catch(() => setPlayingUI(false)); }
   else nextTrack(true);
 });
@@ -3752,7 +3786,6 @@ musicProgress.addEventListener('click', (e)=>{
 musicList.addEventListener('click', (e)=>{
   const btn = e.target.closest('.music-track');
   if(!btn) return;
-  musicWantsPlayback = true;
   loadTrack(Number(btn.dataset.index), true, true);
 });
 
@@ -3886,24 +3919,9 @@ function openHumanLibraryDB(){
         store.createIndex('author','author',{unique:false});
       }
     };
-    req.onsuccess = () => {
-      const db = req.result;
-      db.onversionchange = () => {
-        try { db.close(); } catch {}
-        humanLibraryDBPromise = null;
-      };
-      db.onclose = () => {
-        humanLibraryDBPromise = null;
-      };
-      resolve(db);
-    };
+    req.onsuccess = () => resolve(req.result);
     req.onerror = () => reject(req.error || new Error('IndexedDB unavailable'));
-    req.onblocked = () => console.warn('Human Library database upgrade is blocked by another tab.');
-  }).catch(err=>{ 
-    humanLibraryDBPromise = null;
-    console.warn('Human Library vault unavailable:', err); 
-    return null; 
-  });
+  }).catch(err=>{ console.warn('Human Library vault unavailable:', err); return null; });
   return humanLibraryDBPromise;
 }
 
@@ -4033,7 +4051,7 @@ async function fetchTextWithTimeout(url, timeoutMs=20000){
 
 async function getCachedText(url, cacheKey){
   try{
-    if(typeof window.caches !== 'undefined' && typeof window.caches.open === 'function'){
+    if('caches' in window){
       const cache = await caches.open(cacheKey);
       const cached = await cache.match(url);
       if(cached) return await cached.text();
@@ -4135,11 +4153,7 @@ async function loadMassiveQuoteLibrary(){
     libraryStatus.innerHTML='<strong>Human Quote Library:</strong> importing the open quotation dataset…';
     const rawText=await getCachedText(MASSIVE_LIBRARY_URL,QUOTABLES_LIBRARY_CACHE);
     const lines=rawText.split(/\r?\n/), records=[]; let index=0;
-    const remainingCapacity = Math.max(0, Math.min(
-      HUMAN_LIBRARY_CLIENT_LOAD_LIMIT,
-      MAX_HUMAN_LIBRARY - externalHumanQuoteCount
-    ));
-    for(let i=0;i<lines.length && records.length<remainingCapacity;i++){
+    for(let i=0;i<lines.length;i++){
       const line=normalizeExternalLine(lines[i]).replace(/^\uFEFF/,'');
       if(!line || line.startsWith('#')) continue;
       const tab=line.indexOf('\t'); if(tab<1) continue;
@@ -4179,11 +4193,7 @@ async function loadCommunityQuoteLibrary(){
     const rawText=await getCachedText(COMMUNITY_LIBRARY_URL,COMMUNITY_LIBRARY_CACHE);
     const chunks=rawText.split(/\r?\n[ \t]*%[ \t]*(?:\r?\n|$)/);
     const records=[]; let index=0;
-    const remainingCapacity = Math.max(0, Math.min(
-      HUMAN_LIBRARY_CLIENT_LOAD_LIMIT,
-      MAX_HUMAN_LIBRARY - externalHumanQuoteCount
-    ));
-    for(let i=0;i<chunks.length && records.length<remainingCapacity;i++){
+    for(let i=0;i<chunks.length;i++){
       const text=normalizeExternalLine(chunks[i]); if(!text || text.length<8 || text.length>1200) continue;
       const record=appendExternalQuote({quote:text,author:'Community quotation database',sourceId:'community',index:++index});
       if(record) records.push(record);
@@ -4332,6 +4342,147 @@ if(libraryStatusEl){
     libraryStatusEl.innerHTML = '<strong>Human Quote Library:</strong> local vault unavailable; the core archive remains fully usable.';
   });
 }
+
+
+/* ===================== QUOTE ARCHIVE V2 LOGIC ===================== */
+const V2_RECENT_KEY = 'quote-archive-recent-v2';
+const V2_RECENT_LIMIT = 20;
+
+function v2ReadRecent(){
+  try{
+    const raw = localStorage.getItem(V2_RECENT_KEY);
+    const parsed = raw ? JSON.parse(raw) : [];
+    return Array.isArray(parsed) ? parsed.filter(x => x && typeof x.id === 'string') : [];
+  }catch{
+    return [];
+  }
+}
+
+function v2WriteRecent(items){
+  try{
+    localStorage.setItem(V2_RECENT_KEY, JSON.stringify(items.slice(0, V2_RECENT_LIMIT)));
+  }catch{
+    /* Private browsing/storage-disabled mode: the feature simply becomes session-only. */
+  }
+}
+
+function recordRecentQuote(q){
+  if(!q || !q.id) return;
+  const item = {
+    id: String(q.id),
+    catNo: String(q.catNo || q.id),
+    quote: String(q.quote || ''),
+    author: String(q.author || 'Unknown author'),
+    catLabel: String(q.catLabel || 'Archive')
+  };
+  const current = v2ReadRecent().filter(x => x.id !== item.id);
+  current.unshift(item);
+  v2WriteRecent(current);
+  renderRecentQuotes();
+}
+
+function renderRecentQuotes(){
+  const host = document.getElementById('recentGrid');
+  if(!host) return;
+  const items = v2ReadRecent();
+  if(!items.length){
+    host.innerHTML = '<div class="v2-empty">Open a quote record and it will appear here.</div>';
+    return;
+  }
+  host.innerHTML = items.map(item => `
+    <article class="v2-history-card" tabindex="0" role="button"
+      data-recent-id="${escapeHTML(item.id)}"
+      aria-label="Open ${escapeHTML(item.catNo)}">
+      <div class="v2-history-meta"><strong>${escapeHTML(item.catNo)}</strong><span>·</span><span>${escapeHTML(item.catLabel)}</span></div>
+      <p>“${escapeHTML(item.quote)}”</p>
+      <div class="v2-history-meta">— ${escapeHTML(item.author)}</div>
+    </article>
+  `).join('');
+}
+
+function v2OpenRecent(id){
+  const q = findQuote(id);
+  if(q){
+    openQuoteDetail(q, true);
+    return;
+  }
+  showToast('That quote is no longer available in the current archive.');
+}
+
+const recentGridV2 = document.getElementById('recentGrid');
+if(recentGridV2){
+  recentGridV2.addEventListener('click', e => {
+    const card = e.target.closest('[data-recent-id]');
+    if(card) v2OpenRecent(card.dataset.recentId);
+  });
+  recentGridV2.addEventListener('keydown', e => {
+    if(e.key !== 'Enter' && e.key !== ' ') return;
+    const card = e.target.closest('[data-recent-id]');
+    if(!card) return;
+    e.preventDefault();
+    v2OpenRecent(card.dataset.recentId);
+  });
+}
+
+const recentClearBtnV2 = document.getElementById('recentClearBtn');
+if(recentClearBtnV2){
+  recentClearBtnV2.addEventListener('click', () => {
+    v2WriteRecent([]);
+    renderRecentQuotes();
+    showToast('Recently viewed history cleared.');
+  });
+}
+
+/* Record detail views without changing the existing URL/deep-link behavior. */
+const originalOpenQuoteDetailV2 = openQuoteDetail;
+openQuoteDetail = function(q, updateURL=false){
+  originalOpenQuoteDetailV2(q, updateURL);
+  if(q) recordRecentQuote(q);
+};
+
+/* Dedicated deep-link copy button. */
+const quoteDetailLinkV2 = document.getElementById('quoteDetailLink');
+if(quoteDetailLinkV2){
+  quoteDetailLinkV2.addEventListener('click', async () => {
+    if(!detailQuote) return;
+    const url = quoteDeepLink(detailQuote.id);
+    if(!url){
+      showToast('A quote link could not be created here.');
+      return;
+    }
+    const ok = await copyText(url);
+    setStatus(ok ? 'Quote link copied to clipboard.' : 'Copy is unavailable; the quote link is visible in the address bar.');
+  });
+}
+
+/* Small desktop keyboard layer. Never hijacks typing in form fields. */
+document.addEventListener('keydown', e => {
+  if(e.ctrlKey || e.metaKey || e.altKey) return;
+  const target = e.target;
+  const typing = target && (
+    target.matches?.('input, textarea, select, [contenteditable="true"]') ||
+    target.isContentEditable
+  );
+  if(typing) return;
+
+  if(e.key === '/'){
+    e.preventDefault();
+    searchInput?.focus();
+    searchInput?.select();
+  }else if(e.key.toLowerCase() === 'r'){
+    e.preventDefault();
+    pullRandom();
+  }else if(e.key.toLowerCase() === 'g'){
+    e.preventDefault();
+    document.getElementById('generator')?.scrollIntoView({behavior:'smooth',block:'start'});
+  }else if(e.key.toLowerCase() === 'f'){
+    e.preventDefault();
+    document.getElementById('favorites')?.scrollIntoView({behavior:'smooth',block:'start'});
+  }
+});
+
+renderRecentQuotes();
+
 </script>
 </body>
 </html>
