@@ -2443,6 +2443,10 @@ function toggleFav(id){
 }
 
 function findQuote(id){
+    if (typeof id === 'string' && id.startsWith('quote-')) {
+      id = id.slice(6);
+    }
+
   if(typeof id !== 'string') return null;
   if(id.startsWith('GEN-')) return parseGeneratedId(id);
   return quotes.find(q=>q.id===id) || favoriteSnapshots[id] || null;
@@ -2701,7 +2705,7 @@ function cardHTML(q){
   const color = info ? info.color : 'var(--gold)';
   const icon = info ? info.icon : '✦';
   return `
-  <article class="qcard" data-id="quote-${escapeHTML(String(q.id).replace(/[^a-zA-Z0-9_-]/g, "-"))}" aria-label="${escapeHTML(q.catLabel)} quote ${escapeHTML(q.catNo)}" style="--cat-color:${color}">
+  <article class="qcard" data-id="${escapeHTML(String(q.id))}" aria-label="${escapeHTML(q.catLabel)} quote ${escapeHTML(q.catNo)}" style="--cat-color:${color}">
     <span class="hole" aria-hidden="true"></span>
     <span class="cat-icon" aria-hidden="true">${icon}</span>
     <span class="cat-no">${escapeHTML(q.catNo)}</span>
@@ -2906,6 +2910,118 @@ function handleCardActionEvent(e){
 }
 grid.addEventListener('click', handleCardActionEvent);
 
+/* ===================== CARD ACTION RELIABILITY PATCH =====================
+   This final interaction layer deliberately handles every action button on
+   quote cards in the capture phase. It prevents older delegated handlers or
+   stale event layers from swallowing the click, while keeping the existing
+   application functions and UI intact.
+*/
+(function installCardActionReliabilityPatch(){
+  const actionSelectors = '.copy-btn,.fav-btn,.dl-btn,.share-btn,.focus-open-btn,.details-btn';
+
+  function fallbackCopy(value){
+    return new Promise(resolve=>{
+      try{
+        const ta = document.createElement('textarea');
+        ta.value = String(value ?? '');
+        ta.setAttribute('readonly','');
+        ta.style.position = 'fixed';
+        ta.style.left = '-9999px';
+        ta.style.top = '0';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.focus();
+        ta.select();
+        ta.setSelectionRange(0, ta.value.length);
+        let ok = false;
+        try { ok = document.execCommand('copy'); } catch(_) { ok = false; }
+        ta.remove();
+        resolve(ok);
+      }catch(_){ resolve(false); }
+    });
+  }
+
+  copyText = async function reliableCopyText(value){
+    const text = String(value ?? '');
+    try{
+      if(navigator.clipboard && (window.isSecureContext || location.protocol === 'https:')){
+        await navigator.clipboard.writeText(text);
+        return true;
+      }
+    }catch(_){ /* use legacy fallback below */ }
+    return await fallbackCopy(text);
+  };
+
+  async function reliableCardAction(button, card){
+    const id = card?.dataset?.id;
+    if(!id) return;
+    const q = findQuote(id);
+    if(!q) return;
+
+    if(button.matches('.copy-btn')){
+      const ok = await copyText(`"${q.quote}" — ${q.author || 'Unknown author'}`);
+      setStatus(ok ? `Copied ${q.catNo} to clipboard.` : 'Could not copy — please select the quote text manually.');
+      return;
+    }
+
+    if(button.matches('.fav-btn')){
+      toggleFav(id);
+      setStatus(favorites.has(id) ? `${q.catNo} added to favorites.` : `${q.catNo} removed from favorites.`);
+      return;
+    }
+
+    if(button.matches('.dl-btn')){
+      downloadCard(q);
+      return;
+    }
+
+    if(button.matches('.share-btn')){
+      await shareQuote(q);
+      return;
+    }
+
+    if(button.matches('.focus-open-btn')){
+      openFocus(q);
+      return;
+    }
+
+    if(button.matches('.details-btn')){
+      openQuoteDetail(q, true);
+      return;
+    }
+  }
+
+  document.addEventListener('click', function(e){
+    const button = e.target?.closest?.(actionSelectors);
+    if(!button) return;
+    const card = button.closest('.qcard');
+    if(!card) return;
+
+    /* Stop the older delegated grid listener so an action happens exactly once. */
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    void reliableCardAction(button, card).catch(err=>{
+      console.warn('Quote card action failed:', err);
+      setStatus('That quote action could not be completed. Please try again.');
+    });
+  }, true);
+
+  /* Keyboard activation is covered by click events, but explicitly support
+     Enter/Space for custom browser/accessibility event paths. */
+  document.addEventListener('keydown', function(e){
+    if(e.key !== 'Enter' && e.key !== ' ') return;
+    const button = e.target?.closest?.(actionSelectors);
+    const card = button?.closest?.('.qcard');
+    if(!button || !card) return;
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    void reliableCardAction(button, card).catch(err=>{
+      console.warn('Quote card keyboard action failed:', err);
+      setStatus('That quote action could not be completed. Please try again.');
+    });
+  }, true);
+})();
+
 loadMoreBtn.addEventListener('click',()=>{
   visibleCount += BATCH;
   renderGrid();
@@ -3082,7 +3198,7 @@ async function copyText(text){
 function renderFavorites(){
   const favItems = [...favorites].map(id=>findQuote(id)).filter(Boolean);
   favList.innerHTML = favItems.length ? favItems.map(q=>`
-    <div class="fav-item" data-id="quote-${escapeHTML(String(q.id).replace(/[^a-zA-Z0-9_-]/g, "-"))}">
+    <div class="fav-item" data-id="${escapeHTML(String(q.id))}">
       <div>
         <p>&ldquo;${escapeHTML(q.quote)}&rdquo;</p>
         <div class="meta">${escapeHTML(q.catNo)} · ${escapeHTML(q.catLabel)}</div>
@@ -4482,6 +4598,9 @@ document.addEventListener('keydown', e => {
 });
 
 renderRecentQuotes();
+
+
+
 
 </script>
 </body>
