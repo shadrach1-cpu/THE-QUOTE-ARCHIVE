@@ -428,7 +428,7 @@
     -webkit-tap-highlight-color:transparent;
   }
   .qcard .actions button:hover{background:rgba(0,0,0,.1)}
-  .qcard .actions button.fav.active{background:var(--cat-color, var(--gold));color:#1d1811}
+  .qcard .actions button.fav.active{background:#000;color:#fff;border:1px solid #000;font-weight:800;box-shadow:0 0 0 1px rgba(0,0,0,.08)}
 
   .load-more-wrap{display:flex;justify-content:center;margin-top:26px}
 
@@ -2436,7 +2436,13 @@ function toggleFav(id){
     }
   }
   saveFavs();
-  renderGrid();
+  // Re-render the correct quote surface immediately so the generator's
+  // favourite button visibly changes state without requiring a refresh.
+  if(id.startsWith('GEN-')){
+    renderGenGrid();
+  } else {
+    renderGrid();
+  }
   refreshQotdFavButton();
   adding ? sfx.favOn() : sfx.favOff();
   checkAchievements();
