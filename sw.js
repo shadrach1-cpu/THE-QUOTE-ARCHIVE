@@ -1,4 +1,4 @@
-const CACHE_NAME = 'quote-archive-v2-4-actions-fixed';
+const CACHE_NAME = 'quote-archive-v2-5-post-images';
 const APP_SHELL = [
   './',
   './index.html',
