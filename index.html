@@ -53,7 +53,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500;1,9..144,600&family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500;1,9..144,600&family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=Playfair+Display:ital,wght@1,600&family=Cormorant+Garamond:ital,wght@1,600&family=Lora:ital,wght@1,500&family=Cinzel:wght@600&family=Bebas+Neue&family=Oswald:wght@600&family=Montserrat:wght@700&family=Poppins:wght@600&family=Raleway:wght@600&family=Archivo+Black&family=Abril+Fatface&family=Dancing+Script:wght@700&family=Pacifico&family=Caveat:wght@700&family=Special+Elite&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
 
 <!-- Structured data: helps Google understand this as a searchable quote collection -->
 <script type="application/ld+json">
@@ -779,6 +779,18 @@
   .ps-key{margin-top:8px;font-size:.8rem;color:var(--ink-muted)}
   .ps-key summary{cursor:pointer;font-weight:700}
   .ps-key input{width:100%;margin:8px 0 4px;padding:9px 10px;border:1px solid var(--line);border-radius:8px;background:rgba(255,255,255,.6);color:var(--ink-text);font:inherit;font-size:16px}
+  .ps-adv{border:1px solid var(--line);border-radius:12px;padding:8px 12px;background:rgba(0,0,0,.025)}
+  .ps-adv summary{cursor:pointer;font:700 .68rem 'IBM Plex Mono',monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-muted);padding:4px 0}
+  .ps-adv[open] summary{margin-bottom:8px}
+  .ps-sub{margin:10px 0}
+  .ps-sublabel{display:block;font-size:.76rem;font-weight:700;color:var(--ink-muted);margin-bottom:5px}
+  .ps-sublabel output{font-weight:500;margin-left:6px}
+  .ps-slider{display:block;margin:10px 0}.ps-slider input{width:100%}
+  .ps-input{width:100%;padding:9px 10px;border:1px solid var(--line);border-radius:8px;background:rgba(255,255,255,.6);color:var(--ink-text);font:inherit;font-size:16px}
+  .ps-toggles{display:flex;flex-direction:column;gap:6px;font-size:.86rem}
+  .ps-row input[type=color]{width:52px;height:38px;border:1px solid var(--line);border-radius:8px;padding:2px;background:transparent;cursor:pointer}
+  .ps-adv .ps-chip.small{padding:6px 10px;min-height:36px}
+  #psFonts{max-height:190px;overflow:auto;padding:2px}
   .ps-meta{font-size:.78rem;color:var(--ink-muted);margin:6px 0 0}
   .ps-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
   .ps-actions .btn{justify-content:center;min-height:46px}
@@ -790,6 +802,7 @@
   }
   @media (prefers-reduced-motion: reduce){.qart canvas{transition:none}.qart:hover canvas{transform:none}}
 </style>
+<link rel="stylesheet" href="v4.css">
 </head>
 <body>
 <a href="#main" class="skip-link">Skip to content</a>
@@ -1132,6 +1145,7 @@
           </div>
           <span class="ps-meta" id="psStyleName"></span>
         </div>
+        <div id="psAdvanced"></div>
         <div class="ps-actions">
           <button class="btn primary" id="psDownload" type="button">⬇ Download image</button>
           <button class="btn" id="psShare" type="button">↗ Share image</button>
@@ -1288,7 +1302,19 @@ motivation:[
 "Dreams don't work unless you do.",
 "Every champion was once someone who refused to quit.",
 "Move forward even when the map isn't finished.",
-"The fire in you is louder than the doubt around you."
+"The fire in you is louder than the doubt around you.",
+"Begin messy. Polish is a luxury of the second draft.",
+"Your goals don't need your mood's approval.",
+"Ten honest minutes today beat a perfect plan for next week.",
+"Nobody ever regretted the workout, the page, or the call they actually made.",
+"The hardest part of any road is the doorstep.",
+"Let your reasons be bigger than your excuses.",
+"Today's effort is a deposit your future self can't wait to withdraw.",
+"If it matters to you, find the time. If it doesn't, find the honesty.",
+"Wake up with a job to do, not a mood to obey.",
+"Small fires, fed daily, light entire cities.",
+"Don't count the days you're tired. Count the days you still moved.",
+"The next version of your life starts with an ordinary Tuesday."
 ],
 discipline:[
 "Discipline is choosing what you want most over what you want now.",
@@ -1320,7 +1346,19 @@ discipline:[
 "Do the work the mood doesn't want to do.",
 "Your standards are the ceiling of your results.",
 "Repetition is the mother of mastery.",
-"Show up on the ordinary days and the extraordinary ones take care of themselves."
+"Show up on the ordinary days and the extraordinary ones take care of themselves.",
+"Do the boring thing well and the exciting things will follow.",
+"Freedom is what discipline buys you later.",
+"A schedule is a promise you make to your future self.",
+"Your habits quietly vote on who you become.",
+"Make the right action easy and the wrong one inconvenient.",
+"Skipping once is an accident. Skipping twice is a new routine.",
+"Be strict with your time and generous with your rest.",
+"Willpower is a spark. Systems are the fire that stays lit.",
+"Keep the promises nobody else will ever check.",
+"What you repeat, you become.",
+"Discipline is quiet. Regret is loud.",
+"Train yourself to finish what you start before you start something new."
 ],
 success:[
 "Success is the sum of small efforts, repeated day in and day out.",
@@ -1352,7 +1390,19 @@ success:[
 "Success is a series of uncomfortable choices made comfortably often.",
 "Trade instant gratification for lasting achievement.",
 "Success remembers who showed up when it was hard to.",
-"Build so well that your work speaks before you do."
+"Build so well that your work speaks before you do.",
+"Success is rarely loud. It's usually a long list of unremarkable days done well.",
+"Define winning on your own terms before someone else does.",
+"The results you want live on the other side of the work you avoid.",
+"Measure progress by who you're becoming, not just what you're earning.",
+"Success is a habit of finishing, not a moment of arriving.",
+"Plan for the storm, work like it's sunny, celebrate like you earned it.",
+"There is no elevator, but every stair counts.",
+"A good life is built from many small wins and a few brave bets.",
+"Aim for work you'd be proud to sign.",
+"Quality compounds. So does neglect.",
+"Success follows the people who solve real problems for real people.",
+"Don't chase the crowd's applause; earn your own respect first."
 ],
 mindset:[
 "The only person you are destined to become is the person you decide to be.",
@@ -1384,7 +1434,19 @@ mindset:[
 "Negative self-talk is a habit you're allowed to break.",
 "Think in decades, act in days.",
 "A resilient mindset treats failure as feedback, not identity.",
-"Whatever you keep telling yourself, you're probably right."
+"Whatever you keep telling yourself, you're probably right.",
+"Your thoughts are a rehearsal. Choose what you're practising.",
+"Talk to yourself like someone you're responsible for helping.",
+"A calm mind sees more options than a panicked one.",
+"You can't control the weather, but you can choose your coat.",
+"Replace 'I can't' with 'I can't yet' and watch what opens.",
+"Curiosity is the antidote to fear.",
+"The story you tell about a setback decides how long it lasts.",
+"Protect your attention the way you protect your wallet.",
+"Perspective is the cheapest way to change your day.",
+"A strong mind isn't one without doubt; it's one that acts anyway.",
+"Don't believe every thought that walks through your head.",
+"Think big, begin small, and let progress change your mind."
 ],
 growth:[
 "Small progress is still progress.",
@@ -1416,7 +1478,19 @@ growth:[
 "Roots grow in the dark before branches grow in the light.",
 "Discomfort is the tuition growth charges.",
 "Keep choosing the harder right over the easier wrong.",
-"A season of struggle is often a season of secret growth."
+"A season of struggle is often a season of secret growth.",
+"Growth is uncomfortable because you're becoming bigger than your habits.",
+"Be a student of everything, an expert in nothing, and curious about it all.",
+"Every skill you admire was once a clumsy first attempt.",
+"Outgrow your excuses before you outgrow your goals.",
+"Feedback is a gift that rarely arrives wrapped nicely.",
+"You are allowed to be a masterpiece and a work in progress at the same time.",
+"The comfort zone is lovely, but nothing grows there.",
+"Read a little, practise a lot, reflect often.",
+"Change what you consume and you'll change what you create.",
+"The person you're becoming needs the discomfort you're avoiding.",
+"Keep a beginner's mind and an expert's patience.",
+"Slow growth is still growth. Roots go deep before branches go high."
 ],
 focus:[
 "Don't watch the clock. Do what it does. Keep going.",
@@ -1448,7 +1522,19 @@ focus:[
 "A clear target sharpens an unclear day.",
 "Focus is choosing your priority before the day chooses it for you.",
 "What deserves your best attention rarely announces itself loudly.",
-"Guard the first hour of your day; it sets the tone for the rest."
+"Guard the first hour of your day; it sets the tone for the rest.",
+"Where attention goes, results grow.",
+"One task, fully done, outweighs five tasks half-started.",
+"Close the extra tabs, in your browser and in your head.",
+"Say no to good ideas so you can say yes to great work.",
+"Depth is a superpower in a world of skimming.",
+"Silence your phone, not your ambition.",
+"Focus is deciding what to ignore.",
+"A clear next step is the cure for a cluttered mind.",
+"Do one thing at a time and do it as if it were the only thing.",
+"Protect your first hour; it sets the tone for all the others.",
+"Distraction is just a vote for someone else's priorities.",
+"Work in sprints, rest in full, return with a sharp mind."
 ],
 resilience:[
 "Get up one more time than life knocks you down.",
@@ -1480,7 +1566,19 @@ resilience:[
 "Difficult roads have carried people to beautiful destinations before you.",
 "What tries to bury you might just be planting you.",
 "Rest if you must, but don't quit.",
-"You weren't built to fold the first time life pushes back."
+"You weren't built to fold the first time life pushes back.",
+"Storms prove which roots were deep enough.",
+"You have survived every bad day so far. That's a perfect record.",
+"Bend, don't break. Then rise a little taller.",
+"Rest if you must, but don't mistake a pause for the finish.",
+"What breaks you open can also let the light in.",
+"Strength is a muscle you only find by lifting what feels too heavy.",
+"A setback is a setup for a comeback you haven't written yet.",
+"If you must fall, collect a lesson on every landing.",
+"Hard seasons end; what you learn in them stays.",
+"You are not what happened to you; you are what you do next.",
+"Even the longest night has a sunrise scheduled.",
+"Courage is quiet on the days you simply refuse to stay down."
 ],
 action:[
 "Nothing will work unless you do.",
@@ -1512,7 +1610,19 @@ action:[
 "Take the step your future self will thank you for.",
 "Progress prefers people who act imperfectly over people who wait perfectly.",
 "Action is the only currency results actually accept.",
-"Stop collecting information and start taking initiative."
+"Stop collecting information and start taking initiative.",
+"An imperfect step beats a perfect plan that never moves.",
+"Ideas are free. Execution is what pays.",
+"Don't wait for the green light on every street. Start driving.",
+"Done is a gift to your future self.",
+"You can't forecast your future, but you can start constructing it today.",
+"Decide, then adjust. Hesitation costs more than mistakes.",
+"Do it scared, do it tired, do it anyway.",
+"Don't just wait for open doors; learn to build a few.",
+"Action is the only language results understand.",
+"A rough draft out in the world teaches more than a flawless one in a drawer.",
+"Stop researching the cold water and jump in.",
+"If you've thought about it for a week, you already know. Start."
 ],
 creativity:[
 "Creativity is intelligence having fun with a problem.",
@@ -1544,7 +1654,19 @@ creativity:[
 "Every 'what if' is a door creativity is asking you to open.",
 "Great ideas rarely survive first contact with silence; say them out loud.",
 "Make the thing only you could make.",
-"Creativity is showing up to play, even when it feels like work."
+"Creativity is showing up to play, even when it feels like work.",
+"Make something imperfect today. Perfect can wait.",
+"Creativity is intelligence having fun with possibility.",
+"Borrow widely, combine strangely, sign it as your own.",
+"Boredom is where tomorrow's ideas stretch their legs.",
+"Your weird is your edge.",
+"A blank page is an invitation, not an accusation.",
+"Ask 'what if' until the answer surprises you.",
+"Constraints are the quiet engine of invention.",
+"Take a walk. Half of every problem is solved by changing the scenery.",
+"Don't wait for inspiration; show up and let it find you working.",
+"Keep a notebook for ideas the way a gardener keeps seeds.",
+"Make it first, judge it later."
 ],
 leadership:[
 "A leader's job is to make more leaders, not more followers.",
@@ -1596,7 +1718,19 @@ leadership:[
 "Humility is a leader's most underrated strength.",
 "A leader's job is to see around corners the team can't yet see.",
 "Leadership tested in the quiet months is what shows up in the loud ones.",
-"Serve the mission, not your own image, and the team will follow."
+"Serve the mission, not your own image, and the team will follow.",
+"Lead the way you'd want to be led on your worst day.",
+"A leader's first job is to make others feel capable.",
+"Listen like you're wrong; decide like you're accountable.",
+"Credit flows outward; responsibility flows inward.",
+"People follow clarity before they follow charisma.",
+"Set the standard by being the standard.",
+"Great leaders grow other leaders.",
+"Trust is built in small moments and lost in big ones.",
+"A good leader asks better questions before giving better answers.",
+"Say the hard thing kindly and the kind thing honestly.",
+"Your team reads your calm before they read your plan.",
+"Lead with the long view, act with the short one."
 ],
 courage:[
 "Courage isn't the absence of fear, it's action taken beside it.",
@@ -1648,7 +1782,19 @@ courage:[
 "Choosing yourself, even when it disappoints someone else, takes real courage.",
 "The brave thing and the right thing are usually standing next to each other.",
 "Walking away from what's comfortable but wrong takes more courage than staying.",
-"Every act of courage makes the next one slightly more possible."
+"Every act of courage makes the next one slightly more possible.",
+"Courage is fear that stood up and walked in anyway.",
+"The brave aren't fearless; they're simply moving.",
+"Speak the true thing, even if your voice shakes.",
+"Every bold life began with one uncomfortable yes.",
+"Choose the discomfort of growth over the comfort of stagnation.",
+"You were not built for a life of hiding.",
+"Courage is a decision you remake every morning.",
+"The cave you fear to enter holds the treasure you seek.",
+"Be the person your younger self needed to see.",
+"Do the thing that scares you, and the fear will shrink to fit.",
+"Boldness is just preparation with a deadline.",
+"Stand up quietly if you can, loudly if you must."
 ],
 gratitude:[
 "Gratitude turns what you have into enough.",
@@ -1700,7 +1846,19 @@ gratitude:[
 "Notice the door that opened quietly while you were busy knocking on another.",
 "The thankful eye sees abundance where the anxious eye sees lack.",
 "Every good thing in your life started as something you once hoped for.",
-"Gratitude is where peace and ambition finally agree with each other."
+"Gratitude is where peace and ambition finally agree with each other.",
+"Gratitude turns what we have into enough.",
+"Notice the ordinary; it's where most of life happens.",
+"Thank people while they can still hear you.",
+"A grateful heart finds a feast in a small table.",
+"Count your blessings out loud, and watch the list grow.",
+"Appreciation is the shortest road to joy.",
+"The things you thank are the things that stay.",
+"Be thankful for the lessons wearing the disguise of problems.",
+"Gratitude doesn't deny the hard days; it finds the light inside them.",
+"Say thank you like you mean the whole sentence.",
+"Treat today like a gift you were lucky enough to open.",
+"Wealth begins the moment you notice what you already have."
 ],
 patience:[
 "Patience isn't waiting; it's working calmly while you wait.",
@@ -1752,7 +1910,19 @@ patience:[
 "Patience is betting on tomorrow without abandoning today's effort.",
 "Give the awkward, early stage permission to be awkward and early.",
 "Not everything worth having arrives on your schedule.",
-"Wait with your hands still working, not just your eyes on the clock."
+"Wait with your hands still working, not just your eyes on the clock.",
+"Patience is not waiting; it's trusting the timing while you keep working.",
+"The seed doesn't apologise for the time it takes.",
+"Good things take the time they take.",
+"Steady hands finish faster than rushing ones.",
+"Don't dig up the seed to check if it's growing.",
+"Calm is a superpower in a hurried world.",
+"Rushed things break; patient things last.",
+"Let the process finish its sentence.",
+"Be gentle with your timeline; it's yours alone.",
+"The wait is part of the work.",
+"Take a breath before you answer and a day before you decide.",
+"Patience is love expressed as time."
 ],
 confidence:[
 "Confidence is built in the reps nobody applauded.",
@@ -1804,7 +1974,19 @@ confidence:[
 "Stop shrinking to make other people comfortable.",
 "The calm certainty you're looking for is built, not born.",
 "Confidence is trusting your no as much as your yes.",
-"You don't need to be perfect to be sure of yourself."
+"You don't need to be perfect to be sure of yourself.",
+"Confidence is built by keeping small promises to yourself.",
+"You don't need to be loud to be certain.",
+"Walk in like you belong, because you do.",
+"Preparation is the quiet root of confidence.",
+"Believe in the work you've already done.",
+"Be so familiar with your craft that nerves become excitement.",
+"Self-trust is earned one kept promise at a time.",
+"Take up space without apologising for it.",
+"Confidence isn't knowing you'll win; it's knowing you'll be okay either way.",
+"Your voice is worth the room it takes.",
+"Stand tall, speak plainly, and let your work do the shining.",
+"Doubt is allowed to ride along. It just doesn't get to drive."
 ],
 purpose:[
 "Know your why and the how tends to sort itself out.",
@@ -1856,7 +2038,19 @@ purpose:[
 "Find the work only you, with your exact story, could do this way.",
 "A life with purpose still has bad days; it just has fewer wasted ones.",
 "Ask what the world needs that you're strangely equipped to give.",
-"Purpose is the difference between existing and living on purpose."
+"Purpose is the difference between existing and living on purpose.",
+"Purpose is found by serving something larger than your comfort.",
+"Ask what the world needs, then ask what you can't help but do.",
+"A clear why makes almost any how bearable.",
+"Direction matters more than speed.",
+"Live so that your life reads like something you meant.",
+"Your purpose is where your gifts meet someone's need.",
+"The question isn't 'what do I want?' but 'what is mine to do?'",
+"Meaning isn't found; it's built from what you give your days to.",
+"Know your why, and the what will keep revealing itself.",
+"A purposeful day beats a productive one.",
+"Make a life you'd be proud to describe out loud.",
+"Align your calendar with your convictions."
 ],
 change:[
 "Growth demands a version of you that no longer fits your old habits.",
@@ -1908,7 +2102,19 @@ change:[
 "You can honor where you came from and still move on from it.",
 "The rerouted path is often the one you needed all along.",
 "Growth requires leaving some rooms you've outgrown.",
-"Be willing to disappoint the old plan to honor the new purpose."
+"Be willing to disappoint the old plan to honor the new purpose.",
+"Change is uncomfortable because it's honest.",
+"Don't fear change; fear staying the same while the world moves.",
+"You can't read the next chapter by rereading the last one.",
+"Adapt the method, never the mission.",
+"Every ending is a quiet beginning in disguise.",
+"Be willing to be a beginner again, and again.",
+"The old you got you here; the new you will take you further.",
+"Release what's finished so you have hands free for what's next.",
+"Change begins with one small, unfamiliar choice.",
+"Flexibility is strength wearing soft clothes.",
+"A new season asks for new habits.",
+"Reinvention is just courage with a fresh notebook."
 ],
 perseverance:[
 "Keep going, especially when nobody would blame you for stopping.",
@@ -1960,7 +2166,19 @@ perseverance:[
 "Keep showing up for the goal even when it stops showing up for you.",
 "The path is longer than you hoped, but shorter than you fear.",
 "One more try. That's usually all it takes.",
-"Perseverance is remembering why you started on the days you forget."
+"Perseverance is remembering why you started on the days you forget.",
+"Keep going; the middle is always the hardest part.",
+"Persistence is talent that refuses to quit.",
+"It's not that you failed. It's that you haven't finished.",
+"Keep a steady pace; mountains are climbed one step at a time.",
+"Quitting is a decision. So is continuing. Choose on purpose.",
+"The distance between a dream and reality is called effort.",
+"Grind quietly, shine eventually.",
+"If the path is hard, it's probably leading somewhere worthwhile.",
+"The finish line is built from every unfinished day you showed up for.",
+"Progress hides in the repetition nobody applauds.",
+"Don't stop at the first no; not yet, not like that, not today.",
+"Stay with it long enough for luck to find you working."
 ],
 selfbelief:[
 "Believe in yourself before you have all the proof.",
@@ -2012,7 +2230,19 @@ selfbelief:[
 "You are capable of more than your comfort zone has let you test.",
 "Believe first, and let the proof catch up later.",
 "Trust yourself loudly enough to drown out the quiet doubts.",
-"Self-belief is a muscle; the small wins are its workout."
+"Self-belief is a muscle; the small wins are its workout.",
+"The most important conversation you'll have is the one you have with yourself.",
+"Trust yourself; you've gotten through everything so far.",
+"You are allowed to take your own dreams seriously.",
+"Don't wait for permission to believe in yourself.",
+"Your doubts are loud; your track record is louder.",
+"Back yourself before the evidence arrives.",
+"Self-respect is saying yes to your standards and no to your fears.",
+"You are more capable than your worst day suggests.",
+"Be your own first believer.",
+"Faith in yourself starts as a whisper. Feed it.",
+"You are not behind. You are on your own path.",
+"Become the person who keeps their word to themselves."
 ],
 ambition:[
 "Aim high enough that the attempt itself changes you.",
@@ -2064,7 +2294,19 @@ ambition:[
 "Set the target, then build the ladder to reach it.",
 "Chase the goal that requires you to become someone new.",
 "Ambition is loud in vision and quiet in daily execution.",
-"Want it enough to still be working when the excitement runs out."
+"Want it enough to still be working when the excitement runs out.",
+"Dream large enough that it needs a plan.",
+"Ambition is the bridge between what is and what could be.",
+"Aim higher than is comfortable and train to match.",
+"Hunger is the best teacher you'll ever have.",
+"Raise your standards before you raise your voice.",
+"Big goals shrink when approached one step at a time.",
+"Never apologise for wanting more from your own life.",
+"Keep the hunger, but feed the body that has to carry it.",
+"The summit is a long list of Tuesday mornings.",
+"Don't ask if you're ready; ask if you're willing.",
+"Set a vision that makes your current work feel necessary.",
+"Reach for what makes your heart race and your plan sharper."
 ],
 positivity:[
 "A positive mind finds a way; a negative mind finds an excuse.",
@@ -2116,7 +2358,19 @@ positivity:[
 "Choose the brighter interpretation when both are equally true.",
 "Hope is stubborn optimism with its sleeves rolled up.",
 "Look at today like it's still capable of surprising you well.",
-"A positive mindset is the quiet advantage nobody sees on the scoreboard."
+"A positive mindset is the quiet advantage nobody sees on the scoreboard.",
+"Look for the lesson, then look for the light.",
+"A positive outlook is a decision, not a feeling.",
+"Choose the thought that helps you take the next step.",
+"Joy is practiced, not just found.",
+"The glass isn't half empty or full; it's refillable.",
+"Smile at the morning; it's more likely to smile back.",
+"Optimism is realism with a better plan.",
+"Find three good things before bed and sleep on them.",
+"Be the reason someone's day gets a little lighter.",
+"Positive doesn't mean pretending; it means looking for what's still possible.",
+"A kind word costs nothing and travels a long way.",
+"Even small light changes the whole dark room."
 ]
 };
 
@@ -2142,11 +2396,11 @@ CATS.forEach(cat=>{
 // re-woven later (this is how favorites/downloads survive a page reload).
 function cap(s){ return s.charAt(0).toUpperCase() + s.slice(1); }
 
-const GEN_NOUNS = ["struggle","silence","sunrise","storm","doubt","setback","deadline","detour","pressure","chaos","comfort","fear","failure","habit","distraction","excuse","opportunity","routine","resistance","uncertainty","exhaustion","noise","pain","impatience","burnout","boredom","criticism","rejection","competition","self-doubt","procrastination","fatigue","temptation","isolation","monotony","complacency","overthinking","perfectionism","scarcity","comparison","hesitation","restlessness","apathy","cynicism","fragmentation","stagnation","second-guessing","self-criticism","overwhelm","inertia"];
-const GEN_ACTIONS = ["keep going","show up","try again","stay disciplined","trust the process","push forward","start small","stay consistent","embrace the grind","silence the doubt","outwork the excuse","protect your focus","choose discipline","rise anyway","keep building","stay patient","act today","ignore the noise","finish what you started","bet on yourself","do the work","stay humble","keep showing up","trust your pace","own your mornings","guard your energy","refuse to quit","chase the hard path","build in silence","earn it daily","stay the course","move anyway","keep your word","train your mind","respect the process","choose progress","stay grounded","work unseen","keep climbing","hold the line","stay hungry","adapt and continue","keep your promise","out-discipline the doubt","stay sharp","keep your eyes forward","choose consistency","stay unshaken","rebuild daily","stay committed","take the next step"];
+const GEN_NOUNS = ["struggle","silence","sunrise","storm","doubt","setback","deadline","detour","pressure","chaos","comfort","fear","failure","habit","distraction","excuse","opportunity","routine","resistance","uncertainty","exhaustion","noise","pain","impatience","burnout","boredom","criticism","rejection","competition","self-doubt","procrastination","fatigue","temptation","isolation","monotony","complacency","overthinking","perfectionism","scarcity","comparison","hesitation","restlessness","apathy","cynicism","fragmentation","stagnation","second-guessing","self-criticism","overwhelm","inertia","worry","clutter","envy","regret","hurry","loneliness","skepticism","busyness","disappointment","friction"];
+const GEN_ACTIONS = ["keep going","show up","try again","stay disciplined","trust the process","push forward","start small","stay consistent","embrace the grind","silence the doubt","outwork the excuse","protect your focus","choose discipline","rise anyway","keep building","stay patient","act today","ignore the noise","finish what you started","bet on yourself","do the work","stay humble","keep showing up","trust your pace","own your mornings","guard your energy","refuse to quit","chase the hard path","build in silence","earn it daily","stay the course","move anyway","keep your word","train your mind","respect the process","choose progress","stay grounded","work unseen","keep climbing","hold the line","stay hungry","adapt and continue","keep your promise","out-discipline the doubt","stay sharp","keep your eyes forward","choose consistency","stay unshaken","rebuild daily","stay committed","take the next step","start before you're ready","breathe and begin","keep your head down","show your work","stay curious","keep learning","make it simple","finish strong","rest and return","choose courage"];
 // Kept deliberately article-free (no leading "a"/"an"/"the") so this slot reads cleanly
 // no matter which template position it lands in — "your growth", "into growth", "hides growth".
-const GEN_OUTCOMES = ["growth","strength","clarity","momentum","confidence","freedom","mastery","progress","resilience","purpose","discipline","success","transformation","victory","peace","power","focus","wisdom","character","legacy","evolution","direction","reputation","proof","rhythm","fire","armor","quiet confidence","inner strength","staying power","hard-earned peace","real advantage","undeniable proof","lasting momentum","quiet mastery","renewed energy","fresh perspective","steady progress","deep clarity","genuine confidence","creative freedom","mental toughness","emotional strength","long-term vision","personal growth","self-trust","inner peace","sharper focus","real momentum","lasting change"];
+const GEN_OUTCOMES = ["growth","strength","clarity","momentum","confidence","freedom","mastery","progress","resilience","purpose","discipline","success","transformation","victory","peace","power","focus","wisdom","character","legacy","evolution","direction","reputation","proof","rhythm","fire","armor","quiet confidence","inner strength","staying power","hard-earned peace","real advantage","undeniable proof","lasting momentum","quiet mastery","renewed energy","fresh perspective","steady progress","deep clarity","genuine confidence","creative freedom","mental toughness","emotional strength","long-term vision","personal growth","self-trust","inner peace","sharper focus","real momentum","lasting change","calm","grit","humility","skill","stability","courage","self-respect","depth","belonging","joy"];
 
 const GEN_VIRTUES = {
   motivation:["motivation","drive","inner fire","determination","willpower"],
@@ -3546,11 +3800,33 @@ const QuoteArt = (function(){
     square:   {label:'Square',   sub:'1080×1080 · Instagram / Facebook', w:1080, h:1080},
     portrait: {label:'Portrait', sub:'1080×1350 · Instagram feed 4:5',   w:1080, h:1350},
     story:    {label:'Story',    sub:'1080×1920 · Stories / Status / TikTok', w:1080, h:1920},
-    wide:     {label:'Wide',     sub:'1200×675 · X / LinkedIn',           w:1200, h:675}
+    wide:     {label:'Wide',     sub:'1200×675 · X / LinkedIn',           w:1200, h:675},
+    pin:      {label:'Pin',      sub:'1000×1500 · Pinterest 2:3',          w:1000, h:1500},
+    phone:    {label:'Wallpaper',sub:'1290×2796 · Phone lock screen',      w:1290, h:2796},
+    banner:   {label:'Banner',   sub:'1500×500 · X / LinkedIn cover',      w:1500, h:500},
+    a4:       {label:'Poster A4',sub:'2480×3508 · Print (300 dpi)',        w:2480, h:3508},
+    fbcover:  {label:'Cover',    sub:'1640×624 · Facebook cover',          w:1640, h:624}
   };
   const FONTS = {
     serif:{label:'Elegant', css:(s)=>`italic 500 ${s}px Georgia, "Times New Roman", serif`, lh:1.28},
-    sans: {label:'Modern',  css:(s)=>`700 ${s}px "Helvetica Neue", Helvetica, Arial, sans-serif`, lh:1.24}
+    sans: {label:'Modern',  css:(s)=>`700 ${s}px "Helvetica Neue", Helvetica, Arial, sans-serif`, lh:1.24},
+    playfair:{label:'Playfair', css:(s)=>`italic 600 ${s}px "Playfair Display", Georgia, serif`, lh:1.26, load:['italic 600 40px "Playfair Display"']},
+    cormorant:{label:'Cormorant', css:(s)=>`italic 600 ${s}px "Cormorant Garamond", Georgia, serif`, lh:1.18, load:['italic 600 40px "Cormorant Garamond"'], scale:1.12},
+    lora:{label:'Lora', css:(s)=>`italic 500 ${s}px "Lora", Georgia, serif`, lh:1.3, load:['italic 500 40px "Lora"']},
+    fraunces:{label:'Fraunces', css:(s)=>`italic 600 ${s}px "Fraunces", Georgia, serif`, lh:1.24, load:['italic 600 40px "Fraunces"']},
+    cinzel:{label:'Cinzel', css:(s)=>`normal 600 ${s}px "Cinzel", Georgia, serif`, lh:1.32, load:['normal 600 40px "Cinzel"'], caps:true, scale:.86},
+    bebas:{label:'Bebas', css:(s)=>`normal 400 ${s}px "Bebas Neue", Impact, sans-serif`, lh:1.08, load:['normal 400 40px "Bebas Neue"'], caps:true, scale:1.3},
+    oswald:{label:'Oswald', css:(s)=>`normal 600 ${s}px "Oswald", Impact, sans-serif`, lh:1.15, load:['normal 600 40px "Oswald"'], caps:true, scale:1.02},
+    montserrat:{label:'Montserrat', css:(s)=>`normal 700 ${s}px "Montserrat", Helvetica, Arial, sans-serif`, lh:1.24, load:['normal 700 40px "Montserrat"']},
+    poppins:{label:'Poppins', css:(s)=>`normal 600 ${s}px "Poppins", Helvetica, Arial, sans-serif`, lh:1.26, load:['normal 600 40px "Poppins"']},
+    raleway:{label:'Raleway', css:(s)=>`normal 600 ${s}px "Raleway", Helvetica, Arial, sans-serif`, lh:1.26, load:['normal 600 40px "Raleway"']},
+    archivo:{label:'Archivo Black', css:(s)=>`normal 400 ${s}px "Archivo Black", Impact, sans-serif`, lh:1.2, load:['normal 400 40px "Archivo Black"'], scale:.9},
+    abril:{label:'Abril', css:(s)=>`normal 400 ${s}px "Abril Fatface", Georgia, serif`, lh:1.2, load:['normal 400 40px "Abril Fatface"'], scale:.96},
+    dancing:{label:'Script', css:(s)=>`normal 700 ${s}px "Dancing Script", cursive`, lh:1.22, load:['normal 700 40px "Dancing Script"'], scale:1.12},
+    pacifico:{label:'Pacifico', css:(s)=>`normal 400 ${s}px "Pacifico", cursive`, lh:1.35, load:['normal 400 40px "Pacifico"'], scale:.88},
+    caveat:{label:'Handwritten', css:(s)=>`normal 700 ${s}px "Caveat", cursive`, lh:1.15, load:['normal 700 40px "Caveat"'], scale:1.28},
+    typewriter:{label:'Typewriter', css:(s)=>`normal 400 ${s}px "Special Elite", "Courier New", monospace`, lh:1.3, load:['normal 400 40px "Special Elite"'], scale:.88},
+    spacemono:{label:'Mono', css:(s)=>`normal 700 ${s}px "Space Mono", "Courier New", monospace`, lh:1.32, load:['normal 700 40px "Space Mono"'], scale:.78}
   };
 
   /* ---------- tiny helpers ---------- */
@@ -4080,18 +4356,163 @@ const QuoteArt = (function(){
     ctx.fillStyle = g; ctx.fillRect(0,0,W,H);
   }
 
-  function styleFor(q,variant){
+  /* ---------- V4: extra scenes ---------- */
+  const NEW_SCENES = ['mesh','topo','dunes','moonlake','sunrays','lowpoly','ink','paper','synthwave','lanterns','constellation','cloudsea','fireflies','rainwin','minimal'];
+  const LIGHT_SCENES = {paper:1};
+  Object.assign(SCENES, {
+    mesh(ctx,W,H,P,R,S){
+      ctx.fillStyle = lin(ctx,0,0,W,H,[[0,rgba(P.top)],[1,rgba(P.deep)]]); ctx.fillRect(0,0,W,H);
+      const cols=[P.mid,P.low,P.accent,P.sun,P.top];
+      for(let i=0;i<7;i++){ glow(ctx,R()*W,R()*H,Math.max(W,H)*(.28+R()*.3),cols[i%cols.length],.55+R()*.3); }
+    },
+    topo(ctx,W,H,P,R,S){
+      nightFill(ctx,W,H,P);
+      const f1=2+R()*2, f2=3+R()*3, p1=R()*6, p2=R()*6, step=Math.max(W,H)/46;
+      ctx.lineWidth=1.6*S;
+      for(let k=0;k<26;k++){
+        const lvl=k/26; ctx.beginPath();
+        ctx.strokeStyle=rgba(mix(P.mid,P.sun,lvl),.12+lvl*.4);
+        for(let x=-step;x<=W+step;x+=step/3){
+          let y=H*(.08+lvl*.9)+Math.sin(x/W*f1*Math.PI+p1+lvl*5)*H*.06+Math.sin(x/W*f2*Math.PI+p2-lvl*3)*H*.03;
+          x===-step?ctx.moveTo(x,y):ctx.lineTo(x,y);
+        }
+        ctx.stroke();
+      }
+      glow(ctx,W*(.2+R()*.6),H*.3,Math.max(W,H)*.5,P.accent,.18);
+    },
+    dunes(ctx,W,H,P,R,S){
+      skyFill(ctx,W,H,P,H*.7);
+      const sx=W*(.2+R()*.6), sy=H*(.3+R()*.12);
+      glow(ctx,sx,sy,Math.min(W,H)*.6,P.sun,.5); disc(ctx,sx,sy,Math.min(W,H)*.07,rgba(P.sun,.96));
+      for(let i=0;i<5;i++){
+        const t=i/4; ridge(ctx,W,H,H*(.52+t*.09*3),H*(.06-t*.01),.7+R()*.6,rgba(mix(P.low,P.deep,.18+t*.7)),R,false);
+        if(i<4) fogBand(ctx,W,H*(.5+t*.27),H*(.62+t*.27),P.low,.22);
+      }
+    },
+    moonlake(ctx,W,H,P,R,S){
+      nightFill(ctx,W,H,P); starField(ctx,W,H*.5,R,180,S);
+      const hy=H*.58, mx=W*(.25+R()*.5), my=H*(.22+R()*.12), mr=Math.min(W,H)*.075;
+      glow(ctx,mx,my,mr*9,P.sun,.35); disc(ctx,mx,my,mr,rgba(P.sun,.97));
+      ridge(ctx,W,hy+10,hy,H*.08,1.2,rgba(mix(P.deep,P.top,.2)),R,true);
+      ctx.fillStyle=lin(ctx,0,hy,0,H,[[0,rgba(mix(P.mid,P.deep,.3))],[1,rgba(P.deep)]]); ctx.fillRect(0,hy,W,H-hy);
+      for(let i=0;i<46;i++){ const y=hy+(i/46)*(H-hy)*.9+4, w=mr*(2.4-i*.04)*(.5+R()); ctx.fillStyle=rgba(P.sun,.55-i*.011); ctx.fillRect(mx-w/2+(R()-.5)*mr*.4,y,Math.max(2,w),2*S+i*.04); }
+    },
+    sunrays(ctx,W,H,P,R,S){
+      skyFill(ctx,W,H,P);
+      const cx=W*(.3+R()*.4), cy=H*(.3+R()*.2), n=14+Math.floor(R()*10), off=R()*6, L=Math.max(W,H)*1.4;
+      for(let i=0;i<n;i++){
+        const a=off+i/n*Math.PI*2, w=Math.PI/n*.5;
+        ctx.beginPath(); ctx.moveTo(cx,cy); ctx.arc(cx,cy,L,a,a+w); ctx.closePath();
+        const g=ctx.createRadialGradient(cx,cy,0,cx,cy,L*.6); g.addColorStop(0,rgba(P.sun,.38)); g.addColorStop(1,rgba(P.sun,0)); ctx.fillStyle=g; ctx.fill();
+      }
+      glow(ctx,cx,cy,Math.min(W,H)*.55,P.sun,.7); disc(ctx,cx,cy,Math.min(W,H)*.06,rgba(P.sun,1));
+      ridge(ctx,W,H,H*.86,H*.05,1.4,rgba(P.deep,.9),R,false);
+    },
+    lowpoly(ctx,W,H,P,R,S){
+      const cols=18,rows=Math.round(cols*H/W)+1,cw=W/(cols-1),ch=H/(rows-1),pts=[];
+      for(let r=0;r<rows;r++){ pts[r]=[]; for(let c=0;c<cols;c++){ const edge=r===0||c===0||r===rows-1||c===cols-1; pts[r][c]=[c*cw+(edge?0:(R()-.5)*cw*.8),r*ch+(edge?0:(R()-.5)*ch*.8)]; } }
+      const col=(x,y,j)=>{ const t=Math.min(1,Math.max(0,(x*.4+y)/(W*.4+H)+j)); return t<.5?mix(P.top,P.mid,t*2):mix(P.mid,P.low,(t-.5)*2); };
+      for(let r=0;r<rows-1;r++)for(let c=0;c<cols-1;c++){
+        const a=pts[r][c],b=pts[r][c+1],d=pts[r+1][c],e=pts[r+1][c+1];
+        [[a,b,d],[b,e,d]].forEach(t=>{ const cx=(t[0][0]+t[1][0]+t[2][0])/3, cy=(t[0][1]+t[1][1]+t[2][1])/3;
+          ctx.beginPath(); ctx.moveTo(t[0][0],t[0][1]); ctx.lineTo(t[1][0],t[1][1]); ctx.lineTo(t[2][0],t[2][1]); ctx.closePath();
+          ctx.fillStyle=rgba(col(cx,cy,(R()-.5)*.12)); ctx.fill(); ctx.strokeStyle='rgba(255,255,255,.04)'; ctx.stroke(); });
+      }
+    },
+    ink(ctx,W,H,P,R,S){
+      ctx.fillStyle=lin(ctx,0,0,W,H,[[0,rgba(P.deep)],[1,rgba(mix(P.top,P.deep,.4))]]); ctx.fillRect(0,0,W,H);
+      for(let i=0;i<9;i++){
+        const x=R()*W,y=R()*H,r=Math.max(W,H)*(.12+R()*.3); ctx.save(); ctx.globalCompositeOperation='screen';
+        const g=ctx.createRadialGradient(x,y,0,x,y,r); const c=[P.mid,P.low,P.accent][i%3];
+        g.addColorStop(0,rgba(c,.5)); g.addColorStop(.6,rgba(c,.12)); g.addColorStop(1,rgba(c,0));
+        ctx.fillStyle=g; ctx.beginPath();
+        for(let a=0;a<=Math.PI*2+.1;a+=.12){ const rr=r*(.7+.3*Math.sin(a*3+i)+.15*Math.sin(a*7+i*2)); const px=x+Math.cos(a)*rr,py=y+Math.sin(a)*rr; a===0?ctx.moveTo(px,py):ctx.lineTo(px,py); }
+        ctx.fill(); ctx.restore();
+      }
+    },
+    paper(ctx,W,H,P,R,S){
+      ctx.fillStyle=lin(ctx,0,0,W,H,[[0,rgba(mix(P.sun,[255,250,240],.7))],[1,rgba(mix(P.low,[255,246,232],.65))]]); ctx.fillRect(0,0,W,H);
+      for(let i=0;i<7;i++){ const x=R()*W,y=R()*H,r=Math.max(W,H)*(.15+R()*.25),c=[P.mid,P.accent,P.low][i%3]; glow(ctx,x,y,r,mix(c,[255,255,255],.35),.28); }
+      ctx.strokeStyle=rgba(P.mid,.18); ctx.lineWidth=2*S;
+      for(let i=0;i<3;i++){ ctx.beginPath(); const y=H*(.15+R()*.7); ctx.moveTo(0,y); ctx.bezierCurveTo(W*.3,y-H*.1*R(),W*.7,y+H*.1*R(),W,y+(R()-.5)*H*.2); ctx.stroke(); }
+    },
+    synthwave(ctx,W,H,P,R,S){
+      ctx.fillStyle=lin(ctx,0,0,0,H*.62,[[0,rgba(P.deep)],[.7,rgba(P.mid)],[1,rgba(P.low)]]); ctx.fillRect(0,0,W,H);
+      starField(ctx,W,H*.35,R,60,S);
+      const hy=H*.62, sr=Math.min(W,H)*.2, sx=W/2, sy=hy-sr*.7;
+      glow(ctx,sx,sy,sr*3,P.accent,.5);
+      const g=lin(ctx,0,sy-sr,0,sy+sr,[[0,rgba(P.sun)],[1,rgba(P.accent)]]);
+      ctx.save(); ctx.beginPath(); ctx.arc(sx,sy,sr,0,Math.PI*2); ctx.clip(); ctx.fillStyle=g; ctx.fillRect(sx-sr,sy-sr,sr*2,sr*2);
+      ctx.fillStyle=rgba(P.mid,1); for(let i=0;i<8;i++){ const y=sy+i*sr/8*1.1; ctx.fillRect(sx-sr,y,sr*2,(i+1)*sr*.02+1); } ctx.restore();
+      ctx.fillStyle=rgba(P.deep); ctx.fillRect(0,hy,W,H-hy);
+      ctx.strokeStyle=rgba(P.accent,.75); ctx.lineWidth=2*S;
+      for(let i=-14;i<=14;i++){ ctx.beginPath(); ctx.moveTo(W/2+i*W*.012,hy); ctx.lineTo(W/2+i*W*.14,H); ctx.stroke(); }
+      for(let k=1;k<=12;k++){ const y=hy+Math.pow(k/12,2.2)*(H-hy); ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); }
+    },
+    lanterns(ctx,W,H,P,R,S){
+      nightFill(ctx,W,H,P); starField(ctx,W,H,R,120,S);
+      const n=34;
+      for(let i=0;i<n;i++){
+        const t=R(), x=R()*W, y=H*(.05+Math.pow(R(),.8)*.9), s=Math.min(W,H)*(.014+t*.03);
+        glow(ctx,x,y,s*7,mix(P.low,P.sun,.5),.35+t*.3);
+        ctx.fillStyle=rgba(mix(P.sun,P.accent,.4),.55+t*.4); ctx.beginPath(); ctx.ellipse(x,y,s*.8,s,0,0,Math.PI*2); ctx.fill();
+      }
+    },
+    constellation(ctx,W,H,P,R,S){
+      nightFill(ctx,W,H,P); starField(ctx,W,H,R,160,S);
+      const pts=[]; for(let i=0;i<22;i++) pts.push([W*(.1+R()*.8),H*(.1+R()*.8)]);
+      ctx.strokeStyle=rgba(P.accent,.35); ctx.lineWidth=1.6*S;
+      pts.forEach((p,i)=>{ const near=pts.map((q,j)=>({j,d:Math.hypot(p[0]-q[0],p[1]-q[1])})).filter(o=>o.j!==i).sort((a,b)=>a.d-b.d).slice(0,2);
+        near.forEach(o=>{ ctx.beginPath(); ctx.moveTo(p[0],p[1]); ctx.lineTo(pts[o.j][0],pts[o.j][1]); ctx.stroke(); }); });
+      pts.forEach(p=>{ glow(ctx,p[0],p[1],Math.min(W,H)*.035,P.sun,.6); disc(ctx,p[0],p[1],3.2*S,rgba(P.sun)); });
+    },
+    cloudsea(ctx,W,H,P,R,S){
+      skyFill(ctx,W,H,P,H*.8); starField(ctx,W,H*.3,R,50,S);
+      const sx=W*(.2+R()*.6), sy=H*.38; glow(ctx,sx,sy,Math.min(W,H)*.5,P.sun,.5); disc(ctx,sx,sy,Math.min(W,H)*.05,rgba(P.sun));
+      ridge(ctx,W,H,H*.62,H*.1,1.2,rgba(mix(P.mid,P.deep,.6)),R,true);
+      for(let i=0;i<7;i++){
+        const y=H*(.58+i*.06);
+        for(let k=0;k<26;k++){ const x=R()*W,r=Math.min(W,H)*(.07+R()*.12); glow(ctx,x,y+(R()-.5)*H*.03,r*2,mix(P.low,[255,255,255],.3+i*.06),.28+i*.05); }
+      }
+    },
+    fireflies(ctx,W,H,P,R,S){
+      nightFill(ctx,W,H,P);
+      for(let i=0;i<4;i++) ridge(ctx,W,H,H*(.62+i*.07),H*.05,1+R(),rgba(mix(P.deep,P.mid,.15-i*.03)),R,false);
+      for(let i=0;i<70;i++){ const x=R()*W,y=H*(.35+R()*.6),r=(2+R()*5)*S; glow(ctx,x,y,r*7,P.sun,.45); disc(ctx,x,y,r*.55,rgba(P.sun,.95)); }
+    },
+    rainwin(ctx,W,H,P,R,S){
+      ctx.fillStyle=lin(ctx,0,0,W,H,[[0,rgba(P.deep)],[1,rgba(P.mid)]]); ctx.fillRect(0,0,W,H);
+      for(let i=0;i<40;i++){ glow(ctx,R()*W,R()*H,Math.min(W,H)*(.06+R()*.12),[P.low,P.accent,P.sun][i%3],.45); }
+      ctx.save(); ctx.fillStyle='rgba(10,14,24,.28)'; ctx.fillRect(0,0,W,H); ctx.restore();
+      for(let i=0;i<110;i++){
+        const x=R()*W,y=R()*H,r=(3+R()*9)*S;
+        ctx.fillStyle='rgba(255,255,255,.12)'; ctx.beginPath(); ctx.ellipse(x,y,r*.8,r*1.3,0,0,Math.PI*2); ctx.fill();
+        ctx.strokeStyle='rgba(255,255,255,.35)'; ctx.lineWidth=1.2*S; ctx.beginPath(); ctx.ellipse(x,y,r*.8,r*1.3,0,Math.PI*.1,Math.PI*.9); ctx.stroke();
+        if(R()>.7){ ctx.strokeStyle='rgba(255,255,255,.12)'; ctx.beginPath(); ctx.moveTo(x,y+r*1.3); ctx.lineTo(x+(R()-.5)*4,y+r*1.3+R()*H*.12); ctx.stroke(); }
+      }
+    },
+    minimal(ctx,W,H,P,R,S){
+      ctx.fillStyle=lin(ctx,0,0,W*.3,H,[[0,rgba(mix(P.top,P.deep,.5))],[1,rgba(mix(P.mid,P.deep,.55))]]); ctx.fillRect(0,0,W,H);
+      glow(ctx,W*(.3+R()*.4),H*(.25+R()*.2),Math.max(W,H)*.55,P.accent,.12);
+    }
+  });
+
+  function styleFor(q,variant,ov){
     const R = makeRng(hashString(`${q.id || q.quote || 'quote'}|${variant||0}`));
     const cfg = CAT_STYLE[q.category] || DEFAULT_STYLE;
-    const palKey = pick(R,cfg.pal);
-    const sceneKey = (variant>0 && R()<.45) ? pick(R,ALL_SCENES) : pick(R,cfg.scenes);
+    let palKey = pick(R,cfg.pal);
+    let sceneKey = (variant>0 && R()<.45) ? pick(R,ALL_SCENES) : pick(R,cfg.scenes);
+    const R2 = makeRng(hashString(`${q.id || q.quote || 'quote'}|${variant||0}|v4`));
+    if(R2() < .32) sceneKey = pick(R2,NEW_SCENES);
+    if(ov && ov.scene && SCENES[ov.scene]) sceneKey = ov.scene;
+    if(ov && ov.palette && PALETTES[ov.palette]) palKey = ov.palette;
     return {R, palKey, sceneKey};
   }
 
   /* Paints the background only. */
   function drawArt(ctx,W,H,q,variant,opts){
     opts = opts || {};
-    const st = styleFor(q,variant);
+    const st = styleFor(q,variant,{scene:opts.scene,palette:opts.palette});
     const P = PALETTES[st.palKey], S = Math.min(W,H)/1080;
     ctx.save();
     if(opts.photo){
@@ -4106,7 +4527,7 @@ const QuoteArt = (function(){
     vignette(ctx,W,H,.34);
     if(!opts.thumb && opts.makeCanvas) grain(ctx,W,H,opts.makeCanvas);
     ctx.restore();
-    return {scene:st.sceneKey, palette:st.palKey, P};
+    return {scene:st.sceneKey, palette:st.palKey, P, light:!!LIGHT_SCENES[st.sceneKey]};
   }
 
   /* ---------- text ---------- */
@@ -4149,89 +4570,212 @@ const QuoteArt = (function(){
     ctx.fillText(text,x,y);
   }
 
-  /* Full post: art + scrim + typography. */
+  /* ---------- V4: text style options ---------- */
+  const DEFAULT_STYLE_OPTS = {
+    align:'center', vpos:'middle', caseMode:'font', size:100, tracking:0, color:'auto', accent:'auto',
+    effect:'shadow', panel:'none', scrim:100, grain:true, frame:'line', mark:'quote', divider:'line',
+    header:true, author:true, footer:'THE QUOTE ARCHIVE', filter:'none', scene:'auto', palette:'auto'
+  };
+  const FONT_FILES = {};
+  function ensureFont(key){
+    const f = FONTS[key];
+    if(!f || !f.load || !document.fonts || !document.fonts.load) return Promise.resolve();
+    return Promise.all(f.load.map(s=>document.fonts.load(s,'Aa The quote 123').catch(()=>null))).then(()=>null,()=>null);
+  }
+  function applyCase(t,mode,font){
+    const m = mode==='font' ? (font.caps?'upper':'none') : mode;
+    if(m==='upper') return t.toUpperCase();
+    if(m==='lower') return t.toLowerCase();
+    if(m==='title') return t.replace(/\b([a-z])/g,(x)=>x.toUpperCase());
+    return t;
+  }
+  function roundRect(ctx,x,y,w,h,r){
+    r = Math.min(r,w/2,h/2);
+    ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath();
+  }
+  function applyFilter(ctx,W,H,name){
+    if(!name || name==='none') return;
+    ctx.save();
+    if(name==='bw'){ ctx.globalCompositeOperation='saturation'; ctx.fillStyle='#808080'; ctx.fillRect(0,0,W,H); }
+    else if(name==='warm'){ ctx.globalCompositeOperation='overlay'; ctx.fillStyle='rgba(255,150,60,.32)'; ctx.fillRect(0,0,W,H); }
+    else if(name==='cool'){ ctx.globalCompositeOperation='overlay'; ctx.fillStyle='rgba(60,140,255,.3)'; ctx.fillRect(0,0,W,H); }
+    else if(name==='fade'){ ctx.fillStyle='rgba(255,255,255,.14)'; ctx.fillRect(0,0,W,H); ctx.globalCompositeOperation='saturation'; ctx.fillStyle='rgba(128,128,128,.5)'; ctx.fillRect(0,0,W,H); }
+    else if(name==='dramatic'){ ctx.globalCompositeOperation='multiply'; ctx.fillStyle='rgba(60,60,80,.35)'; ctx.fillRect(0,0,W,H); vignette(ctx,W,H,.6); }
+    ctx.restore();
+  }
+
+  /* Full post: art + scrim + typography. opts.style overrides DEFAULT_STYLE_OPTS (default values reproduce the classic look). */
   function paintPost(canvas,q,opts){
     opts = opts || {};
+    const st = Object.assign({}, DEFAULT_STYLE_OPTS, opts.style || {});
     const fmt = FORMATS[opts.format] || FORMATS.square;
     const font = FONTS[opts.font] || FONTS.serif;
     const W = fmt.w, H = fmt.h, m = Math.min(W,H), S = m/1080;
     canvas.width = W; canvas.height = H;
     const ctx = canvas.getContext('2d');
-    const art = drawArt(ctx,W,H,q,opts.variant||0,{makeCanvas:opts.makeCanvas,photo:opts.photo});
+    const art = drawArt(ctx,W,H,q,opts.variant||0,{makeCanvas:st.grain?opts.makeCanvas:null,photo:(st.scene&&st.scene!=='auto')?null:opts.photo,scene:st.scene,palette:st.palette});
     const P = art.P;
+    applyFilter(ctx,W,H,st.filter);
+    const light = !!art.light;
+    const kScrim = Math.max(0,Math.min(1.6,(Number(st.scrim)||0)/100)) * (light ? .12 : 1);
 
     // legibility scrim
-    ctx.fillStyle = art.photo ? 'rgba(0,0,0,.2)' : 'rgba(0,0,0,.12)'; ctx.fillRect(0,0,W,H);
+    ctx.fillStyle = `rgba(0,0,0,${((art.photo ? .2 : .12)*kScrim).toFixed(3)})`; ctx.fillRect(0,0,W,H);
     const sg = ctx.createRadialGradient(W/2,H/2,0,W/2,H/2,Math.max(W,H)*.6);
-    sg.addColorStop(0,'rgba(0,0,0,.36)'); sg.addColorStop(.6,'rgba(0,0,0,.16)'); sg.addColorStop(1,'rgba(0,0,0,0)');
+    sg.addColorStop(0,`rgba(0,0,0,${(.36*kScrim).toFixed(3)})`); sg.addColorStop(.6,`rgba(0,0,0,${(.16*kScrim).toFixed(3)})`); sg.addColorStop(1,'rgba(0,0,0,0)');
     ctx.fillStyle = sg; ctx.fillRect(0,0,W,H);
+
+    // colours
+    const customCol = /^#[0-9a-f]{6}$/i.test(st.color) ? st.color : null;
+    const dark = !customCol && (light || st.panel==='paper');
+    const ink = customCol || (dark ? '#1c1a24' : '#ffffff');
+    const inkRGB = hexRGB(ink);
+    const accCol = /^#[0-9a-f]{6}$/i.test(st.accent) ? hexRGB(st.accent) : (dark ? mix(P.mid,[0,0,0],.25) : mix(P.accent,[255,255,255],.25));
+    const softInk = rgba(inkRGB,.82);
 
     // frame
     const inset = m*.04;
-    ctx.strokeStyle = 'rgba(255,255,255,.3)'; ctx.lineWidth = 2*S;
-    ctx.strokeRect(inset,inset,W-inset*2,H-inset*2);
+    const frameCol = dark ? 'rgba(20,20,30,.35)' : 'rgba(255,255,255,.3)';
+    ctx.strokeStyle = frameCol; ctx.lineWidth = 2*S;
+    if(st.frame==='line') ctx.strokeRect(inset,inset,W-inset*2,H-inset*2);
+    else if(st.frame==='double'){ ctx.strokeRect(inset,inset,W-inset*2,H-inset*2); ctx.strokeRect(inset*1.6,inset*1.6,W-inset*3.2,H-inset*3.2); }
+    else if(st.frame==='rounded'){ roundRect(ctx,inset,inset,W-inset*2,H-inset*2,m*.05); ctx.stroke(); }
+    else if(st.frame==='solid'){ ctx.strokeStyle = dark ? 'rgba(20,20,30,.9)' : 'rgba(255,255,255,.92)'; ctx.lineWidth = m*.016; ctx.strokeRect(inset*.7,inset*.7,W-inset*1.4,H-inset*1.4); }
+    else if(st.frame==='corners'){
+      const L = m*.08; ctx.strokeStyle = dark ? 'rgba(20,20,30,.7)' : 'rgba(255,255,255,.75)'; ctx.lineWidth = 4*S;
+      [[inset,inset,1,1],[W-inset,inset,-1,1],[inset,H-inset,1,-1],[W-inset,H-inset,-1,-1]].forEach(c=>{ ctx.beginPath(); ctx.moveTo(c[0]+c[2]*L,c[1]); ctx.lineTo(c[0],c[1]); ctx.lineTo(c[0],c[1]+c[3]*L); ctx.stroke(); });
+    }
 
     const LAYOUT = {car:{shift:-.18,area:.36}, lighthouse:{shift:-.03,area:.46}, highway:{shift:-.05,area:.44}, valley:{shift:-.03,area:.46}, city:{shift:-.04,area:.46}}[art.scene] || {shift:0,area:.5};
     const isWide = W > H;
+    const align = ['left','right','center'].includes(st.align) ? st.align : 'center';
     const marginX = W*(isWide ? .12 : .11);
-    const textW = W - marginX*2;
+    const textW = W - marginX*2 - (st.panel!=='none' ? m*.06 : 0);
+    const tx = align==='left' ? marginX : align==='right' ? W-marginX : W/2;
     const author = String(q.author || '').trim();
-    const showAuthor = author && !/^(unattributed|unknown|unknown author|anonymous|n\/a)$/i.test(author);
-    const quoteText = String(q.quote || '').trim();
+    const showAuthor = st.author !== false && author && !/^(unattributed|unknown|unknown author|anonymous|n\/a)$/i.test(author);
+    const quoteText = applyCase(String(q.quote || '').trim(), st.caseMode, font);
     const authorFs = Math.round(m*.033);
-    const markH = m*.1;
-    const areaH = H*(isWide ? Math.min(.5,LAYOUT.area+.06) : LAYOUT.area);
-    const maxFs = Math.round(m*(isWide ? .085 : .088)), minFs = Math.round(m*.032);
+    const markH = st.mark==='none' ? 0 : (st.mark==='big' ? 0 : m*.1);
+    const kSize = Math.max(.5,Math.min(1.5,(Number(st.size)||100)/100));
+    const areaH = H*(isWide ? Math.min(.5,LAYOUT.area+.06) : LAYOUT.area)*(kSize>1?kSize:1);
+    const maxFs = Math.round(m*(isWide ? .085 : .088)*kSize*(font.scale||1)), minFs = Math.round(m*.032*Math.min(1,kSize));
+    const track = (Number(st.tracking)||0)*S;
+    if('letterSpacing' in ctx) ctx.letterSpacing = track+'px';
     const fit = fitQuote(ctx,quoteText,textW,areaH,maxFs,minFs,font);
     const textH = fit.lines.length*fit.fs*font.lh;
     const gap = fit.fs*.8;
-    const blockH = markH + textH + gap + 3*S + (showAuthor ? gap*.7 + authorFs : 0);
-    let y = (H - blockH)/2 + (isWide ? Math.min(0,LAYOUT.shift*.6)*H : (LAYOUT.shift-.01)*H);
-
+    const divH = st.divider==='none' ? 0 : 3*S;
+    const blockH = markH + textH + gap + divH + (showAuthor ? gap*.7 + authorFs : 0);
+    let y;
+    if(st.vpos==='top') y = inset + m*.17;
+    else if(st.vpos==='bottom') y = H - inset - m*.17 - blockH;
+    else y = (H - blockH)/2 + (isWide ? Math.min(0,LAYOUT.shift*.6)*H : (LAYOUT.shift-.01)*H);
     y = Math.max(y, inset + m*.13);
-    ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
+    ctx.textAlign = align==='center' ? 'center' : align; ctx.textBaseline = 'alphabetic';
+
+    // panel behind the text block
+    if(st.panel!=='none'){
+      const pad = m*.04, bx = marginX-pad*.6, bw = W-marginX*2+pad*1.2, by = y-pad*.8, bh = blockH+pad*1.6;
+      ctx.save();
+      roundRect(ctx,bx,by,bw,bh,m*.03);
+      if(st.panel==='glass'){ ctx.fillStyle='rgba(10,12,24,.42)'; ctx.fill(); ctx.strokeStyle='rgba(255,255,255,.22)'; ctx.lineWidth=2*S; ctx.stroke(); }
+      else if(st.panel==='solid'){ ctx.fillStyle='rgba(8,8,16,.78)'; ctx.fill(); }
+      else if(st.panel==='paper'){ ctx.fillStyle='rgba(255,250,242,.94)'; ctx.shadowColor='rgba(0,0,0,.35)'; ctx.shadowBlur=30*S; ctx.shadowOffsetY=8*S; ctx.fill(); }
+      ctx.restore();
+    }
 
     // header / footer labels
-    ctx.shadowColor = 'rgba(0,0,0,.4)'; ctx.shadowBlur = 8*S;
-    ctx.fillStyle = 'rgba(255,255,255,.82)';
-    ctx.font = `600 ${Math.round(m*.021)}px "IBM Plex Mono", ui-monospace, Menlo, monospace`;
-    spaced(ctx,String(q.catLabel || 'Quote').toUpperCase(),W/2,inset+m*.065,m*.006);
-    ctx.fillStyle = 'rgba(255,255,255,.7)';
-    ctx.font = `600 ${Math.round(m*.02)}px "IBM Plex Mono", ui-monospace, Menlo, monospace`;
-    spaced(ctx,'THE QUOTE ARCHIVE',W/2,H-inset-m*.05,m*.007);
-    ctx.shadowBlur = 0;
+    ctx.save();
+    ctx.textAlign = 'center';
+    if('letterSpacing' in ctx) ctx.letterSpacing = '0px';
+    if(!dark){ ctx.shadowColor = 'rgba(0,0,0,.4)'; ctx.shadowBlur = 8*S; }
+    ctx.fillStyle = dark ? 'rgba(20,20,30,.78)' : 'rgba(255,255,255,.82)';
+    if(st.header!==false){
+      ctx.font = `600 ${Math.round(m*.021)}px "IBM Plex Mono", ui-monospace, Menlo, monospace`;
+      spaced(ctx,String(q.catLabel || 'Quote').toUpperCase(),W/2,inset+m*.065,m*.006);
+    }
+    const footerTxt = String(st.footer==null?'':st.footer).trim().slice(0,40);
+    if(footerTxt){
+      ctx.fillStyle = dark ? 'rgba(20,20,30,.7)' : 'rgba(255,255,255,.7)';
+      ctx.font = `600 ${Math.round(m*.02)}px "IBM Plex Mono", ui-monospace, Menlo, monospace`;
+      spaced(ctx,footerTxt.toUpperCase(),W/2,H-inset-m*.05,m*.007);
+    }
+    ctx.restore();
 
     // opening mark
-    ctx.fillStyle = rgba(mix(P.accent,[255,255,255],.25),.95);
-    ctx.font = `700 ${Math.round(m*.2)}px Georgia, "Times New Roman", serif`;
-    ctx.fillText('\u201C',W/2,y+markH*1.12);
+    const ac = rgba(accCol,.95);
+    if(st.mark==='quote' || st.mark==='big'){
+      ctx.save();
+      if('letterSpacing' in ctx) ctx.letterSpacing = '0px';
+      ctx.fillStyle = st.mark==='big' ? rgba(accCol,.22) : ac;
+      ctx.font = `700 ${Math.round(m*(st.mark==='big'?.55:.2))}px Georgia, "Times New Roman", serif`;
+      if(st.mark==='big') ctx.fillText('“',tx + (align==='left'?-m*.02:align==='right'?m*.02:0), y + m*.36);
+      else ctx.fillText('“',tx,y+markH*1.12);
+      ctx.restore();
+    } else if(st.mark==='bar'){
+      ctx.fillStyle = ac; const bw=m*.1, bx = align==='left'?tx:align==='right'?tx-bw:tx-bw/2; ctx.fillRect(bx,y+markH*.4,bw,5*S);
+    }
     y += markH;
 
-    // quote
-    ctx.shadowColor = 'rgba(0,0,0,.5)'; ctx.shadowBlur = 14*S; ctx.shadowOffsetY = 2*S;
-    ctx.fillStyle = '#ffffff'; ctx.font = font.css(fit.fs);
-    fit.lines.forEach((ln,i)=>{ ctx.fillText(ln,W/2,y+fit.fs*.92+i*fit.fs*font.lh); });
+    // quote text with effect
+    if('letterSpacing' in ctx) ctx.letterSpacing = track+'px';
+    ctx.font = font.css(fit.fs);
+    const fx = st.effect;
+    const baseY = i => y+fit.fs*.92+i*fit.fs*font.lh;
+    ctx.save();
+    if(fx==='shadow' && !dark){ ctx.shadowColor = 'rgba(0,0,0,.5)'; ctx.shadowBlur = 14*S; ctx.shadowOffsetY = 2*S; }
+    else if(fx==='shadow'){ ctx.shadowColor = 'rgba(255,255,255,.35)'; ctx.shadowBlur = 6*S; }
+    else if(fx==='glow'){ ctx.shadowColor = rgba(accCol,.95); ctx.shadowBlur = 34*S; }
+    else if(fx==='hard'){ ctx.shadowColor = dark ? 'rgba(255,255,255,.55)' : 'rgba(0,0,0,.65)'; ctx.shadowBlur = 0; ctx.shadowOffsetX = 5*S; ctx.shadowOffsetY = 5*S; }
+    fit.lines.forEach((ln,i)=>{
+      const by = baseY(i);
+      if(fx==='highlight'){
+        const wid = ctx.measureText(ln).width, padX = fit.fs*.22;
+        const x0 = align==='center' ? tx-wid/2 : align==='left' ? tx : tx-wid;
+        ctx.save(); ctx.shadowColor='transparent'; ctx.fillStyle = rgba(accCol,.92);
+        ctx.fillRect(x0-padX,by-fit.fs*.86,wid+padX*2,fit.fs*font.lh*.98); ctx.restore();
+        ctx.fillStyle = '#14111f';
+      } else if(fx==='gradient'){
+        const g = ctx.createLinearGradient(0,by-fit.fs,0,by+fit.fs*.2);
+        g.addColorStop(0,rgba(mix(P.sun,[255,255,255],.7))); g.addColorStop(1,rgba(mix(P.accent,[255,255,255],.35)));
+        ctx.fillStyle = customCol || g;
+      } else ctx.fillStyle = ink;
+      if(fx==='outline'){
+        ctx.save(); ctx.lineJoin='round'; ctx.lineWidth = Math.max(3,fit.fs*.1); ctx.strokeStyle = dark ? 'rgba(255,255,255,.9)' : 'rgba(0,0,0,.75)'; ctx.strokeText(ln,tx,by); ctx.restore();
+      }
+      ctx.fillText(ln,tx,by);
+      if(fx==='glow'){ ctx.fillText(ln,tx,by); }
+    });
+    ctx.restore();
     y += textH + gap;
-    ctx.shadowBlur = 0; ctx.shadowOffsetY = 0;
+    if('letterSpacing' in ctx) ctx.letterSpacing = '0px';
 
-    // divider + author
-    ctx.fillStyle = rgba(mix(P.accent,[255,255,255],.2),.95);
-    ctx.fillRect(W/2-m*.05,y,m*.1,3*S);
-    y += 3*S + gap*.7 + authorFs*.8;
+    // divider
+    if(st.divider!=='none'){
+      ctx.fillStyle = rgba(accCol,.95); ctx.strokeStyle = rgba(accCol,.95);
+      const dw = m*.1, dx = align==='left'?tx:align==='right'?tx-dw:tx-dw/2;
+      if(st.divider==='line') ctx.fillRect(dx,y,dw,3*S);
+      else if(st.divider==='dots'){ for(let i=0;i<3;i++){ ctx.beginPath(); ctx.arc(dx+dw*(.2+i*.3),y+1.5*S,4.5*S,0,Math.PI*2); ctx.fill(); } }
+      else if(st.divider==='diamond'){ ctx.fillRect(dx,y+1*S,dw*.36,2*S); ctx.fillRect(dx+dw*.64,y+1*S,dw*.36,2*S); ctx.save(); ctx.translate(dx+dw/2,y+1.5*S); ctx.rotate(Math.PI/4); ctx.fillRect(-6*S,-6*S,12*S,12*S); ctx.restore(); }
+      else if(st.divider==='wave'){ ctx.lineWidth=3*S; ctx.beginPath(); for(let i=0;i<=40;i++){ const px=dx+dw*i/40, py=y+Math.sin(i/40*Math.PI*4)*5*S; i?ctx.lineTo(px,py):ctx.moveTo(px,py); } ctx.stroke(); }
+    }
+    y += divH + gap*.7 + authorFs*.8;
+
     if(showAuthor){
-    ctx.shadowColor = 'rgba(0,0,0,.45)'; ctx.shadowBlur = 8*S;
-    ctx.fillStyle = rgba(mix(P.sun,[255,255,255],.4),.98);
-    ctx.font = `700 ${authorFs}px "Helvetica Neue", Helvetica, Arial, sans-serif`;
-    let a = author.toUpperCase();
-    ctx.font = `700 ${authorFs}px "Helvetica Neue", Helvetica, Arial, sans-serif`;
-    while(a.length>1 && ctx.measureText(a).width > textW){ a = a.slice(0,-2).trimEnd()+'…'; }
-    spaced(ctx,a,W/2,y,authorFs*.16);
-    ctx.shadowBlur = 0;
+      ctx.save();
+      if(!dark){ ctx.shadowColor = 'rgba(0,0,0,.45)'; ctx.shadowBlur = 8*S; }
+      ctx.fillStyle = customCol ? rgba(inkRGB,.9) : (dark ? rgba(mix(P.mid,[0,0,0],.35),.98) : rgba(mix(P.sun,[255,255,255],.4),.98));
+      ctx.font = `700 ${authorFs}px "Helvetica Neue", Helvetica, Arial, sans-serif`;
+      let a = author.toUpperCase();
+      while(a.length>1 && ctx.measureText(a).width > textW){ a = a.slice(0,-2).trimEnd()+'…'; }
+      spaced(ctx,a,tx,y,authorFs*.16);
+      ctx.restore();
     }
     return {scene:art.scene, palette:art.palette};
   }
 
-  return {FORMATS, FONTS, CAT_STYLE, PALETTES, SCENES, drawArt, paintPost, hashString};
+  return {FORMATS, FONTS, CAT_STYLE, PALETTES, SCENES, NEW_SCENES, ALL_SCENES, DEFAULT_STYLE_OPTS, drawArt, paintPost, hashString, ensureFont};
 })();
 
 /* ===================== POST STUDIO / DOWNLOAD ===================== */
@@ -4370,7 +4914,7 @@ fetch('photos/manifest.json', {cache:'no-cache'}).then(r => r.ok ? r.json() : []
 
 function buildPostCanvas(q){
   const canvas = document.createElement('canvas');
-  QuoteArt.paintPost(canvas, q, {format:artPrefs.format, font:artPrefs.font, variant:artVariantFor(q.id), makeCanvas:artMakeCanvas, photo:artPhotoFor(q)});
+  QuoteArt.paintPost(canvas, q, {format:artPrefs.format, font:artPrefs.font, variant:artVariantFor(q.id), makeCanvas:artMakeCanvas, photo:artPhotoFor(q), style:artPrefs.style});
   return canvas;
 }
 async function saveCanvasPng(canvas, fileName){
@@ -4399,7 +4943,7 @@ async function downloadCard(q){
     return;
   }
   let canvas;
-  try{ await ensureArtPhoto(q); canvas = buildPostCanvas(q); }
+  try{ await ensureArtPhoto(q); await QuoteArt.ensureFont(artPrefs.font); canvas = buildPostCanvas(q); }
   catch(err){ console.warn(err); setStatus('Could not create the card image in this browser.'); return; }
   const ok = await saveCanvasPng(canvas, postFileName(q));
   if(!ok){ setStatus('The browser blocked the card download. Try using a modern browser or save the image manually.'); return; }
@@ -4471,12 +5015,12 @@ psFormats.innerHTML = Object.keys(QuoteArt.FORMATS).map(k => {
   return `<button type="button" class="ps-chip" data-format="${k}" aria-pressed="false"><b>${f.label}</b><small>${f.sub}</small></button>`;
 }).join('');
 psFonts.innerHTML = Object.keys(QuoteArt.FONTS).map(k =>
-  `<button type="button" class="ps-chip small" data-font="${k}" aria-pressed="false"><b>${QuoteArt.FONTS[k].label}</b></button>`
+  `<button type="button" class="ps-chip small" data-font="${k}" aria-pressed="false"><b style="font-family:${(QuoteArt.FONTS[k].css(16).match(/\d+px (.*)$/)||[0,'inherit'])[1]};font-style:${/italic/.test(QuoteArt.FONTS[k].css(16))?'italic':'normal'}">${QuoteArt.FONTS[k].label}</b></button>`
 ).join('');
 
 function renderStudio(){
   if(!psQuote) return;
-  const info = QuoteArt.paintPost(psCanvas, psQuote, {format:artPrefs.format, font:artPrefs.font, variant:artVariantFor(psQuote.id), makeCanvas:artMakeCanvas, photo:artPhotoFor(psQuote)});
+  const info = QuoteArt.paintPost(psCanvas, psQuote, {format:artPrefs.format, font:artPrefs.font, variant:artVariantFor(psQuote.id), makeCanvas:artMakeCanvas, photo:artPhotoFor(psQuote), style:artPrefs.style});
   const imgState = artImageStatus(psQuote);
   const srcName = {ai:'AI-generated image', photo:'Real photo', local:'Your photo'}[artPrefs.source];
   psStyleName.textContent = `${info.scene === 'photo' ? srcName : (ART_SCENE_NAMES[info.scene] || info.scene)} · look #${artVariantFor(psQuote.id) + 1}`;
@@ -4609,6 +5153,124 @@ document.addEventListener('click', e => {
 document.getElementById('qotdPost').addEventListener('click', () => { if(qotdItem) openPostStudio(qotdItem); });
 document.getElementById('quoteDetailPost').addEventListener('click', () => { if(detailQuote) openPostStudio(detailQuote); });
 
+
+/* ---------- V4: advanced Post Studio controls ---------- */
+const PS_PRESETS = {
+  classic:{label:'Classic', font:'serif', style:{}},
+  poster:{label:'Bold poster', font:'bebas', style:{effect:'hard', align:'left', mark:'bar', divider:'none', frame:'solid', size:105}},
+  minimal:{label:'Minimal', font:'raleway', style:{effect:'none', frame:'none', mark:'none', align:'left', size:88, scrim:120, divider:'line'}},
+  glass:{label:'Glass card', font:'poppins', style:{panel:'glass', effect:'none', frame:'rounded', mark:'none', divider:'dots', size:92}},
+  neon:{label:'Neon', font:'oswald', style:{effect:'glow', mark:'none', divider:'wave', scene:'synthwave', frame:'none'}},
+  paper:{label:'Paper note', font:'lora', style:{panel:'paper', effect:'none', frame:'none', mark:'big', divider:'dots', scene:'paper', size:88}},
+  cinema:{label:'Cinema', font:'cinzel', style:{effect:'shadow', frame:'corners', divider:'diamond', filter:'dramatic', mark:'none', scrim:110}},
+  hand:{label:'Handwritten', font:'caveat', style:{effect:'shadow', mark:'big', divider:'wave', frame:'none'}},
+  gold:{label:'Gold leaf', font:'playfair', style:{effect:'gradient', frame:'double', divider:'diamond', mark:'quote'}},
+  type:{label:'Typewriter', font:'typewriter', style:{effect:'none', align:'left', mark:'none', divider:'line', frame:'line', size:90, caseMode:'none'}}
+};
+(function(){
+  const defaults = QuoteArt.DEFAULT_STYLE_OPTS;
+  const saved = safeReadJSON('dqa_post_style_v4', {});
+  artPrefs.style = Object.assign({}, defaults);
+  if(saved && typeof saved === 'object' && !Array.isArray(saved)){
+    Object.keys(defaults).forEach(k => { if(k in saved && typeof saved[k] === typeof defaults[k]) artPrefs.style[k] = k === 'footer' ? String(saved[k]).slice(0,40) : saved[k]; });
+  }
+})();
+const _origSaveArtPrefs = saveArtPrefs;
+saveArtPrefs = function(){ _origSaveArtPrefs(); safeWriteJSON('dqa_post_style_v4', artPrefs.style); };
+Object.assign(ART_SCENE_NAMES, {mesh:'Gradient mesh',topo:'Topographic lines',dunes:'Desert dunes',moonlake:'Moon over the lake',sunrays:'Sun rays',lowpoly:'Low-poly',ink:'Ink clouds',paper:'Soft paper',synthwave:'Synthwave',lanterns:'Floating lanterns',constellation:'Constellation',cloudsea:'Sea of clouds',fireflies:'Fireflies',rainwin:'Rainy window',minimal:'Minimal gradient'});
+
+const psAdvanced = document.getElementById('psAdvanced');
+const PS_OPTIONS = {
+  align:['Align',[['left','Left'],['center','Centre'],['right','Right']]],
+  vpos:['Position',[['top','Top'],['middle','Middle'],['bottom','Bottom']]],
+  caseMode:['Letters',[['font','Font default'],['none','As written'],['upper','UPPERCASE'],['lower','lowercase'],['title','Title Case']]],
+  effect:['Text effect',[['shadow','Soft shadow'],['none','None'],['glow','Glow'],['outline','Outline'],['hard','Hard shadow'],['highlight','Highlight'],['gradient','Gold gradient']]],
+  panel:['Text panel',[['none','None'],['glass','Glass'],['solid','Dark'],['paper','Paper']]],
+  frame:['Frame',[['line','Thin line'],['none','None'],['double','Double'],['rounded','Rounded'],['solid','Thick'],['corners','Corners']]],
+  mark:['Quote mark',[['quote','Classic “'],['big','Large faded'],['bar','Bar'],['none','None']]],
+  divider:['Divider',[['line','Line'],['dots','Dots'],['diamond','Diamond'],['wave','Wave'],['none','None']]],
+  filter:['Photo filter',[['none','None'],['bw','Black & white'],['warm','Warm'],['cool','Cool'],['fade','Faded'],['dramatic','Dramatic']]]
+};
+const PS_SLIDERS = {size:['Text size',60,140,2,'%'], tracking:['Letter spacing',-2,14,1,'px'], scrim:['Text shade',0,150,5,'%']};
+function psOptHTML(key){
+  const [label,opts] = PS_OPTIONS[key];
+  return `<div class="ps-sub"><span class="ps-sublabel">${label}</span><div class="ps-chips" data-opt="${key}">${opts.map(o=>`<button type="button" class="ps-chip small" data-v="${o[0]}" aria-pressed="false"><b>${o[1]}</b></button>`).join('')}</div></div>`;
+}
+function psSliderHTML(key){
+  const [label,min,max,step,unit] = PS_SLIDERS[key];
+  return `<label class="ps-slider"><span class="ps-sublabel">${label} <output data-out="${key}"></output></span><input type="range" data-slider="${key}" min="${min}" max="${max}" step="${step}"></label>`;
+}
+if(psAdvanced){
+  const sceneOpts = ['<option value="auto">Automatic (varies per quote)</option>'].concat(QuoteArt.ALL_SCENES.concat(QuoteArt.NEW_SCENES).map(k=>`<option value="${k}">${ART_SCENE_NAMES[k]||k}</option>`)).join('');
+  const palOpts = ['<option value="auto">Automatic</option>'].concat(Object.keys(QuoteArt.PALETTES).map(k=>`<option value="${k}">${k.charAt(0).toUpperCase()+k.slice(1)}</option>`)).join('');
+  psAdvanced.innerHTML = `
+    <div class="ps-group"><span class="ps-label">Quick looks</span><div class="ps-chips" id="psPresets">${Object.keys(PS_PRESETS).map(k=>`<button type="button" class="ps-chip small" data-preset="${k}"><b>${PS_PRESETS[k].label}</b></button>`).join('')}</div></div>
+    <details class="ps-adv" open><summary>Layout</summary>${psOptHTML('align')}${psOptHTML('vpos')}${psOptHTML('caseMode')}${psSliderHTML('size')}${psSliderHTML('tracking')}</details>
+    <details class="ps-adv"><summary>Effects, panel &amp; frame</summary>${psOptHTML('effect')}${psOptHTML('panel')}${psOptHTML('frame')}${psOptHTML('mark')}${psOptHTML('divider')}${psSliderHTML('scrim')}</details>
+    <details class="ps-adv"><summary>Colours &amp; extras</summary>
+      <div class="ps-sub"><span class="ps-sublabel">Text colour</span><div class="ps-row"><input type="color" id="psColor" value="#ffffff" aria-label="Text colour"><button type="button" class="btn ghost" id="psColorAuto">Auto</button></div></div>
+      <div class="ps-sub"><span class="ps-sublabel">Accent colour</span><div class="ps-row"><input type="color" id="psAccent" value="#ffcf6b" aria-label="Accent colour"><button type="button" class="btn ghost" id="psAccentAuto">Auto</button></div></div>
+      <div class="ps-sub"><span class="ps-sublabel">Footer text</span><input type="text" id="psFooter" maxlength="40" placeholder="Your name or @handle" class="ps-input"></div>
+      <div class="ps-sub ps-toggles"><label><input type="checkbox" id="psTHeader"> Drawer label on top</label><label><input type="checkbox" id="psTAuthor"> Show author</label><label><input type="checkbox" id="psTGrain"> Film grain</label></div>
+      ${psOptHTML('filter')}
+    </details>
+    <details class="ps-adv"><summary>Background look</summary>
+      <div class="ps-sub"><span class="ps-sublabel">Scene</span><select id="psScene" class="ps-input">${sceneOpts}</select></div>
+      <div class="ps-sub"><span class="ps-sublabel">Colour palette</span><select id="psPalette" class="ps-input">${palOpts}</select></div>
+    </details>
+    <div class="ps-row"><button type="button" class="btn ghost" id="psStyleReset">↺ Reset text style</button></div>`;
+}
+function psSyncAdvanced(){
+  if(!psAdvanced) return;
+  const st = artPrefs.style;
+  psAdvanced.querySelectorAll('[data-opt]').forEach(g => g.querySelectorAll('[data-v]').forEach(b => b.setAttribute('aria-pressed', String(st[g.dataset.opt] === b.dataset.v))));
+  psAdvanced.querySelectorAll('[data-slider]').forEach(r => { r.value = st[r.dataset.slider]; const o = psAdvanced.querySelector(`[data-out="${r.dataset.slider}"]`); if(o) o.textContent = r.value + PS_SLIDERS[r.dataset.slider][4]; });
+  const c = document.getElementById('psColor'), a = document.getElementById('psAccent');
+  if(/^#[0-9a-f]{6}$/i.test(st.color)) c.value = st.color;
+  if(/^#[0-9a-f]{6}$/i.test(st.accent)) a.value = st.accent;
+  document.getElementById('psColorAuto').setAttribute('aria-pressed', String(st.color === 'auto'));
+  document.getElementById('psAccentAuto').setAttribute('aria-pressed', String(st.accent === 'auto'));
+  document.getElementById('psFooter').value = st.footer;
+  document.getElementById('psTHeader').checked = st.header !== false;
+  document.getElementById('psTAuthor').checked = st.author !== false;
+  document.getElementById('psTGrain').checked = st.grain !== false;
+  document.getElementById('psScene').value = st.scene; document.getElementById('psPalette').value = st.palette;
+  psAdvanced.querySelectorAll('[data-preset]').forEach(b => { const p = PS_PRESETS[b.dataset.preset]; b.setAttribute('aria-pressed', String(artPrefs.font === p.font && Object.keys(QuoteArt.DEFAULT_STYLE_OPTS).every(k => (k in p.style ? p.style[k] : QuoteArt.DEFAULT_STYLE_OPTS[k]) === st[k] || k === 'footer'))); });
+}
+function psSetStyle(patch){ Object.assign(artPrefs.style, patch); saveArtPrefs(); renderStudio(); }
+if(psAdvanced){
+  psAdvanced.addEventListener('click', e => {
+    const o = e.target.closest('[data-opt] [data-v]');
+    if(o){ psSetStyle({[o.parentElement.dataset.opt]: o.dataset.v}); return; }
+    const p = e.target.closest('[data-preset]');
+    if(p){ const pr = PS_PRESETS[p.dataset.preset]; artPrefs.font = pr.font; artPrefs.style = Object.assign({}, QuoteArt.DEFAULT_STYLE_OPTS, {footer:artPrefs.style.footer}, pr.style); saveArtPrefs(); renderStudio(); return; }
+    if(e.target.id === 'psColorAuto'){ psSetStyle({color:'auto'}); return; }
+    if(e.target.id === 'psAccentAuto'){ psSetStyle({accent:'auto'}); return; }
+    if(e.target.id === 'psStyleReset'){ artPrefs.style = Object.assign({}, QuoteArt.DEFAULT_STYLE_OPTS); artPrefs.font = 'serif'; saveArtPrefs(); renderStudio(); }
+  });
+  psAdvanced.addEventListener('input', e => {
+    const t = e.target;
+    if(t.dataset && t.dataset.slider){ psSetStyle({[t.dataset.slider]: Number(t.value)}); }
+    else if(t.id === 'psColor') psSetStyle({color:t.value});
+    else if(t.id === 'psAccent') psSetStyle({accent:t.value});
+    else if(t.id === 'psFooter') psSetStyle({footer:t.value.slice(0,40)});
+    else if(t.id === 'psTHeader') psSetStyle({header:t.checked});
+    else if(t.id === 'psTAuthor') psSetStyle({author:t.checked});
+    else if(t.id === 'psTGrain') psSetStyle({grain:t.checked});
+  });
+  psAdvanced.addEventListener('change', e => {
+    if(e.target.id === 'psScene') psSetStyle({scene:e.target.value});
+    else if(e.target.id === 'psPalette') psSetStyle({palette:e.target.value});
+  });
+}
+const _fontReady = {};
+const _origRenderStudio = renderStudio;
+renderStudio = function(){
+  _origRenderStudio();
+  psSyncAdvanced();
+  const k = artPrefs.font;
+  if(!_fontReady[k]){ _fontReady[k] = true; QuoteArt.ensureFont(k).then(() => { if(psQuote) _origRenderStudio(); }); }
+};
 
 /* ===================== FOCUS MODE ===================== */
 const focusOverlay = document.getElementById('focusOverlay');
@@ -5820,5 +6482,6 @@ renderRecentQuotes();
 
 
 </script>
+<script src="v4.js"></script>
 </body>
 </html>

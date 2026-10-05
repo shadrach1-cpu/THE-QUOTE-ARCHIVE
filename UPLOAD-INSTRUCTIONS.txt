@@ -1,0 +1,59 @@
+THE QUOTE ARCHIVE — V4 UPLOAD FOLDER
+====================================
+Everything in this folder keeps the same layout as your GitHub repository.
+
+HOW TO UPLOAD (GitHub website, no tools needed)
+1. Open https://github.com/shadrach1-cpu/THE-QUOTE-ARCHIVE
+2. Add file -> Upload files
+3. Drag in the CONTENTS of this folder (index.html, sw.js, v4.js, v4.css, manifest.json,
+   and the photos and music folders). GitHub keeps the folder structure.
+   Do NOT upload this UPLOAD-INSTRUCTIONS.txt file (harmless, but not needed).
+4. Commit changes. Wait 1-2 minutes for GitHub Pages to rebuild.
+5. Open the site and press Ctrl+Shift+R (hard refresh) once so the new version loads.
+
+WHAT THIS REPLACES
+- index.html and sw.js are updated; v4.js and v4.css are new files (they MUST be uploaded
+  together with index.html or the new features will not appear).
+- manifest.json (root) is the corrected 779-byte PWA file (the one in the repo was wrong).
+- photos/manifest.json + 40 photos/illustrated-*.jpg switch on the illustrated backgrounds.
+- music/tracks.json is an empty list. To add songs later: put the mp3 in /music and list it, e.g.
+  [{"file":"music/my-song.mp3","title":"My Song"}]
+  Only add music you own or that is licensed for public use.
+
+NEW IN V4
+- Post Studio: 17 more fonts, 15 new backgrounds, 5 new sizes, quick looks, effects, panels,
+  frames, colours, alignment, footer text, filters
+- 240 new quotes (1,060 total) and bigger generator word banks
+- Command menu (Ctrl/Cmd+K), shortcuts help (?), notes, collections, your own quotes,
+  backup/restore, insights, missing-word game, read aloud, auto-advance in Focus Mode,
+  ambience mixer + generative radio + sleep timer, accent colours and accessibility options
+
+BROKEN IMAGES TO DELETE FROM YOUR GITHUB REPO
+(these are screenshots of galleries with several pictures stitched together; they are no longer used)
+Delete each from the photos/ folder AND from the repo root if a copy exists there:
+ - neon-skyline-bridge.jpg
+ - milkyway-tent.jpg
+ - waterfall-tiers.jpg
+ - ai-robot.jpg
+ - coastal-road-aerial.jpg
+ - wolf-portrait.jpg
+ - yacht-sunset.jpg
+ - green-valley-river.jpg
+ - tower-skyline-dusk.jpg
+ - paraglider-coast.jpg
+ - ocean-wave.jpg
+ - modern-living-room.jpg
+ - eagle-portrait.jpg
+ - camel-caravan-sunset.jpg
+ - lakeside-campfire.jpg
+ - forest-road-mountains.jpg
+ - brain-circuit.jpg
+
+The 53 other real photos in photos/ are included here with a thin white edge sliver trimmed off; upload them to replace the old ones.
+
+NEW MUSIC AND PHOTOS (added later)
+- music/: 21 new Pixabay tracks + music/tracks.json (the site adds them to the music player automatically,
+  so the player now has 43 tracks). Upload the music folder contents.
+- photos/: 19 new Pixabay landscape photos (pixabay-*.jpg, resized to 1920px) + updated photos/manifest.json.
+- CREDITS.txt: who made each track/photo (Pixabay Content License). Upload it to the repo root.
+GitHub's web uploader accepts up to 100 files per upload, so upload music, photos and the rest in separate rounds if needed.

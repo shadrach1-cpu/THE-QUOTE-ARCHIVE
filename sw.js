@@ -1,4 +1,4 @@
-const CACHE_NAME = 'quote-archive-v2-5-post-images';
+const CACHE_NAME = 'quote-archive-v4-studio';
 const APP_SHELL = [
   './',
   './index.html',
@@ -6,7 +6,9 @@ const APP_SHELL = [
   './license.html',
   './LICENSE.txt',
   './icon-192.png',
-  './icon-512.png'
+  './icon-512.png',
+  './v4.js',
+  './v4.css'
 ];
 
 self.addEventListener('install', (event) => {
