@@ -6005,8 +6005,12 @@ async function hydrateHumanLibrary(){
   humanLibraryHydrationPromise=(async()=>{
     const records=await vaultGetAll(HUMAN_LIBRARY_CLIENT_LOAD_LIMIT);
     let added=0;
+    // Look up existing ids in a Set: checking each record with findQuote()
+    // scanned the whole list every time and froze the page with large vaults.
+    const knownIds=new Set(quotes.map(q=>q.id));
     for(const record of records){
-      if(!record?.quote || findQuote(record.id)) continue;
+      if(!record?.quote || knownIds.has(record.id)) continue;
+      knownIds.add(record.id);
       const q=humanRecordToQuote(record);
       quotes.push(q); added++;
     }
