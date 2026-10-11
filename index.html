@@ -6483,5 +6483,163 @@ renderRecentQuotes();
 
 </script>
 <script src="v4.js"></script>
+<script>
+/* ===================== ARCHIVE SERVER CONNECTION =====================
+   Connects this page to THE QUOTE ARCHIVE's own backend (Render + Neon).
+   - Read-only: only public GET endpoints are used; no keys or secrets here.
+   - Optional: if the server is asleep, slow or offline, the built-in archive
+     keeps working exactly as before. Nothing here blocks page load.
+   - Server results are added to the in-page list (not to the local vault),
+     de-duplicated against quotes already shown.
+*/
+(function connectArchiveServer(){
+  const API = 'https://quote-archive-api.onrender.com/api/v1';
+  const SOURCE = {
+    id: 'archive-server', label: 'THE QUOTE ARCHIVE server',
+    license: 'See the source record for licence details',
+    url: 'https://shadrach1-cpu.github.io/THE-QUOTE-ARCHIVE/', licenseUrl: ''
+  };
+  const MIN_TERM = 3;
+  let online = false;
+  let searchTimer = null;
+  let lastTerm = '';
+
+  async function apiGet(path, timeoutMs){
+    const ctrl = typeof AbortController === 'function' ? new AbortController() : null;
+    const timer = ctrl ? setTimeout(() => ctrl.abort(), timeoutMs) : null;
+    try{
+      const res = await fetch(API + path, {mode:'cors', cache:'no-store', signal: ctrl?.signal});
+      if(!res.ok) throw new Error('Archive server responded ' + res.status);
+      return await res.json();
+    }finally{ if(timer) clearTimeout(timer); }
+  }
+
+  // Status line under the Human Quote Library text.
+  let statusEl = document.getElementById('archiveServerStatus');
+  if(!statusEl){
+    const anchor = document.getElementById('libraryStatus');
+    if(anchor){
+      statusEl = document.createElement('p');
+      statusEl.className = 'library-status';
+      statusEl.id = 'archiveServerStatus';
+      statusEl.setAttribute('aria-live', 'polite');
+      anchor.insertAdjacentElement('afterend', statusEl);
+    }
+  }
+  function setServerStatus(html){ if(statusEl) statusEl.innerHTML = '<strong>Archive server:</strong> ' + html; }
+
+  function seenSet(){
+    if(!appendExternalQuote._seen){
+      appendExternalQuote._seen = new Set(quotes.map(q => normalizeSearchText(q.quote)).filter(Boolean));
+    }
+    return appendExternalQuote._seen;
+  }
+
+  function drawerFor(item){
+    const names = (item.categories || []).map(c => String(c.name || '').toLowerCase());
+    const match = CATS.find(c => names.includes(c.label.toLowerCase()));
+    if(match) return match;
+    return catInfo(inferLibraryCategory(item.text)) || CATS[0];
+  }
+
+  function toQuote(item){
+    const cat = drawerFor(item);
+    return {
+      id: 'SRV-' + item.id,
+      catNo: 'SRV·' + String(item.id).padStart(6, '0'),
+      quote: String(item.text || ''),
+      author: (item.author && item.author.name) || 'Unknown author',
+      category: cat.key,
+      catLabel: cat.label,
+      external: true,
+      sourceId: SOURCE.id,
+      sourceLabel: SOURCE.label,
+      sourceLicense: SOURCE.license,
+      sourceUrl: SOURCE.url,
+      licenseUrl: SOURCE.licenseUrl,
+      provenance: 'Published in THE QUOTE ARCHIVE database (server record #' + item.id + ').'
+    };
+  }
+
+  // Adds server items that are not already on the page. Returns how many were added.
+  function addItems(items){
+    const seen = seenSet();
+    let added = 0;
+    for(const item of items || []){
+      if(!item || !item.text) continue;
+      const key = normalizeSearchText(item.text);
+      if(!key || seen.has(key) || findQuote('SRV-' + item.id)) continue;
+      seen.add(key);
+      quotes.push(toQuote(item));
+      added++;
+    }
+    if(added){
+      try{ refreshArchiveDirectories(); }catch(e){}
+      try{ updateIndexedCount(); }catch(e){}
+    }
+    return added;
+  }
+
+  async function searchServer(term){
+    if(!online || term.length < MIN_TERM || term === lastTerm) return;
+    lastTerm = term;
+    try{
+      const data = await apiGet('/search?q=' + encodeURIComponent(term) + '&page_size=50', 15000);
+      const added = addItems(data.items);
+      // Only redraw if the visitor is still looking at the same search.
+      if(added && (currentSearch || '').trim() === term) renderGrid();
+      if(added) setServerStatus('online · added ' + added.toLocaleString() + ' more match' + (added === 1 ? '' : 'es') + ' for “' + escapeHTML(term) + '”.');
+    }catch(err){
+      console.warn('Archive server search unavailable:', err);
+      lastTerm = '';
+    }
+  }
+
+  function queueSearch(){
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(() => searchServer((searchInput.value || '').trim()), 700);
+  }
+
+  // Deep links such as ?quote=SRV-482 for quotes that live only on the server.
+  async function openServerDeepLink(){
+    try{
+      const id = new URL(window.location.href).searchParams.get('quote') || '';
+      const m = /^SRV-(\d+)$/.exec(id);
+      if(!m || findQuote(id)) return;
+      const item = await apiGet('/quotes/' + m[1], 20000);
+      addItems([item]);
+      const q = findQuote(id);
+      if(q) openQuoteDetail(q, false);
+    }catch(err){ console.warn('Could not open server quote link:', err); }
+  }
+
+  async function connect(attempt){
+    try{
+      // The free server sleeps when idle; the first request can take ~1 minute.
+      const stats = await apiGet('/stats', 75000);
+      online = true;
+      setServerStatus('online · ' + Number(stats.public_quotes || 0).toLocaleString() + ' published quotations searchable from the archive database.');
+      openServerDeepLink();
+      const term = (searchInput.value || '').trim();
+      if(term) searchServer(term);
+    }catch(err){
+      online = false;
+      if(attempt < 1){
+        setServerStatus('waking up… the built-in archive is ready in the meantime.');
+        setTimeout(() => connect(attempt + 1), 5000);
+      }else{
+        setServerStatus('offline right now — the built-in archive is fully usable.');
+      }
+    }
+  }
+
+  if(typeof searchInput !== 'undefined' && searchInput){
+    searchInput.addEventListener('input', queueSearch);
+    searchInput.addEventListener('search', queueSearch);
+  }
+  setServerStatus('connecting… the built-in archive is ready in the meantime.');
+  connect(0);
+})();
+</script>
 </body>
 </html>
