@@ -714,6 +714,8 @@
   .provenance-item{padding:12px;border:1px dashed var(--line);border-radius:10px;background:rgba(0,0,0,.025)}
   .provenance-item span{display:block;font:700 .64rem 'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-muted);margin-bottom:4px}
   .provenance-item strong{font-size:.82rem;line-height:1.45}
+  .provenance-item a{color:inherit;text-decoration:underline;text-underline-offset:2px}
+  footer .copyright-notice a{color:var(--gold)}
   .related-quotes{border-top:1px solid var(--line);padding-top:16px;margin-top:8px}
   .related-quotes h3{font-family:'Fraunces',serif;margin:0 0 10px}
   .related-list{display:grid;gap:7px}
@@ -1066,6 +1068,13 @@
       · The Quote Archive source code, original design, original content and custom functionality are proprietary.
       <span class="license-badge">PROPRIETARY · NO REUSE</span>
       · <a href="./license.html">View License</a>
+    </div>
+    <div class="copyright-notice">
+      <strong>Quotation credits:</strong> some quotations come from
+      <a href="https://en.wikiquote.org/" target="_blank" rel="noopener noreferrer">Wikiquote</a> via
+      <a href="https://quotekg.l3s.uni-hannover.de/" target="_blank" rel="noopener noreferrer">QuoteKG</a> (L3S Research Center)
+      and are shared under <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-SA 4.0</a>;
+      each one links to its source page. Third-party quotations are not covered by the notice above and keep their own licences.
     </div>
   </footer>
 </div>
@@ -3172,8 +3181,18 @@ function renderQuoteDetail(){
     quoteDetailStatus.textContent = 'Generated record · not a historical quotation';
   }else if(q.external){
     quoteDetailType.textContent = 'External quotation';
-    quoteDetailSource.textContent = q.provenance || q.sourceLabel || 'Imported quotation with retained provenance';
-    quoteDetailStatus.textContent = q.sourceLicense || 'License information unavailable';
+    if(q.recordUrl){
+      // Credit line with links (required for share-alike sources such as Wikiquote/QuoteKG).
+      quoteDetailSource.innerHTML = escapeHTML(q.provenance || q.sourceLabel || '') +
+        ' · <a href="' + escapeHTML(q.recordUrl) + '" target="_blank" rel="noopener noreferrer">View source page</a>';
+      quoteDetailStatus.innerHTML = q.licenseUrl
+        ? '<a href="' + escapeHTML(q.licenseUrl) + '" target="_blank" rel="noopener noreferrer">' + escapeHTML(q.sourceLicense || 'Licence') + '</a>'
+        : escapeHTML(q.sourceLicense || 'License information unavailable');
+    }else{
+      quoteDetailSource.textContent = q.provenance || q.sourceLabel || 'Imported quotation with retained provenance';
+      quoteDetailStatus.textContent = q.sourceLicense || 'License information unavailable';
+    }
+    if(typeof q.enrich === 'function' && !q.enriched) q.enrich();
   }else{
     quoteDetailType.textContent = 'Curated archive card';
     quoteDetailSource.textContent = 'Curated text filed in The Quote Archive; authorship not independently verified';
@@ -6561,8 +6580,40 @@ renderRecentQuotes();
       sourceLicense: SOURCE.license,
       sourceUrl: SOURCE.url,
       licenseUrl: SOURCE.licenseUrl,
-      provenance: 'Published in THE QUOTE ARCHIVE database (server record #' + item.id + ').'
+      provenance: 'Published in THE QUOTE ARCHIVE database (server record #' + item.id + ').',
+      enrich: function(){ enrichFromServer(this); }
     };
+  }
+
+  // Known sources → how they are credited on the page.
+  const CREDITS = {
+    'QuoteKG': { label: 'Wikiquote via QuoteKG (L3S Research Center)', license: 'CC BY-SA 4.0 · shared alike',
+                 licenseUrl: 'https://creativecommons.org/licenses/by-sa/4.0/' },
+    'ConceptJunkie community quote file': { label: 'Community quote collection (ConceptJunkie/quote)',
+                 license: "Curator's public-domain statement", licenseUrl: 'https://github.com/ConceptJunkie/quote' },
+    'THE QUOTE ARCHIVE curated drawers': { label: 'THE QUOTE ARCHIVE curated drawers', license: 'Archive collection', licenseUrl: '' }
+  };
+
+  // Loads the full record (sources, licence, source page) the first time a server quote is opened.
+  async function enrichFromServer(q){
+    if(!q || q.enriched || q._enriching) return;
+    q._enriching = true;
+    try{
+      const rec = await apiGet('/quotes/' + String(q.id).replace(/^SRV-/, ''), 20000);
+      const src = (rec.sources || [])[0];
+      if(src){
+        const c = CREDITS[src.source] || { label: src.source, license: src.license || '', licenseUrl: '' };
+        q.sourceLabel = c.label;
+        q.sourceLicense = c.license || src.license || 'See source';
+        q.licenseUrl = c.licenseUrl;
+        q.recordUrl = src.record_url || src.source_home || '';
+        q.provenance = c.label + (src.work ? ' — from “' + src.work + '”' : '');
+      }
+      q.enriched = true;
+      if(typeof detailQuote !== 'undefined' && detailQuote === q) renderQuoteDetail();
+    }catch(err){
+      console.warn('Could not load source details:', err);
+    }finally{ q._enriching = false; }
   }
 
   // Adds server items that are not already on the page. Returns how many were added.
