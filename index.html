@@ -716,6 +716,8 @@
   .provenance-item strong{font-size:.82rem;line-height:1.45}
   .provenance-item a{color:inherit;text-decoration:underline;text-underline-offset:2px}
   footer .copyright-notice a{color:var(--gold)}
+.photo-credit{font-size:.78rem;opacity:.8;margin:.35rem 0 0}
+.photo-credit a{color:inherit;text-decoration:underline;text-underline-offset:2px}
   .related-quotes{border-top:1px solid var(--line);padding-top:16px;margin-top:8px}
   .related-quotes h3{font-family:'Fraunces',serif;margin:0 0 10px}
   .related-list{display:grid;gap:7px}
@@ -1075,6 +1077,9 @@
       <a href="https://quotekg.l3s.uni-hannover.de/" target="_blank" rel="noopener noreferrer">QuoteKG</a> (L3S Research Center)
       and are shared under <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-SA 4.0</a>;
       each one links to its source page. Third-party quotations are not covered by the notice above and keep their own licences.
+      <strong>Photo credits:</strong> Archive photos come from
+      <a href="https://unsplash.com/?utm_source=the_quote_archive&amp;utm_medium=referral" target="_blank" rel="noopener noreferrer">Unsplash</a>
+      under the <a href="https://unsplash.com/license" target="_blank" rel="noopener noreferrer">Unsplash License</a>; each photo names its photographer.
     </div>
   </footer>
 </div>
@@ -1092,6 +1097,7 @@
     </div>
     <h2 id="quoteDetailTitle" class="sr-only">Quote details</h2>
     <button type="button" class="qart detail-art" data-post-open aria-label="Open Post Studio for this quote" title="Make a post image"><canvas id="quoteDetailArtCanvas" class="qart-canvas" aria-hidden="true"></canvas><span class="qart-badge">🖼 Make post</span></button>
+    <p class="photo-credit" id="quoteDetailPhotoCredit" hidden></p>
     <blockquote id="quoteDetailText">Quote</blockquote>
     <div class="quote-detail-author" id="quoteDetailAuthor">— Author</div>
     <div class="provenance-grid">
@@ -1133,6 +1139,7 @@
           <span class="ps-label">Picture</span>
           <div class="ps-chips" id="psSources"></div>
           <span class="ps-meta" id="psSourceNote"></span>
+          <span class="ps-meta photo-credit" id="psPhotoCredit" hidden></span>
           <details class="ps-key"><summary>Faster AI images (optional key)</summary>
             <input type="text" id="psApiKey" placeholder="Pollinations publishable key (pk_...)" autocomplete="off" spellcheck="false" />
             <span class="ps-meta">Free key from auth.pollinations.ai — stored only in this browser.</span>
@@ -4801,10 +4808,11 @@ const QuoteArt = (function(){
 const ART_PREF_KEY = 'dqa_post_prefs_v1';
 const ART_VARIANT_KEY = 'dqa_art_variants_v1';
 const ART_SCENE_NAMES = {photo:'Your photo',city:'City skyline',valley:'River valley',car:'Sunset drive',highway:'Open highway',lighthouse:'Lighthouse coast',peaks:'Mountain glow',stars:'Starry night',ocean:'Ocean horizon',aurora:'Northern lights',bokeh:'Golden bokeh',geo:'Modern shapes',forest:'Misty forest',cosmos:'Deep space',flow:'Silk waves'};
-const artPrefs = Object.assign({format:'square', font:'serif', source:'ai', sourceChosen:false, apiKey:''}, (()=>{ const p = safeReadJSON(ART_PREF_KEY, {}); return p && typeof p === 'object' && !Array.isArray(p) ? p : {}; })());
+const artPrefs = Object.assign({format:'square', font:'serif', source:'archive', sourceChosen:false, apiKey:''}, (()=>{ const p = safeReadJSON(ART_PREF_KEY, {}); return p && typeof p === 'object' && !Array.isArray(p) ? p : {}; })());
 if(!QuoteArt.FORMATS[artPrefs.format]) artPrefs.format = 'square';
 if(!QuoteArt.FONTS[artPrefs.font]) artPrefs.font = 'serif';
-if(!['ai','photo','art','local'].includes(artPrefs.source)) artPrefs.source = 'ai';
+if(!['archive','ai','photo','art','local'].includes(artPrefs.source)) artPrefs.source = 'archive';
+if(!artPrefs.sourceChosen) artPrefs.source = 'archive';   // default: Archive photos (falls back to the site's own photos)
 artPrefs.apiKey = typeof artPrefs.apiKey === 'string' ? artPrefs.apiKey.trim().slice(0,200) : '';
 const artVariants = (()=>{ const v = safeReadJSON(ART_VARIANT_KEY, {}); return v && typeof v === 'object' && !Array.isArray(v) ? v : {}; })();
 
@@ -4833,8 +4841,60 @@ const ART_SUBJECTS = {
   sky:['a starry night sky over snowy mountains with the milky way','aurora borealis over a frozen lake','a dramatic sunset sky over a quiet lake']
 };
 const ART_CAT_GROUPS = {motivation:['nature','sea'],discipline:['urban','nature'],success:['urban','car'],mindset:['sky','nature'],growth:['nature'],focus:['sky','nature'],resilience:['sea','nature'],action:['car','urban'],creativity:['sky','urban'],leadership:['urban','car'],courage:['sea','nature'],gratitude:['nature'],patience:['nature','sea'],confidence:['car','urban'],purpose:['nature','sky'],change:['sky','urban'],perseverance:['nature'],selfbelief:['sky','sea'],ambition:['urban','car'],positivity:['nature','sea']};
-const ART_SOURCES = {ai:'✨ AI image', photo:'📷 Real photo', art:'🎨 Illustrated', local:'🖼 My photos'};
+const ART_SOURCES = {archive:'🏛 Archive photos', ai:'✨ AI image', photo:'📷 Real photo', art:'🎨 Illustrated', local:'🖼 My photos'};
 let artPhotoList = [];
+
+/* Archive photos: Unsplash photos chosen per drawer, listed by THE QUOTE ARCHIVE server.
+   They are hotlinked from Unsplash (as Unsplash's API terms require) and every one
+   shows "Photo by … on Unsplash". If the server is unreachable, Real photos are used. */
+const ARCHIVE_IMG_API = 'https://quote-archive-api.onrender.com/api/v1';
+const archiveImgs = new Map();   // drawer -> {state:'loading'|'ok'|'fail', items:[]}
+function loadArchiveImages(drawer){
+  let e = archiveImgs.get(drawer);
+  if(e) return e;
+  e = {state:'loading', items:[]};
+  archiveImgs.set(drawer, e);
+  const ctrl = typeof AbortController === 'function' ? new AbortController() : null;
+  const tm = ctrl ? setTimeout(() => ctrl.abort(), 70000) : null;   // the free server can take ~1 min to wake
+  fetch(`${ARCHIVE_IMG_API}/images?drawer=${encodeURIComponent(drawer)}&limit=200`, {mode:'cors', signal:ctrl?.signal})
+    .then(r => r.ok ? r.json() : Promise.reject(new Error('HTTP ' + r.status)))
+    .then(d => {
+      e.items = (d && Array.isArray(d.items) ? d.items : []).filter(it => it && typeof it.url === 'string' && /^https:\/\/images\.unsplash\.com\//.test(it.url) && it.credit && it.credit.name);
+      e.state = e.items.length ? 'ok' : 'fail';
+    })
+    .catch(() => { e.state = 'fail'; })
+    .finally(() => { if(tm) clearTimeout(tm); repaintAllThumbs(); if(typeof psQuote !== 'undefined' && psQuote) renderStudio(); });
+  return e;
+}
+/* The archive photo for a quote: {item} when ready, {pending:true} while loading, null when unavailable. */
+function archivePhotoItem(q){
+  const h = QuoteArt.hashString(`${q.id}|${artVariantFor(q.id)}|seed`);
+  const own = loadArchiveImages(String(q.category || 'all'));
+  if(own.state === 'ok') return {item: own.items[h % own.items.length]};
+  const all = own.state === 'fail' ? loadArchiveImages('all') : null;
+  if(all && all.state === 'ok') return {item: all.items[h % all.items.length]};
+  if(own.state === 'loading' || (all && all.state === 'loading')) return {pending:true};
+  return null;
+}
+function archiveImageUrl(it){
+  return it.url + (it.url.includes('?') ? '&' : '?') + 'w=1080&h=1080&fit=crop&crop=entropy&q=72&fm=webp&auto=format';
+}
+/* Credit for the photo currently behind a quote (only for Archive photos). */
+function artPhotoCredit(q){
+  if(!q || artPrefs.source !== 'archive') return null;
+  const r = archivePhotoItem(q);
+  return r && r.item ? r.item : null;
+}
+function photoCreditHTML(it){
+  const c = it.credit || {};
+  const safeUrl = u => (typeof u === 'string' && /^https:\/\/unsplash\.com\//.test(u)) ? u : 'https://unsplash.com/';
+  return `Photo by <a href="${escapeHTML(safeUrl(c.profile_url))}" target="_blank" rel="noopener">${escapeHTML(c.name)}</a> on <a href="${escapeHTML(safeUrl(c.provider_url))}" target="_blank" rel="noopener">Unsplash</a>`;
+}
+function trackArchiveDownload(q){
+  const it = artPhotoCredit(q);
+  if(!it || !Number.isFinite(+it.id)) return;
+  try{ fetch(`${ARCHIVE_IMG_API}/images/${+it.id}/download`, {method:'POST', mode:'no-cors', keepalive:true}); }catch{}
+}
 
 function artPrompt(q, v){
   const groups = ART_CAT_GROUPS[q.category] || Object.keys(ART_SUBJECTS);
@@ -4845,6 +4905,14 @@ function artPrompt(q, v){
 function artImageUrl(q){
   const v = artVariantFor(q.id), h = QuoteArt.hashString(`${q.id}|${v}|seed`), seed = h % 1000000;
   if(artPrefs.source === 'local') return artPhotoList.length ? 'photos/' + encodeURIComponent(artPhotoList[h % artPhotoList.length]) : null;
+  if(artPrefs.source === 'archive'){
+    const r = archivePhotoItem(q);
+    if(r && r.item) return archiveImageUrl(r.item);
+    if(r && r.pending) return null;                       // illustrated scene until the list arrives
+    // Server unreachable or no photos yet: the site's own photos, else Real photos.
+    if(artPhotoList.length) return 'photos/' + encodeURIComponent(artPhotoList[h % artPhotoList.length]);
+    return `https://picsum.photos/seed/${seed}/1200/1200`;
+  }
   if(artPrefs.source === 'photo') return `https://picsum.photos/seed/${seed}/1200/1200`;
   if(artPrefs.source === 'ai'){
     const pr = encodeURIComponent(artPrompt(q, v));
@@ -4926,7 +4994,6 @@ function repaintForImage(url){
 }
 fetch('photos/manifest.json', {cache:'no-cache'}).then(r => r.ok ? r.json() : []).then(list => {
   if(Array.isArray(list)) artPhotoList = list.filter(x => typeof x === 'string' && x.trim());
-  if(artPhotoList.length && !artPrefs.sourceChosen) artPrefs.source = 'local';
   if(typeof renderSourceChips === 'function') renderSourceChips();
   if(artPhotoList.length) repaintAllThumbs();
 }).catch(() => {});
@@ -4967,6 +5034,7 @@ async function downloadCard(q){
   const ok = await saveCanvasPng(canvas, postFileName(q));
   if(!ok){ setStatus('The browser blocked the card download. Try using a modern browser or save the image manually.'); return; }
   setStatus(`Downloaded ${q.catNo || q.id || 'quote'} as a ${QuoteArt.FORMATS[artPrefs.format].label.toLowerCase()} post image.`);
+  trackArchiveDownload(q);
   countDownload();
 }
 
@@ -4976,6 +5044,10 @@ function paintArtThumb(cv, q, w, h){
   cv.width = w; cv.height = h;
   QuoteArt.drawArt(cv.getContext('2d'), w, h, q, artVariantFor(q.id), {thumb:true, photo:artPhotoFor(q)});
   cv.dataset.drawn = '1';
+  const it = artPhotoCredit(q), holder = cv.parentElement;
+  if(holder && cv.id !== 'quoteDetailArtCanvas'){
+    if(it && artImageStatus(q) === 'ok') holder.title = `Photo: ${it.credit.name} / Unsplash`; else holder.removeAttribute('title');
+  }
 }
 const artThumbObserver = ('IntersectionObserver' in window)
   ? new IntersectionObserver(entries => {
@@ -5004,6 +5076,8 @@ function paintDetailArt(){
   const cv = document.getElementById('quoteDetailArtCanvas');
   if(!cv || !detailQuote) return;
   try{ paintArtThumb(cv, detailQuote, 640, 360); }catch(err){ console.warn(err); }
+  const cr = document.getElementById('quoteDetailPhotoCredit');
+  if(cr){ const it = artPhotoCredit(detailQuote); cr.innerHTML = it ? photoCreditHTML(it) : ''; cr.hidden = !it; }
 }
 [grid, genGrid].forEach(el => {
   if(!el) return;
@@ -5041,7 +5115,9 @@ function renderStudio(){
   if(!psQuote) return;
   const info = QuoteArt.paintPost(psCanvas, psQuote, {format:artPrefs.format, font:artPrefs.font, variant:artVariantFor(psQuote.id), makeCanvas:artMakeCanvas, photo:artPhotoFor(psQuote), style:artPrefs.style});
   const imgState = artImageStatus(psQuote);
-  const srcName = {ai:'AI-generated image', photo:'Real photo', local:'Your photo'}[artPrefs.source];
+  const srcName = {archive:'Archive photo', ai:'AI-generated image', photo:'Real photo', local:'Your photo'}[artPrefs.source];
+  const psCredit = document.getElementById('psPhotoCredit');
+  if(psCredit){ const it = imgState === 'ok' ? artPhotoCredit(psQuote) : null; psCredit.innerHTML = it ? photoCreditHTML(it) : ''; psCredit.hidden = !it; }
   psStyleName.textContent = `${info.scene === 'photo' ? srcName : (ART_SCENE_NAMES[info.scene] || info.scene)} · look #${artVariantFor(psQuote.id) + 1}`;
   psSourceNote.textContent = imgState === 'loading' ? (artPrefs.source === 'ai' ? 'Creating your picture… this can take 10–30 seconds. An illustrated preview shows meanwhile.' : 'Loading picture…')
     : imgState === 'fail' ? 'That picture source couldn’t be reached (offline, blocked or rate-limited) — showing an illustrated scene. Try again or pick another source.' : '';
