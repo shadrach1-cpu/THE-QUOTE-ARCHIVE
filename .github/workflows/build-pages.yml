@@ -1,0 +1,54 @@
+# Rebuilds the quote pages (quote/<id>/), author pages (author/<id>/) and sitemap.xml
+# from the live archive API, then commits them so GitHub Pages publishes them.
+#
+# It only runs when you press "Run workflow" (Actions tab > Build quote and author pages),
+# e.g. after publishing a new import in the Data Center.
+name: Build quote and author pages
+
+on:
+  workflow_dispatch:
+    inputs:
+      force:
+        description: "Allow a large drop in the number of quotes (normally refused)"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - name: Check out the site (without the music and photo files)
+        uses: actions/checkout@v4
+        with:
+          filter: blob:none
+          sparse-checkout: |
+            tools
+            quote
+            author
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Build pages from the API
+        run: python tools/build_pages.py ${{ inputs.force && '--force' || '' }}
+
+      - name: Commit the new pages
+        run: |
+          git config user.name "quote-archive-pages-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A quote author sitemap.xml
+          if git diff --cached --quiet; then
+            echo "No changes: the pages are already up to date."
+            exit 0
+          fi
+          git commit -q -m "Rebuild quote and author pages ($(ls quote | wc -l) quotes, $(ls -d author/*/ | wc -l) authors)"
+          git push
