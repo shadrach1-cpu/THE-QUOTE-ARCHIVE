@@ -1,0 +1,48 @@
+# Keeps the free Render server awake and checks that the site is up.
+#
+# Every 5 minutes: wakes the API server (/health/live, which does not touch the
+# database) and loads the website. Render's free plan sleeps after 15 idle minutes,
+# so these visits keep the first real visitor from waiting for it to wake.
+# Every 6 hours (and when run by hand): also checks the database (/health/ready).
+# It is not checked every 5 minutes because that would keep the free Neon database
+# awake around the clock and use up its monthly compute allowance.
+#
+# If a check still fails after a few tries, the run fails and GitHub emails you
+# (Settings > Notifications > Actions: "Send notifications for failed workflows only").
+name: Keep server awake
+
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+    - cron: "17 */6 * * *"
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: keep-awake
+  cancel-in-progress: false
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: API server is up
+        run: |
+          curl -fsS --retry 4 --retry-delay 15 --retry-all-errors --max-time 90 \
+            https://quote-archive-api.onrender.com/health/live
+          echo
+
+      - name: Database is healthy
+        if: github.event.schedule == '17 */6 * * *' || github.event_name == 'workflow_dispatch'
+        run: |
+          curl -fsS --retry 3 --retry-delay 20 --retry-all-errors --max-time 60 \
+            https://quote-archive-api.onrender.com/health/ready
+          echo
+
+      - name: Website loads
+        run: |
+          curl -fsS --retry 3 --retry-delay 10 --retry-all-errors --max-time 30 -o /dev/null \
+            -w "HTTP %{http_code} in %{time_total}s\n" \
+            https://shadrach1-cpu.github.io/THE-QUOTE-ARCHIVE/
