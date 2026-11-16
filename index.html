@@ -1070,6 +1070,7 @@
       · The Quote Archive source code, original design, original content and custom functionality are proprietary.
       <span class="license-badge">PROPRIETARY · NO REUSE</span>
       · <a href="./license.html">View License</a>
+      · <a href="./author/">Browse all authors A–Z</a>
     </div>
     <div class="copyright-notice">
       <strong>Quotation credits:</strong> some quotations come from
@@ -3151,6 +3152,10 @@ function cardHTML(q){
 
 function quoteDeepLink(id){
   try{
+    // Server quotes have their own shareable page (built by tools/build_pages.py);
+    // a quote without a page yet is redirected back here by 404.html.
+    const srv = /^SRV-(\d+)$/.exec(String(id));
+    if(srv) return new URL('quote/' + srv[1] + '/', 'https://shadrach1-cpu.github.io/THE-QUOTE-ARCHIVE/').href;
     const url = new URL(window.location.href);
     url.searchParams.set('quote', id);
     return url.href;
