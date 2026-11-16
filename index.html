@@ -4861,7 +4861,7 @@ function loadArchiveImages(drawer){
   archiveImgs.set(drawer, e);
   const ctrl = typeof AbortController === 'function' ? new AbortController() : null;
   const tm = ctrl ? setTimeout(() => ctrl.abort(), 70000) : null;   // the free server can take ~1 min to wake
-  fetch(`${ARCHIVE_IMG_API}/images?drawer=${encodeURIComponent(drawer)}&limit=200`, {mode:'cors', signal:ctrl?.signal})
+  fetch(`${ARCHIVE_IMG_API}/images?drawer=${encodeURIComponent(drawer)}&limit=300&seed=${Math.floor(Date.now() / 86400000)}`, {mode:'cors', signal:ctrl?.signal})
     .then(r => r.ok ? r.json() : Promise.reject(new Error('HTTP ' + r.status)))
     .then(d => {
       e.items = (d && Array.isArray(d.items) ? d.items : []).filter(it => it && typeof it.url === 'string' && /^https:\/\/images\.unsplash\.com\//.test(it.url) && it.credit && it.credit.name);
