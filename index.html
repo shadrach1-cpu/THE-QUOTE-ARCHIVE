@@ -3101,9 +3101,12 @@ function getFiltered(){
   buildSearchIndex();
   const drawer = searchCategory.value || currentCategory;
   const context = createSearchContext(currentSearch);
+  const srvKey = window.__archiveSearch ? window.__archiveSearch.key() : '';
   const filtered = quoteView.filter(q=>{
     const matchesCat = (drawer === 'all' || q.category === drawer) && (currentCategory === 'all' || q.category === currentCategory);
-    const result = matchesSearch(q, context);
+    let result = matchesSearch(q, context);
+    // Quotes the archive database matched for this search count even if the local matcher misses them.
+    if(!result.match && srvKey && q._srvKeys && q._srvKeys.has(srvKey)) result = {match:true, score:1};
     q._searchScore = result.score;
     return matchesCat && result.match;
   });
@@ -3113,11 +3116,14 @@ function getFiltered(){
 function updateSearchUI(total){
   const query = currentSearch.trim();
   searchClearBtn.classList.toggle('show', !!query);
+  const srv = window.__archiveSearch;
+  const srvTotal = srv && srv.key() ? srv.total() : 0;
+  const archiveNote = srvTotal ? ` · <strong>${srvTotal.toLocaleString()}</strong> in the full archive` : (srv && srv.loading() ? ' · searching the full archive…' : '');
   if(query){
-    searchResultText.innerHTML = `<strong>${total}</strong> match${total===1?'':'es'} for “${escapeHTML(currentSearch.trim())}”`;
+    searchResultText.innerHTML = `<strong>${total}</strong> match${total===1?'':'es'} for “${escapeHTML(currentSearch.trim())}”${archiveNote}`;
     searchHint.textContent = 'Tip: try a feeling, idea, phrase, drawer name or card ID';
   }else{
-    searchResultText.innerHTML = `<strong>${total}</strong> cards in this view`;
+    searchResultText.innerHTML = `<strong>${total}</strong> cards in this view${archiveNote}`;
     searchHint.textContent = 'Searches quote text, authors, topics, categories and card IDs';
   }
 }
@@ -3274,8 +3280,10 @@ function renderGrid(){
     ? slice.map(cardHTML).join('')
     : `<div class="search-empty"><b>No cards found</b><span>Try a broader word, another drawer, or one of the topic suggestions above.</span><br><button class="icon-btn" id="emptySearchClear" type="button">Clear search</button></div>`;
   statShown.textContent = slice.length;
+  const srv = window.__archiveSearch;
+  if(srv) srv.sync(filtered.length, visibleCount);
   updateSearchUI(filtered.length);
-  loadMoreBtn.style.display = filtered.length > visibleCount ? 'inline-flex' : 'none';
+  loadMoreBtn.style.display = (filtered.length > visibleCount || (srv && srv.hasMore())) ? 'inline-flex' : 'none';
 }
 
 function escapeHTML(value){
@@ -6605,8 +6613,6 @@ renderRecentQuotes();
   };
   const MIN_TERM = 3;
   let online = false;
-  let searchTimer = null;
-  let lastTerm = '';
 
   async function apiGet(path, timeoutMs){
     const ctrl = typeof AbortController === 'function' ? new AbortController() : null;
@@ -6639,15 +6645,18 @@ renderRecentQuotes();
     return appendExternalQuote._seen;
   }
 
-  function drawerFor(item){
+  function drawerFor(item, prefer){
     const names = (item.categories || []).map(c => String(c.name || '').toLowerCase());
+    // When browsing a drawer, file the quote in that drawer if it belongs there.
+    const wanted = prefer && prefer !== 'all' ? CATS.find(c => c.key === prefer) : null;
+    if(wanted && names.includes(wanted.label.toLowerCase())) return wanted;
     const match = CATS.find(c => names.includes(c.label.toLowerCase()));
     if(match) return match;
     return catInfo(inferLibraryCategory(item.text)) || CATS[0];
   }
 
-  function toQuote(item){
-    const cat = drawerFor(item);
+  function toQuote(item, prefer){
+    const cat = drawerFor(item, prefer);
     return {
       id: 'SRV-' + item.id,
       catNo: 'SRV·' + String(item.id).padStart(6, '0'),
@@ -6697,18 +6706,37 @@ renderRecentQuotes();
     }finally{ q._enriching = false; }
   }
 
-  // Adds server items that are not already on the page. Returns how many were added.
-  function addItems(items){
+  // Quote text -> quote already on the page, so server results are never shown twice.
+  function textIndex(){
+    if(!addItems._idx || addItems._n !== quotes.length){
+      addItems._idx = new Map();
+      for(const q of quotes){ const k = normalizeSearchText(q.quote); if(k && !addItems._idx.has(k)) addItems._idx.set(k, q); }
+      addItems._n = quotes.length;
+    }
+    return addItems._idx;
+  }
+
+  // Adds server items that are not already on the page and tags every item with the
+  // search it matched (key), so the grid shows it for that search. Returns how many were new.
+  function addItems(items, key, prefer){
+    const idx = textIndex();
     const seen = seenSet();
     let added = 0;
     for(const item of items || []){
       if(!item || !item.text) continue;
-      const key = normalizeSearchText(item.text);
-      if(!key || seen.has(key) || findQuote('SRV-' + item.id)) continue;
-      seen.add(key);
-      quotes.push(toQuote(item));
-      added++;
+      const k = normalizeSearchText(item.text);
+      if(!k) continue;
+      let q = findQuote('SRV-' + item.id) || idx.get(k);
+      if(!q){
+        q = toQuote(item, prefer);
+        quotes.push(q);
+        if(quoteView !== quotes) quoteView.push(q);
+        idx.set(k, q); seen.add(k);
+        added++;
+      }
+      if(key) (q._srvKeys || (q._srvKeys = new Set())).add(key);
     }
+    addItems._n = quotes.length;
     if(added){
       try{ refreshArchiveDirectories(); }catch(e){}
       try{ updateIndexedCount(); }catch(e){}
@@ -6716,25 +6744,78 @@ renderRecentQuotes();
     return added;
   }
 
-  async function searchServer(term){
-    if(!online || term.length < MIN_TERM || term === lastTerm) return;
-    lastTerm = term;
-    try{
-      const data = await apiGet('/search?q=' + encodeURIComponent(term) + '&page_size=50', 15000);
-      const added = addItems(data.items);
-      // Only redraw if the visitor is still looking at the same search.
-      if(added && (currentSearch || '').trim() === term) renderGrid();
-      if(added) setServerStatus('online · added ' + added.toLocaleString() + ' more match' + (added === 1 ? '' : 'es') + ' for “' + escapeHTML(term) + '”.');
-    }catch(err){
-      console.warn('Archive server search unavailable:', err);
-      lastTerm = '';
-    }
+  // ---- Full-archive search with paging --------------------------------------------
+  // The grid asks for the next page of database results whenever the visitor reaches
+  // the end of what is loaded, so every match can be reached (50 per page).
+  const PAGE_SIZE = 50;
+  const srv = { key: '', total: 0, page: 0, hasMore: false, loading: false, pending: false, timer: null };
+
+  function categorySlug(drawerKey){
+    const c = CATS.find(x => x.key === drawerKey);
+    return c ? c.label.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') : '';
+  }
+  function wanted(){
+    const term = (currentSearch || '').trim();
+    const drawer = (searchCategory && searchCategory.value) || currentCategory || 'all';
+    const useTerm = term.length >= MIN_TERM ? term : '';
+    if(!useTerm && drawer === 'all') return null;          // plain "All cards": nothing to ask
+    return { term: useTerm, drawer, key: normalizeSearchText(useTerm) + '|' + drawer };
   }
 
-  function queueSearch(){
-    clearTimeout(searchTimer);
-    searchTimer = setTimeout(() => searchServer((searchInput.value || '').trim()), 700);
+  async function fetchPage(){
+    srv.pending = false;
+    const w = wanted();
+    if(!online || !w || w.key !== srv.key || srv.loading) return;
+    srv.loading = true;
+    const page = srv.page + 1;
+    const params = new URLSearchParams({ page: String(page), page_size: String(PAGE_SIZE) });
+    if(w.term) params.set('q', w.term);
+    if(w.drawer !== 'all'){ const slug = categorySlug(w.drawer); if(slug) params.set('category', slug); }
+    let ok = false;
+    try{
+      const data = await apiGet('/search?' + params.toString(), 20000);
+      if(w.key !== srv.key) return;                           // the search changed meanwhile
+      addItems(data.items, w.key, w.drawer);
+      srv.page = page;
+      srv.total = Number(data.total || 0);
+      srv.hasMore = !!data.has_more;
+      ok = true;
+      setServerStatus('online · ' + srv.total.toLocaleString() + ' match' + (srv.total === 1 ? '' : 'es') + ' in the archive database' +
+        (w.term ? ' for “' + escapeHTML(w.term) + '”' : '') + (srv.hasMore ? ' — press “Show More Cards” for the rest.' : '.'));
+    }catch(err){
+      console.warn('Archive server search unavailable:', err);
+      if(w.key === srv.key) srv.hasMore = false;
+    }finally{
+      srv.loading = false;
+    }
+    if(ok || w.key === srv.key) renderGrid();
   }
+
+  function sync(filteredCount, shown){
+    const w = wanted();
+    if(!w){
+      if(srv.key){ srv.key = ''; srv.total = 0; srv.hasMore = false; srv.pending = false; clearTimeout(srv.timer); }
+      return;
+    }
+    if(w.key !== srv.key){
+      // New search or drawer: start again from page 1 after a short pause in typing.
+      Object.assign(srv, { key: w.key, total: 0, page: 0, hasMore: false });
+      clearTimeout(srv.timer);
+      srv.pending = online;
+      srv.timer = setTimeout(fetchPage, 600);
+      return;
+    }
+    // Same search: fetch the next page once the visitor is within one batch of the end.
+    if(srv.hasMore && !srv.loading && filteredCount - shown < BATCH) fetchPage();
+  }
+
+  window.__archiveSearch = {
+    key: () => { const w = wanted(); return w && w.key === srv.key && srv.page ? srv.key : ''; },
+    total: () => srv.total,
+    hasMore: () => srv.hasMore,
+    loading: () => srv.loading || srv.pending,
+    sync
+  };
 
   // Deep links such as ?quote=SRV-482 for quotes that live only on the server.
   async function openServerDeepLink(){
@@ -6756,8 +6837,8 @@ renderRecentQuotes();
       online = true;
       setServerStatus('online · ' + Number(stats.public_quotes || 0).toLocaleString() + ' published quotations searchable from the archive database.');
       openServerDeepLink();
-      const term = (searchInput.value || '').trim();
-      if(term) searchServer(term);
+      srv.key = '';            // re-ask for whatever search or drawer is on screen
+      renderGrid();
     }catch(err){
       online = false;
       if(attempt < 1){
@@ -6769,10 +6850,6 @@ renderRecentQuotes();
     }
   }
 
-  if(typeof searchInput !== 'undefined' && searchInput){
-    searchInput.addEventListener('input', queueSearch);
-    searchInput.addEventListener('search', queueSearch);
-  }
   setServerStatus('connecting… the built-in archive is ready in the meantime.');
   connect(0);
 })();
