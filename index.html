@@ -3110,7 +3110,12 @@ function getFiltered(){
     q._searchScore = result.score;
     return matchesCat && result.match;
   });
-  return sortSearchResults(filtered);
+  const sorted = sortSearchResults(filtered);
+  if(!srvKey || searchSortMode !== 'relevance') return sorted;
+  // "Best match": the archive database's ranked results first, then matches found only on this page.
+  const inDb = q => q._srvRank && q._srvRank[srvKey] !== undefined;
+  const top = sorted.filter(inDb).sort((x, y) => x._srvRank[srvKey] - y._srvRank[srvKey]);
+  return top.concat(sorted.filter(q => !inDb(q)));
 }
 
 function updateSearchUI(total){
@@ -3281,7 +3286,7 @@ function renderGrid(){
     : `<div class="search-empty"><b>No cards found</b><span>Try a broader word, another drawer, or one of the topic suggestions above.</span><br><button class="icon-btn" id="emptySearchClear" type="button">Clear search</button></div>`;
   statShown.textContent = slice.length;
   const srv = window.__archiveSearch;
-  if(srv) srv.sync(filtered.length, visibleCount);
+  if(srv) srv.sync(filtered, visibleCount);
   updateSearchUI(filtered.length);
   loadMoreBtn.style.display = (filtered.length > visibleCount || (srv && srv.hasMore())) ? 'inline-flex' : 'none';
 }
@@ -6718,10 +6723,10 @@ renderRecentQuotes();
 
   // Adds server items that are not already on the page and tags every item with the
   // search it matched (key), so the grid shows it for that search. Returns how many were new.
-  function addItems(items, key, prefer){
+  function addItems(items, key, prefer, rankBase){
     const idx = textIndex();
     const seen = seenSet();
-    let added = 0;
+    let added = 0, rank = rankBase || 0;
     for(const item of items || []){
       if(!item || !item.text) continue;
       const k = normalizeSearchText(item.text);
@@ -6734,7 +6739,12 @@ renderRecentQuotes();
         idx.set(k, q); seen.add(k);
         added++;
       }
-      if(key) (q._srvKeys || (q._srvKeys = new Set())).add(key);
+      if(key){
+        (q._srvKeys || (q._srvKeys = new Set())).add(key);
+        const r = q._srvRank || (q._srvRank = {});
+        if(r[key] === undefined) r[key] = rank;
+      }
+      rank++;
     }
     addItems._n = quotes.length;
     if(added){
@@ -6775,7 +6785,7 @@ renderRecentQuotes();
     try{
       const data = await apiGet('/search?' + params.toString(), 20000);
       if(w.key !== srv.key) return;                           // the search changed meanwhile
-      addItems(data.items, w.key, w.drawer);
+      addItems(data.items, w.key, w.drawer, (page - 1) * PAGE_SIZE);
       srv.page = page;
       srv.total = Number(data.total || 0);
       srv.hasMore = !!data.has_more;
@@ -6791,7 +6801,7 @@ renderRecentQuotes();
     if(ok || w.key === srv.key) renderGrid();
   }
 
-  function sync(filteredCount, shown){
+  function sync(filtered, shown){
     const w = wanted();
     if(!w){
       if(srv.key){ srv.key = ''; srv.total = 0; srv.hasMore = false; srv.pending = false; clearTimeout(srv.timer); }
@@ -6805,8 +6815,13 @@ renderRecentQuotes();
       srv.timer = setTimeout(fetchPage, 600);
       return;
     }
-    // Same search: fetch the next page once the visitor is within one batch of the end.
-    if(srv.hasMore && !srv.loading && filteredCount - shown < BATCH) fetchPage();
+    // Same search: fetch the next page once the visitor is within one batch of the end of
+    // the database results (they come first under "Best match"), or of the whole list otherwise.
+    if(!srv.hasMore || srv.loading) return;
+    const ahead = searchSortMode === 'relevance'
+      ? filtered.filter(q => q._srvRank && q._srvRank[srv.key] !== undefined).length
+      : filtered.length;
+    if(ahead - shown < BATCH) fetchPage();
   }
 
   window.__archiveSearch = {
