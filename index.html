@@ -910,6 +910,7 @@
         <button class="mini-btn dl" id="qotdDownload" type="button">⬇ Download Card</button>
         <button class="mini-btn" id="qotdPost" type="button">🖼 Make Post</button>
         <button class="mini-btn" id="qotdShare" type="button">↗ Share</button>
+        <button class="mini-btn" id="qotdNotify" type="button" aria-pressed="false">🔔 Notify me daily</button>
       </div>
     </div>
     <div class="status" id="status" role="status" aria-live="polite"></div>
@@ -6867,6 +6868,81 @@ renderRecentQuotes();
 
   setServerStatus('connecting… the built-in archive is ready in the meantime.');
   connect(0);
+})();
+
+/* ---------- Quote of the day by browser notification ----------
+   "Notify me daily" subscribes this browser (Web Push). The archive server sends one
+   quote each morning; tapping it opens the quote's page. Tap again to stop. */
+(function dailyQuoteNotifications(){
+  const API = 'https://quote-archive-api.onrender.com/api/v1';
+  const btn = document.getElementById('qotdNotify');
+  if(!btn) return;
+  const supported = 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window;
+  const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  const standalone = (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true;
+
+  function setLabel(on){
+    btn.textContent = on ? '🔕 Stop daily quote' : '🔔 Notify me daily';
+    btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+  }
+  function keyBytes(b64){
+    let s = b64.replace(/-/g, '+').replace(/_/g, '/');
+    s += '='.repeat((4 - s.length % 4) % 4);
+    return Uint8Array.from(atob(s), c => c.charCodeAt(0));
+  }
+  async function currentSub(){
+    try{
+      const reg = await navigator.serviceWorker.getRegistration();
+      return reg ? await reg.pushManager.getSubscription() : null;
+    }catch{ return null; }
+  }
+  async function post(path, body){
+    return fetch(API + path, {method:'POST', mode:'cors', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)});
+  }
+
+  if(!supported){
+    if(isIOS && !standalone){
+      btn.addEventListener('click', () => showToast('📲', 'Install the app first', 'On iPhone or iPad: tap Share → Add to Home Screen, open The Quote Archive from your home screen, then tap “Notify me daily”.'));
+    }else{
+      btn.hidden = true;            // this browser cannot receive notifications
+    }
+    return;
+  }
+  currentSub().then(s => setLabel(!!s));
+
+  btn.addEventListener('click', async () => {
+    btn.disabled = true;
+    try{
+      const existing = await currentSub();
+      if(existing){
+        await post('/push/unsubscribe', {endpoint: existing.endpoint}).catch(() => {});
+        await existing.unsubscribe();
+        setLabel(false);
+        showToast('🔕', 'Daily quote turned off', 'You will not get any more notifications.');
+        return;
+      }
+      const permission = await Notification.requestPermission();
+      if(permission !== 'granted'){
+        showToast('🔔', 'Notifications are blocked', 'Allow notifications for this site in your browser settings, then try again.');
+        return;
+      }
+      const keyRes = await fetch(API + '/push/key', {mode:'cors'});
+      if(!keyRes.ok) throw new Error('Archive server responded ' + keyRes.status);
+      const info = await keyRes.json();
+      const reg = await navigator.serviceWorker.ready;
+      const sub = await reg.pushManager.subscribe({userVisibleOnly: true, applicationServerKey: keyBytes(info.public_key)});
+      const res = await post('/push/subscribe', sub.toJSON());
+      if(!res.ok){ await sub.unsubscribe().catch(() => {}); throw new Error('Archive server responded ' + res.status); }
+      setLabel(true);
+      const at = new Date(Date.UTC(2020, 0, 1, Number(info.send_hour_utc) || 6)).toLocaleTimeString([], {hour:'numeric', minute:'2-digit'});
+      showToast('🔔', 'Daily quote is on', 'You will get a quote every morning at about ' + at + '.');
+    }catch(err){
+      console.warn('Daily quote notifications:', err);
+      showToast('⚠️', 'Could not turn on daily quotes', 'The archive server may be busy. Please try again in a minute.');
+    }finally{
+      btn.disabled = false;
+    }
+  });
 })();
 </script>
 </body>
