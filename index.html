@@ -552,6 +552,22 @@
     color:var(--gold);background:rgba(224,168,63,.07);
   }
 
+  /* Suggest a quote */
+  .suggest{margin:48px 0 8px;border:1px solid rgba(224,168,63,.25);border-radius:16px;background:rgba(255,255,255,.03);padding:22px}
+  .suggest h2{font-family:'Fraunces',serif;font-weight:600;font-size:1.5rem;margin:0 0 4px}
+  .suggest > p{margin:0 0 16px;color:var(--site-muted)}
+  .suggest-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .suggest-grid .wide{grid-column:1 / -1}
+  .suggest label{display:grid;gap:6px;font-size:.85rem;color:var(--site-muted);font-weight:600}
+  .suggest input,.suggest select,.suggest textarea{width:100%;box-sizing:border-box;background:rgba(255,255,255,.05);color:var(--site-text);border:1px solid rgba(224,168,63,.25);border-radius:9px;padding:10px 12px;font:inherit;min-height:42px}
+  .suggest textarea{min-height:96px;resize:vertical}
+  .suggest .consent{display:flex;gap:10px;align-items:flex-start;font-weight:500}
+  .suggest .consent input{width:auto;min-height:0;margin-top:3px}
+  .suggest-actions{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:14px}
+  .suggest-msg{font-size:.92rem}
+  .suggest-msg.ok{color:#7fd3a8} .suggest-msg.err{color:#f0a08a}
+  .suggest .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+  @media (max-width:640px){.suggest-grid{grid-template-columns:1fr}}
   .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 
   @media (max-width:900px){
@@ -1061,6 +1077,35 @@
       <div class="v2-key"><span>Close dialog</span><kbd>Esc</kbd></div>
     </div>
   </div>
+</section>
+
+<section class="suggest" id="suggest" aria-labelledby="suggestTitle">
+  <h2 id="suggestTitle">Suggest a quote</h2>
+  <p>Know a quote that belongs here? Send it in. Every suggestion is read and checked before it’s added to the archive.</p>
+  <form id="suggestForm" novalidate>
+    <div class="suggest-grid">
+      <label class="wide">The quote *
+        <textarea id="sgText" name="text" maxlength="600" required placeholder="Type the quote exactly as it was said or written"></textarea></label>
+      <label>Who said it
+        <input id="sgAuthor" name="author" maxlength="300" placeholder="e.g. Maya Angelou"></label>
+      <label>From (book, speech, film…)
+        <input id="sgWork" name="work" maxlength="500" placeholder="Optional"></label>
+      <label>Link to a source
+        <input id="sgUrl" name="source_url" type="url" maxlength="1000" placeholder="https://… (optional)"></label>
+      <label>Drawer
+        <select id="sgDrawer" name="drawer"><option value="">Choose one (optional)</option></select></label>
+      <label>Your name
+        <input id="sgName" name="name" maxlength="100" placeholder="Optional, only the editor sees it"></label>
+      <label>Note to the editor
+        <input id="sgNote" name="note" maxlength="1000" placeholder="Optional"></label>
+      <div class="hp" aria-hidden="true"><label>Leave this empty <input name="website" id="sgWebsite" tabindex="-1" autocomplete="off"></label></div>
+      <label class="consent wide"><input type="checkbox" id="sgConsent" required> I believe this quote is real and correctly credited, and I’m happy for it to be published in The Quote Archive.</label>
+    </div>
+    <div class="suggest-actions">
+      <button class="btn primary" id="sgSend" type="submit">Send suggestion</button>
+      <span class="suggest-msg" id="sgMsg" role="status" aria-live="polite"></span>
+    </div>
+  </form>
 </section>
 
 <footer>
@@ -6941,6 +6986,53 @@ renderRecentQuotes();
       showToast('⚠️', 'Could not turn on daily quotes', 'The archive server may be busy. Please try again in a minute.');
     }finally{
       btn.disabled = false;
+    }
+  });
+})();
+
+/* ---------- Suggest a quote ----------
+   Sends the visitor's suggestion to the archive server. It waits there until the owner
+   approves or rejects it in the Data Center; nothing is published automatically. */
+(function suggestAQuote(){
+  const API = 'https://quote-archive-api.onrender.com/api/v1';
+  const form = document.getElementById('suggestForm');
+  if(!form) return;
+  const msg = document.getElementById('sgMsg');
+  const send = document.getElementById('sgSend');
+  const drawer = document.getElementById('sgDrawer');
+  try{ CATS.forEach(c => drawer.insertAdjacentHTML('beforeend', `<option value="${c.key}">${c.icon} ${escapeHTML(c.label)}</option>`)); }catch(e){}
+  function say(text, kind){ msg.textContent = text; msg.className = 'suggest-msg ' + (kind || ''); }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const val = id => (document.getElementById(id).value || '').trim();
+    const text = val('sgText');
+    if(text.length < 10){ say('Please type the quote (at least 10 characters).', 'err'); document.getElementById('sgText').focus(); return; }
+    if(!document.getElementById('sgConsent').checked){ say('Please tick the box to confirm the quote can be published.', 'err'); return; }
+    const url = val('sgUrl');
+    if(url && !/^https?:\/\//i.test(url)){ say('The source link should start with https://', 'err'); return; }
+    send.disabled = true; say('Sending…');
+    const ctrl = typeof AbortController === 'function' ? new AbortController() : null;
+    const timer = ctrl ? setTimeout(() => ctrl.abort(), 60000) : null;    // the free server can take a moment to wake
+    try{
+      const res = await fetch(API + '/submissions', {
+        method: 'POST', mode: 'cors', headers: {'Content-Type': 'application/json'}, signal: ctrl?.signal,
+        body: JSON.stringify({ text, author: val('sgAuthor') || null, work: val('sgWork') || null, source_url: url || null,
+          drawer: drawer.value || null, name: val('sgName') || null, note: val('sgNote') || null, website: val('sgWebsite') })
+      });
+      const data = await res.json().catch(() => ({}));
+      if(res.ok){
+        form.reset();
+        say('Thank you! Your suggestion was sent. It will appear in the archive once it has been checked.', 'ok');
+        try{ showToast('✉️', 'Suggestion sent', 'Thank you for helping the archive grow.'); }catch(e){}
+      }else{
+        say((data && data.error && data.error.message) || 'Sorry, that could not be sent. Please try again.', 'err');
+      }
+    }catch(err){
+      say('Could not reach the archive server just now. Please try again in a minute.', 'err');
+    }finally{
+      if(timer) clearTimeout(timer);
+      send.disabled = false;
     }
   });
 })();
